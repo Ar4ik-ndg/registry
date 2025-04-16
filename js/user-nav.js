@@ -24,20 +24,26 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('userName');
             localStorage.removeItem('userRole');
-            window.location.href = 'index.html';
+            window.location.href = 'pacient.html';
         }
     }
 
     // Генерация меню
     function generateMenu(role) {
-        let menuItems = `
-            <a href="${role === 'doctor' ? 'vrach.html' : 'personal-account.html'}" class="dropdown-item">
-                ${role === 'doctor' ? 'Рабочий кабинет' : 'Личный кабинет'}
-            </a>
+        let menuItems = '';
+        
+        if (role === 'admin') {
+            menuItems = '<a href="admin.html" class="dropdown-item">Админ-панель</a>';
+        } else if (role === 'doctor') {
+            menuItems = '<a href="vrach.html" class="dropdown-item">Рабочий кабинет</a>';
+        } else {
+            menuItems = '<a href="personal-account.html" class="dropdown-item">Личный кабинет</a>';
+        }
+        
+        return menuItems + `
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item logout">Выйти</a>
         `;
-        return menuItems;
     }
 
     // Обновление отображения
