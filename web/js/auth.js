@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Если страница публичная - не проверяем авторизацию
     if (publicPages.includes(currentPage)) return;
 
+    // В auth.js обновляем protectedPages
     const protectedPages = {
         'patient': ['personal-account.html', 'zapis.html'],
         'doctor': ['vrach.html', 'vrach1.html'],
