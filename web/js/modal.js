@@ -64,29 +64,36 @@ async function handleSubmit(e) {
     }
     
     try {
-        // Здесь должна быть реальная проверка с сервером
+        // Здесь будет реальный запрос к API
         // Временная заглушка для демонстрации
-        const users = [
-            { 
-                email: 'doctor@clinic.ru', 
-                password: 'doctor123', 
-                name: 'Иванов И. И.', 
-                role: 'doctor' 
+        const mockUsers = {
+            'admin@clinic.ru': { 
+                password: 'admin123', 
+                name: 'Администратор Системы', 
+                role: 'admin',
+                id: 'admin-123'
             },
-            { 
-                email: 'patient@clinic.ru', 
+            'doctor@clinic.ru': { 
+                password: 'doctor123', 
+                name: 'Иванов Иван Иванович', 
+                role: 'doctor',
+                id: 'doc-456'
+            },
+            'patient@clinic.ru': { 
                 password: 'patient123', 
-                name: 'Александров А. А.', 
-                role: 'patient' 
+                name: 'Александров Александр Александрович', 
+                role: 'patient',
+                id: 'pat-789'
             }
-        ];
+        };
         
-        const user = users.find(u => u.email === email && u.password === password);
+        const user = mockUsers[email];
         
-        if (user) {
+        if (user && user.password === password) {
             setAuthStatus(true, {
                 name: user.name,
-                role: user.role
+                role: user.role,
+                id: user.id
             });
             
             closeModal();
