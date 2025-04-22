@@ -64,43 +64,47 @@ async function handleSubmit(e) {
     }
     
     try {
-        // Здесь будет реальный запрос к API
-        // Временная заглушка для демонстрации
         const mockUsers = {
             'admin@clinic.ru': { 
                 password: 'admin123', 
                 name: 'Администратор Системы', 
                 role: 'admin',
-                id: 'admin-123'
+                id: 'admin-123',
+                token: 'mock_admin_token'  
             },
             'doctor@clinic.ru': { 
                 password: 'doctor123', 
                 name: 'Иванов Иван Иванович', 
                 role: 'doctor',
-                id: 'doc-456'
+                id: 'doc-456',
+                token: 'mock_doctor_token'  
             },
             'patient@clinic.ru': { 
                 password: 'patient123', 
                 name: 'Александров Александр Александрович', 
                 role: 'patient',
-                id: 'pat-789'
+                id: 'pat-789',
+                token: 'mock_patient_token'  
             }
         };
         
         const user = mockUsers[email];
         
         if (user && user.password === password) {
-            setAuthStatus(true, {
-                name: user.name,
-                role: user.role,
-                id: user.id
-            });
+            // Сохраняем все данные
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('userName', user.name);
+            localStorage.setItem('userRole', user.role);
+            localStorage.setItem('userId', user.id);
+            localStorage.setItem('authToken', user.token);  
             
             closeModal();
             
             // Перенаправляем в зависимости от роли
             if (user.role === 'doctor') {
-                window.location.href = 'vrach.html';
+                window.location.href = 'vrach.html';  ь
+            } else if (user.role === 'admin') {
+                window.location.href = 'admin.html';
             } else {
                 window.location.href = 'personal-account.html';
             }
@@ -109,8 +113,6 @@ async function handleSubmit(e) {
         }
     } catch (error) {
         alert(error.message);
-        passwordInput.value = '';
-        passwordInput.focus();
     }
 }
 
