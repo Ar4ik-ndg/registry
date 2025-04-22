@@ -30,6 +30,7 @@ async function apiRequest(endpoint, method = 'GET', data = null) {
 }
 
 // ==================== Пользователь ====================
+
 // Получить данные текущего пользователя
 export async function getCurrentUser() {
     const userId = localStorage.getItem('userId');
@@ -42,9 +43,9 @@ export async function getUserAppointments() {
     return apiRequest(`/user/tikets/${userId}`);
 }
 
-// Создать новый приём
+// Создать новый приём (заявку)
 export async function createAppointment(data) {
-    return apiRequest('/appointments/request', 'POST', {
+    return apiRequest('/user/tikets/request', 'POST', {
         patientId: localStorage.getItem('userId'),
         doctorId: data.doctorId,
         requestedDate: data.requestedDate,
@@ -58,6 +59,11 @@ export async function cancelAppointment(appointmentId) {
     return apiRequest(`/user/tikets/cancel/${appointmentId}`, 'PUT');
 }
 
+// Подтвердить / Обновить заявку
+export async function confirmAppointment(appointmentId, data = {}) {
+    return apiRequest(`/med/tikets/update/${appointmentId}`, 'PUT', data);
+}
+
 // Обновить данные пользователя
 export async function updateUserProfile(data) {
     const userId = localStorage.getItem('userId');
@@ -65,8 +71,8 @@ export async function updateUserProfile(data) {
 }
 
 // ==================== Вспомогательные функции ====================
+
 function formatDateForAPI(date) {
-    // Преобразует дату в формат 'dd.MM.yyyy HH:mm'
     const d = new Date(date);
     const day = String(d.getDate()).padStart(2, '0');
     const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -75,7 +81,9 @@ function formatDateForAPI(date) {
     const minutes = String(d.getMinutes()).padStart(2, '0');
     return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
-// Добавить в api.js
+
+// ==================== Врач ====================
+
 export async function getDoctorAppointments() {
     const doctorId = localStorage.getItem('userId');
     return apiRequest(`/doctor/appointments/${doctorId}`);
@@ -98,33 +106,25 @@ export async function uploadAppointmentResults(appointmentId, files) {
     files.forEach(file => {
         formData.append('files', file);
     });
-    
+
     const headers = {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
     };
-    
+
     const response = await fetch(`${API_BASE_URL}/appointments/${appointmentId}/results`, {
         method: 'POST',
         headers,
         body: formData
     });
-    
+
     if (!response.ok) {
         throw new Error('Ошибка при загрузке файлов');
     }
-    
+
     return await response.json();
 }
-export async function getAllAppointments() {
-    return apiRequest('/admin/appointments', 'GET');
-  }
-  
-  // Подтвердить/отклонить заявку
-  export async function processAppointment(appointmentId, action, data = {}) {
-    return apiRequest(`/admin/appointments/${appointmentId}/${action}`, 'PUT', data);
-  }
-  
-  // Получить свободные слоты врача
-  export async function getDoctorSlots(doctorId) {
+
+// Получить свободные слоты врача
+export async function getDoctorSlots(doctorId) {
     return apiRequest(`/doctor/${doctorId}/slots`, 'GET');
-  }
+}
