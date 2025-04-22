@@ -133,6 +133,7 @@ curl --request POST \
 {
   "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NSIsImlhdCI6MTc0MzUyMTgyOCwiZXhwIjoxNzQzNjA4MjI4fQ.vXkDTsNhsrnXlRf_ei-eJK3q4X78YFcIZMzuyMUbCsY",
   "user": {
+    "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",
     "birthday": "12.3.4567",
     "email": " user",
     "fullName": "test user",
@@ -203,12 +204,21 @@ curl --request POST \
 {
   "message": "Запись успешно отправлена на подтверждение",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "подтверждается"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 }
 ```
@@ -271,12 +281,21 @@ curl --request PUT \
 {
   "message": "Прием отменен",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "отменен"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "отменен",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 }
 ```
@@ -342,7 +361,16 @@ curl --request GET \
     "description": "test",
     "results": null,
     "doctor": "test doc",
-    "status": "подтверждается"
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 ]
 ```
@@ -814,7 +842,16 @@ curl --request GET \
     "description": "test",
     "results": null,
     "doctor": "test doc",
-    "status": "подтверждается"
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 ]
 ```
@@ -848,9 +885,10 @@ curl --request GET \
 
 где: <br>
 
-| Параметр                | Значение                                                 |
-|-------------------------|----------------------------------------------------------|
-| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)} |
+| Параметр                | Значение                                                                            |
+|-------------------------|-------------------------------------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}                            |
+| status                  | Искомый статус приемов (отменен, подтверждается, запланирован, обработка, завершен) |
 ### Ответ:
 
 ---
@@ -865,7 +903,16 @@ curl --request GET \
     "description": "test",
     "results": null,
     "doctor": "test doc",
-    "status": "подтверждается"
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 ]
 ```
@@ -929,7 +976,16 @@ curl --request GET \
     "description": "test",
     "results": null,
     "doctor": "test doc",
-    "status": "подтверждается"
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 ]
 ```
@@ -968,7 +1024,7 @@ POST http://localhost:8080/api/v0.1/med/tikets/new
 
 ```curl
 curl --request POST \
-  --url http://localhost:8080/api/v0.1/mde/tikets/new \
+  --url http://localhost:8080/api/v0.1/med/tikets/new \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -976,8 +1032,7 @@ curl --request POST \
     "description": "test",
     "doctor": "test doc",
     "status": "запланирован",
-    "user":
-    {
+    "user": {
     "email": "pacient@clinic.ru",
     "birthday": "12.3.4567",
     "fullName": "Иван Иванов Иванович",
@@ -1011,12 +1066,21 @@ curl --request POST \
 {
   "message": "Запись успешно отправлена на подтверждение",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "запланирован"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "запланирован",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 }
 ```
@@ -1057,7 +1121,7 @@ PUT http://localhost:8080/api/v0.1/med/tikets/update/<id>
 
 ```curl
 curl --request PUT \
-  --url http://localhost:8080/api/v0.1/mde/tikets/update/<id> \
+  --url http://localhost:8080/api/v0.1/med/tikets/update/<id> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -1093,12 +1157,23 @@ curl --request PUT \
 {
   "message": "Запись успешно обновлена",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "запланирован"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "запланирован",
+    "user": {
+      "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",
+      "fullName": "test user",
+      "birthday": "12.3.4567",
+      "phone": "test",
+      "email": "test user",
+      "passport": "test",
+      "snils": "test",
+      "medPolicy": "test",
+      "role": "USER"
+    }
   }
 }
 ```
@@ -1165,7 +1240,18 @@ curl --request GET \
   "description": "test",
   "results": null,
   "doctor": "test doc",
-  "status": "подтверждается"
+  "status": "подтверждается",
+  "user": {
+    "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",
+    "fullName": "test user",
+    "birthday": "12.3.4567",
+    "phone": "test",
+    "email": "test user",
+    "passport": "test",
+    "snils": "test",
+    "medPolicy": "test",
+    "role": "USER"
+  }
 }
 ```
 
@@ -1271,7 +1357,7 @@ PUT http://localhost:8080/api/v0.1/med/id/<id>
 
 ```curl
 curl --request PUT \
-  --url http://localhost:8080/api/v0.1/user/id/{id} \
+  --url http://localhost:8080/api/v0.1/med/id/{id} \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{

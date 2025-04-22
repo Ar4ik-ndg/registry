@@ -5,12 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Если страница публичная - не проверяем авторизацию
     if (publicPages.includes(currentPage)) return;
 
-    // В auth.js обновляем protectedPages
     const protectedPages = {
-        'patient': ['personal-account.html', 'zapis.html'],
-        'doctor': ['vrach.html', 'vrach1.html'],
-        'admin': ['admin.html'],
-        'registry': ['registry.html']
+        'USER': ['personal-account.html', 'zapis.html'],
+        'MEDIC': ['vrach.html', 'vrach1.html', 'zapis.html'],
+        'ADMIN': ['admin.html','vrach.html', 'vrach1.html', 'zapis.html'],
     };
 
     // Проверка авторизации
@@ -27,9 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('У вас нет доступа к этой странице');
         // Перенаправляем на страницу по умолчанию для роли
         const defaultPages = {
-            'admin': 'admin.html',
-            'doctor': 'vrach.html',
-            'patient': 'personal-account.html'
+            'ADMIN': 'admin.html',
+            'MEDIC': 'vrach.html',
+            'USER': 'personal-account.html'
         };
         window.location.href = defaultPages[userRole] || 'pacient.html';
     }

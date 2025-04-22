@@ -37,8 +37,8 @@ class MedController(private val userService: UserService, private val tiketServi
                 ""
             )).body
         if (response is Error) return ResponseEntity.badRequest().body(response)
-        if (response is AuthResponse && response.user is User) {
-            val user: User = response.user
+        if (response is User) {
+            val user: User = response
             val parsedStatus = try{
                 TiketStatus.valueOf((tiket.status?: TiketStatus.подтверждается.toString()).lowercase()).toString()
             } catch (e: Exception) {return ResponseEntity.badRequest().body(Error("Неверно передан статус"))}
