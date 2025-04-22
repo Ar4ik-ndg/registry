@@ -43,12 +43,13 @@ export async function getUserAppointments() {
 }
 
 // Создать новый приём
-export async function createAppointment(date, description, doctor) {
-    return apiRequest('/user/tikets/new', 'POST', {
-        date: formatDateForAPI(date), // Форматируем дату
-        description,
-        doctor,
-        user: localStorage.getItem('userId')
+export async function createAppointment(data) {
+    return apiRequest('/appointments/request', 'POST', {
+        patientId: localStorage.getItem('userId'),
+        doctorId: data.doctorId,
+        requestedDate: data.requestedDate,
+        description: data.description,
+        status: data.status || 'pending'
     });
 }
 
@@ -114,3 +115,16 @@ export async function uploadAppointmentResults(appointmentId, files) {
     
     return await response.json();
 }
+export async function getAllAppointments() {
+    return apiRequest('/admin/appointments', 'GET');
+  }
+  
+  // Подтвердить/отклонить заявку
+  export async function processAppointment(appointmentId, action, data = {}) {
+    return apiRequest(`/admin/appointments/${appointmentId}/${action}`, 'PUT', data);
+  }
+  
+  // Получить свободные слоты врача
+  export async function getDoctorSlots(doctorId) {
+    return apiRequest(`/doctor/${doctorId}/slots`, 'GET');
+  }

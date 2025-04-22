@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const protectedPages = {
         'patient': ['personal-account.html', 'zapis.html'],
         'doctor': ['vrach.html', 'vrach1.html'],
-        'admin': ['admin.html']
+        'admin': ['admin.html'],
+        'registry': ['registry.html']
     };
 
     // Проверка авторизации

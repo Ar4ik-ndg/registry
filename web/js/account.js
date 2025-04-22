@@ -4,9 +4,8 @@ import {
     createAppointment,
     updateUserProfile,
     getCurrentUser,
-    rescheduleAppointment,
-    confirmAppointment as confirmAppointmentAPI,
-    getDoctorsBySpecialization
+    getDoctorsBySpecialization,
+    confirmAppointment as confirmAppointmentAPI
 } from './api.js';
 
 // Константы для специальностей
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         displayUserInfo(user);
         displayAppointments(appointments);
-        
         initEventHandlers();
     } catch (error) {
         console.error('Ошибка загрузки данных:', error);
@@ -66,7 +64,12 @@ function displayAppointments(appointments) {
     container.innerHTML = '';
 
     if (appointments.length === 0) {
-        container.innerHTML = '<p class="no-appointments">У вас нет запланированных приёмов</p>';
+        container.innerHTML = `
+            <div class="no-appointments">
+                <p>У вас нет запланированных приёмов</p>
+                <button class="action-btn new-appointment-btn">Записаться на приём</button>
+            </div>
+        `;
         return;
     }
 
@@ -93,6 +96,13 @@ function displayAppointments(appointments) {
         
         container.appendChild(card);
     });
+
+    // Добавляем кнопку для новой записи
+    const newAppointmentBtn = document.createElement('button');
+    newAppointmentBtn.className = 'action-btn new-appointment-btn';
+    newAppointmentBtn.textContent = 'Записаться на приём';
+    newAppointmentBtn.addEventListener('click', showSpecializationModal);
+    container.appendChild(newAppointmentBtn);
 }
 
 function initEventHandlers() {
@@ -130,15 +140,18 @@ function initEventHandlers() {
             const id = e.target.dataset.id;
             showCreateAppointmentModal(id);
         }
+        
+        if (e.target.classList.contains('new-appointment-btn')) {
+            showSpecializationModal();
+        }
     });
 
     document.querySelector('.edit-btn')?.addEventListener('click', showEditProfileModal);
     document.querySelector('.change-pwd-btn')?.addEventListener('click', showChangePasswordModal);
     document.querySelector('.logout-btn')?.addEventListener('click', logout);
-    document.querySelector('.new-appointment-btn')?.addEventListener('click', showSpecializationModal);
 }
 
-// ==================== ФУНКЦИИ ЗАПИСИ НА ПРИЕМ ====================
+// ========== ФУНКЦИИ ЗАПИСИ НА ПРИЕМ ==========
 function showSpecializationModal() {
     const modalHTML = `
         <div class="modal" id="specializationModal">
@@ -189,7 +202,9 @@ async function showDoctorsModal(specialization) {
                             ? doctors.map(doctor => `
                                 <div class="doctor-item" data-id="${doctor.id}">
                                     <h3>${doctor.fullName}</h3>
-                                    <button class="action-btn select-btn">Выбрать время</button>
+                                    <p>${doctor.specialization || specialization}</p>
+                                    <p>Опыт: ${doctor.experience || 'не указан'}</p>
+                                    <button class="action-btn select-btn">Выбрать</button>
                                 </div>
                               `).join('')
                             : '<p>Нет доступных врачей</p>'}
@@ -202,16 +217,14 @@ async function showDoctorsModal(specialization) {
         const modal = document.getElementById('doctorsModal');
         modal.style.display = 'block';
 
-        if (doctors.length > 0) {
-            document.querySelectorAll('.doctor-item .select-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const doctorId = this.closest('.doctor-item').dataset.id;
-                    const doctorName = this.closest('.doctor-item').querySelector('h3').textContent;
-                    modal.remove();
-                    showDateTimeModal(doctorId, doctorName, specialization);
-                });
+        document.querySelectorAll('.select-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const doctorId = this.closest('.doctor-item').dataset.id;
+                const doctorName = this.closest('.doctor-item').querySelector('h3').textContent;
+                modal.remove();
+                showDateTimeModal(doctorId, doctorName, specialization);
             });
-        }
+        });
 
         modal.querySelector('.close').addEventListener('click', () => modal.remove());
         window.addEventListener('click', (e) => {
@@ -245,10 +258,11 @@ function showDateTimeModal(doctorId, doctorName, specialization) {
                 
                 <div class="form-group">
                     <label for="appointmentDescription">Жалобы/симптомы:</label>
-                    <textarea id="appointmentDescription" rows="3"></textarea>
+                    <textarea id="appointmentDescription" rows="3" required></textarea>
                 </div>
                 
-                <button class="action-btn confirm-btn" id="confirmAppointment">Подтвердить запись</button>
+                <button class="action-btn confirm-btn" id="confirmAppointment">Отправить заявку</button>
+                <p class="info-text">Заявка будет обработана регистратурой в течение 24 часов</p>
             </div>
         </div>
     `;
@@ -262,23 +276,24 @@ function showDateTimeModal(doctorId, doctorName, specialization) {
         const time = document.getElementById('appointmentTime').value;
         const description = document.getElementById('appointmentDescription').value;
         
-        if (!date) {
-            showErrorModal('Пожалуйста, выберите дату');
+        if (!date || !description) {
+            showErrorModal('Пожалуйста, заполните все обязательные поля');
             return;
         }
 
         try {
-            await createAppointment(
-                `${formatDateForAPI(new Date(date))} ${time}`,
-                description,
-                doctorName
-            );
+            await createAppointment({
+                doctorId: doctorId,
+                requestedDate: `${formatDateForAPI(new Date(date))} ${time}`,
+                description: description,
+                status: 'pending'
+            });
             
-            showSuccessModal('Вы успешно записаны на прием!');
+            showSuccessModal('Ваша заявка отправлена в регистратуру! Мы свяжемся с вами для подтверждения.');
             modal.remove();
             await refreshAppointments();
         } catch (error) {
-            showErrorModal('Ошибка при записи: ' + error.message);
+            showErrorModal('Ошибка при отправке заявки: ' + error.message);
         }
     });
 
@@ -288,7 +303,7 @@ function showDateTimeModal(doctorId, doctorName, specialization) {
     });
 }
 
-// ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
 function getStatusClass(status) {
     const statusMap = {
         'подтверждается': 'status-not-confirmed',
@@ -379,4 +394,21 @@ function logout() {
         localStorage.removeItem('userId');
         window.location.href = 'pacient.html';
     }
+}
+
+// Заглушки для модальных окон (реализуйте по аналогии)
+function showEditProfileModal() {
+    alert('Функция редактирования профиля будет реализована позже');
+}
+
+function showChangePasswordModal() {
+    alert('Функция смены пароля будет реализована позже');
+}
+
+function showRescheduleModal(appointmentId) {
+    alert(`Функция переноса приёма ${appointmentId} будет реализована позже`);
+}
+
+function showCreateAppointmentModal(appointmentId) {
+    alert(`Функция повторной записи для приёма ${appointmentId} будет реализована позже`);
 }
