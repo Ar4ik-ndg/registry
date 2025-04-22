@@ -4,8 +4,8 @@ import {
     createAppointment,
     updateUserProfile,
     getCurrentUser,
-    getDoctorsBySpecialization,
-    confirmAppointment as confirmAppointmentAPI
+    
+    
 } from './api.js';
 
 // Константы для специальностей
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             getCurrentUser(),
             getUserAppointments()
         ]);
-        
+
         displayUserInfo(user);
         displayAppointments(appointments);
         initEventHandlers();
@@ -34,7 +34,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Ошибка загрузки данных:', error);
         showErrorModal('Не удалось загрузить данные. Пожалуйста, попробуйте позже.');
     }
+
+    // === Вот сюда вставляем ===
+    const headerBtn = document.getElementById('newAppointmentBtn');
+    if (headerBtn) {
+        headerBtn.addEventListener('click', showSpecializationModal);
+    }
 });
+
 
 function displayUserInfo(user) {
     const fields = {
@@ -141,7 +148,7 @@ function initEventHandlers() {
             showCreateAppointmentModal(id);
         }
         
-        if (e.target.classList.contains('new-appointment-btn')) {
+        if (e.target.closest('.new-appointment-btn')) {
             showSpecializationModal();
         }
     });
