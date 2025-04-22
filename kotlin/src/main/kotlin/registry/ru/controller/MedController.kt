@@ -19,6 +19,9 @@ class MedController(private val userService: UserService, private val tiketServi
     @GetMapping("/tikets/status/{status}")
     fun getTiketsByStatus(@PathVariable status: String): ResponseEntity<Any> = tiketService.getTiketsByStatus(status)
 
+    @GetMapping("tikets/doctor/{doctor}")
+    fun getTiketsByDoctor(@PathVariable doctor: String): ResponseEntity<Any> = tiketService.getTiketsByDateAndDoctor(doctor)
+
     @PostMapping("/tikets/new")
     fun createNewTiket(@RequestBody tiket: TiketCreateRequest): ResponseEntity<Any> {
         val userEmail: String = tiket.user.email?: return ResponseEntity.badRequest().body(Error("Не задан email пациента"))

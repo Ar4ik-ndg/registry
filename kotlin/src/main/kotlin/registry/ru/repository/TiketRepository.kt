@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Repository
 interface TiketRepository: JpaRepository<Tiket, String> {
-    fun findByDateGreaterThanEqual(date: LocalDateTime): List<Tiket>
+    fun findByDateBetweenAndDoctor(start: LocalDateTime, end: LocalDateTime, doctor: String): List<Tiket>
     fun findByDateBeforeAndStatus(date: LocalDateTime, status: String): List<Tiket>
     fun findByUserId(userId: String): List<Tiket>
     fun findByStatus(status: String): List<Tiket>
