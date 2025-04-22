@@ -21,23 +21,36 @@ class MedController(private val userService: UserService, private val tiketServi
 
     @PostMapping("/tikets/new")
     fun createNewTiket(@RequestBody tiket: TiketCreateRequest): ResponseEntity<Any> {
-        val user: User? = userService.getUserById(tiket.user)
-        user?.let {
+        val userEmail: String = tiket.user.email?: return ResponseEntity.badRequest().body(Error("Не задан email пациента"))
+        val response = userService.getUserByEmail(userEmail)?: userService.createUser(
+            UserRegisterRequest(
+                tiket.user.birthday?: return ResponseEntity.badRequest().body(Error("Не задан день рождения пациента")),
+                email = userEmail,
+                tiket.user.fullName?: return ResponseEntity.badRequest().body(Error("Не задано ФИО пациента")),
+                tiket.user.medPolicy?: return ResponseEntity.badRequest().body(Error("Не задан мед полис пациента")),
+                tiket.user.passport?: return ResponseEntity.badRequest().body(Error("Не задан пасспорт пациента")),
+                tiket.user.phone?: return ResponseEntity.badRequest().body(Error("Не задан номер телефона пациента")),
+                tiket.user.snils?: return ResponseEntity.badRequest().body(Error("Не задан СНИЛС пациента")),
+                ""
+            )).body
+        if (response is Error) return ResponseEntity.badRequest().body(response)
+        if (response is AuthResponse && response.user is User) {
+            val user: User = response.user
             val parsedStatus = try{
                 TiketStatus.valueOf((tiket.status?: TiketStatus.подтверждается.toString()).lowercase()).toString()
             } catch (e: Exception) {return ResponseEntity.badRequest().body(Error("Неверно передан статус"))}
             if (tiket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
             val newTiket: Tiket = Tiket(UUID.randomUUID().toString(),
-            tiket.date,
-            tiket.description,
-            tiket.results,
-            tiket.doctor,
-            parsedStatus,
-            user)
+                tiket.date,
+                tiket.description,
+                tiket.results,
+                tiket.doctor,
+                parsedStatus,
+                user)
             tiketService.createNewTiket(newTiket)
-        return ResponseEntity.ok().body(Response("Запись успешно создана", newTiket))
+            return ResponseEntity.ok().body(Response("Запись успешно создана", newTiket))
         }
-        return ResponseEntity.badRequest().body(Error("Пользователь с id ${tiket.user} не найден"))
+        else return ResponseEntity.internalServerError().body(Error("Невозможно создать пользователя"))
     }
 
     @PutMapping("/tikets/update/{id}")

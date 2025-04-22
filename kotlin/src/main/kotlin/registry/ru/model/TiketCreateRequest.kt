@@ -10,5 +10,5 @@ data class TiketCreateRequest(
     val results: String?,
     val doctor: String,
     val status: String?,
-    val user: String
+    val user: UserUpdRequest
 )
