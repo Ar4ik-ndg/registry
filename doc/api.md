@@ -894,6 +894,70 @@ Status Code = 403 Forbidden
 
 ---
 
+### Вывод приемов по дате и врачу:
+
+```http
+GET http://localhost:8080/api/v0.1/med/tikets/doctor/<doctor>
+```
+
+#### Запрос
+
+```curl
+curl --request GET \
+  --url http://localhost:8080/api/v0.1/med/tikets/doctor/<doctor> \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
+```
+
+где: <br>
+
+| Параметр                | Значение                                                 |
+|-------------------------|----------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)} |
+| doctor                  | ФИО врача, для которого надо получить список приемов     |
+### Ответ:
+
+---
+
+#### Правильный токен:
+
+```json
+[
+  {
+    "id": "ada353f5-4577-4694-8dc1-50294e7baea2",
+    "date": "07.04.2025 00:32",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "подтверждается"
+  }
+]
+```
+```http
+Status Code = 200 OK
+```
+---
+#### Несуществуюущий адрес:
+
+```json
+{
+    "error": "Нет задач на текущую дату"
+}
+```
+
+```http
+Status Code = 400 Forbidden
+```
+
+---
+#### Просроченный/неверный токен:
+
+```http
+Status Code = 403 Forbidden
+```
+
+---
+
 ### Создание приема:
 
 ```http
