@@ -1,11 +1,12 @@
-import { 
-    getUserAppointments, 
-    cancelAppointment,
-    createAppointment,
-    updateUserProfile,
+import {
+    getTiketsByUser,
+    cancelTiket,
+    createTiket,
+    updateUser,
     getCurrentUser,
-    
-    
+    getDocs,
+
+
 } from './api.js';
 
 // Константы для специальностей
@@ -21,24 +22,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         return;
     }
 
-    try {
-        const [user, appointments] = await Promise.all([
-            getCurrentUser(),
-            getUserAppointments()
-        ]);
+    if (localStorage.getItem('isAuthenticated') === 'true') {
+        try {
+            const [user, appointments] = await Promise.all([
+                getCurrentUser(localStorage.getItem('userId')),
+                getTiketsByUser(localStorage.getItem('userId'))
+            ]);
 
-        displayUserInfo(user);
-        displayAppointments(appointments);
-        initEventHandlers();
-    } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
-        showErrorModal('Не удалось загрузить данные. Пожалуйста, попробуйте позже.');
-    }
+            displayUserInfo(user);
+            displayAppointments(appointments);
+            initEventHandlers();
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
+            showErrorModal('Не удалось загрузить данные. Пожалуйста, попробуйте позже.');
+        }
 
-    // === Вот сюда вставляем ===
-    const headerBtn = document.getElementById('newAppointmentBtn');
-    if (headerBtn) {
-        headerBtn.addEventListener('click', showSpecializationModal);
+        // === Вот сюда вставляем ===
+        const headerBtn = document.getElementById('newAppointmentBtn');
+        if (headerBtn) {
+            headerBtn.addEventListener('click', showSpecializationModal);
+        }
     }
 });
 
@@ -118,7 +121,7 @@ function initEventHandlers() {
             const id = e.target.dataset.id;
             try {
                 if (confirm('Вы уверены, что хотите отменить приём?')) {
-                    await cancelAppointment(id);
+                    await cancelTiket(id);
                     showSuccessModal('Приём успешно отменён');
                     await refreshAppointments();
                 }
@@ -126,17 +129,19 @@ function initEventHandlers() {
                 showErrorModal('Ошибка при отмене: ' + error.message);
             }
         }
-        
-        if (e.target.classList.contains('confirm-btn')) {
-            const id = e.target.dataset.id;
-            try {
-                await confirmAppointmentAPI(id);
-                showSuccessModal('Приём подтверждён');
-                await refreshAppointments();
-            } catch (error) {
-                showErrorModal('Ошибка при подтверждении: ' + error.message);
-            }
-        }
+
+// ========== Тут (у пользователя) этого не должно быть ==========
+
+        // if (e.target.classList.contains('confirm-btn')) {
+        //     const id = e.target.dataset.id;
+        //     try {
+        //         await confirmAppointmentAPI(id);
+        //         showSuccessModal('Приём подтверждён');
+        //         await refreshAppointments();
+        //     } catch (error) {
+        //         showErrorModal('Ошибка при подтверждении: ' + error.message);
+        //     }
+        // }
         
         if (e.target.classList.contains('transfer-btn')) {
             const id = e.target.dataset.id;
@@ -197,7 +202,7 @@ function showSpecializationModal() {
 
 async function showDoctorsModal(specialization) {
     try {
-        const doctors = await getDoctorsBySpecialization(specialization);
+        const doctors = await getDocs(specialization);
         
         const modalHTML = `
             <div class="modal" id="doctorsModal">
@@ -209,7 +214,9 @@ async function showDoctorsModal(specialization) {
                             ? doctors.map(doctor => `
                                 <div class="doctor-item" data-id="${doctor.id}">
                                     <h3>${doctor.fullName}</h3>
-                                    <p>${doctor.specialization || specialization}</p>
+                                    <p>${doctor.prof || specialization}</p>
+                                    
+                                    //Поля опыта у докторов нет
                                     <p>Опыт: ${doctor.experience || 'не указан'}</p>
                                     <button class="action-btn select-btn">Выбрать</button>
                                 </div>
@@ -289,13 +296,14 @@ function showDateTimeModal(doctorId, doctorName, specialization) {
         }
 
         try {
-            await createAppointment({
-                doctorId: doctorId,
-                requestedDate: `${formatDateForAPI(new Date(date))} ${time}`,
+            await createTiket({
+                doctor: doctorName,
+                date: `${formatDateForAPI(new Date(date))} ${time}`,
                 description: description,
-                status: 'pending'
+                user: {email: localStorage.getItem("userEmail")}
             });
-            
+
+            // Обработки ошибок нет (читай документацию в doc/api.md запросы пользователя)
             showSuccessModal('Ваша заявка отправлена в регистратуру! Мы свяжемся с вами для подтверждения.');
             modal.remove();
             await refreshAppointments();
@@ -359,7 +367,7 @@ function formatDisplayDate(apiDate) {
 
 async function refreshAppointments() {
     try {
-        const appointments = await getUserAppointments();
+        const appointments = await getTiketsByUser(localStorage.getItem("userId"));
         displayAppointments(appointments);
     } catch (error) {
         console.error('Ошибка обновления приёмов:', error);
@@ -380,6 +388,7 @@ function generateTimeOptions() {
     return times.join('');
 }
 
+// ========== то же самое есть в api.js здесь вероятнее всего не надо ==========
 function formatDateForAPI(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -397,9 +406,7 @@ function showErrorModal(message) {
 
 function logout() {
     if (confirm('Вы уверены, что хотите выйти?')) {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userId');
-        window.location.href = 'pacient.html';
+        logout();
     }
 }
 

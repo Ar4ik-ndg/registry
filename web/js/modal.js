@@ -68,21 +68,21 @@ async function handleSubmit(e) {
             'admin@clinic.ru': { 
                 password: 'admin123', 
                 name: 'Администратор Системы', 
-                role: 'admin',
+                role: 'ADMIN',
                 id: 'admin-123',
                 token: 'mock_admin_token'  
             },
             'doctor@clinic.ru': { 
                 password: 'doctor123', 
                 name: 'Иванов Иван Иванович', 
-                role: 'doctor',
+                role: 'MEDIC',
                 id: 'doc-456',
                 token: 'mock_doctor_token'  
             },
             'patient@clinic.ru': { 
                 password: 'patient123', 
                 name: 'Александров Александр Александрович', 
-                role: 'patient',
+                role: 'USER',
                 id: 'pat-789',
                 token: 'mock_patient_token'  
             }
@@ -101,9 +101,9 @@ async function handleSubmit(e) {
             closeModal();
             
             // Перенаправляем в зависимости от роли
-            if (user.role === 'doctor') {
-                window.location.href = 'vrach.html';  ь
-            } else if (user.role === 'admin') {
+            if (user.role === 'MEDIC') {
+                window.location.href = 'vrach.html';
+            } else if (user.role === 'ADMIN') {
                 window.location.href = 'admin.html';
             } else {
                 window.location.href = 'personal-account.html';

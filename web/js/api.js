@@ -149,7 +149,7 @@ export async function getTiketsByUser(userId){
 }
 
 // Получить данные текущего пользователя
-export async function getCurrentUser(type="id",identifier){
+export async function getCurrentUser(identifier, type="id",){
     if (!identifier || !type) { throw new Error("Не указан пользователь"); }
 
     const response = await apiRequest(`/user/${type}/${identifier}`);
@@ -246,7 +246,7 @@ export async function getTiket(id){
 }
 
 // Получить данные о персонале
-export async function getCurrentStaff(type="id",identifier){
+export async function getCurrentStaff(identifier, type="id"){
     if (!identifier || !type) { throw new Error("Не указан пользователь"); }
 
     const response = await apiRequest(`/med/${type}/${identifier}`);
