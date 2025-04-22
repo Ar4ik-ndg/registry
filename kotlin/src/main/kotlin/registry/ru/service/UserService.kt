@@ -29,7 +29,7 @@ class UserService(private val userRepository: UserRepository, private val jwtUti
         userMedPolicy?.let { return ResponseEntity.badRequest().body(Error( "Пользователь с таким мед. полисом уже существует")) }
         userSnils?.let { return ResponseEntity.badRequest().body(Error( "Пользователь с таким снилс уже существует")) }
 
-        val hashedPassword = passwordEncoder.encode(user.password)
+        val hashedPassword = passwordEncoder.encode(user.password?: "")
         val role = Roles.USER.toString()
         val newUser = User(UUID.randomUUID().toString(),
             user.fullName,

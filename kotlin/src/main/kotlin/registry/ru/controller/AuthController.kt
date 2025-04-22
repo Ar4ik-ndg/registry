@@ -34,6 +34,7 @@ class AuthController(
 
     @PostMapping("/register")
     fun register(@RequestBody request: UserRegisterRequest): ResponseEntity<Any> {
+        if (request.password.isNullOrEmpty()) return ResponseEntity.badRequest().body(Error("Не задан пароль"))
         return userService.createUser(request)
     }
     @PostMapping("/register/staff")

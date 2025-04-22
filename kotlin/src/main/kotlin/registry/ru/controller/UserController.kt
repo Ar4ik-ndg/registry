@@ -26,7 +26,7 @@ class UserController(private val userService: UserService, private val tiketServ
 
     @PostMapping("/tikets/new")
     fun createNewTiket(@RequestBody tiket: TiketCreateRequest): ResponseEntity<Any> {
-        val user: User? = userService.getUserById(tiket.user)
+        val user: User? = userService.getUserByEmail(tiket.user.email?: return ResponseEntity.badRequest().body(Error("Не найден пользователь с email: ${tiket.user.email}")))
         user?.let {
             val parsedStatus = try {
                 TiketStatus.подтверждается.toString()
