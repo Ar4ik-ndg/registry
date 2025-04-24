@@ -12,9 +12,10 @@ import java.util.*
 @Service
 class TiketService(private val tiketRepository: TiketRepository) {
     fun getAllTikets(): List<Tiket> = tiketRepository.findAll()
-    fun getTiketsByDate(date: LocalDateTime): ResponseEntity<Any> {
+    fun getTiketsByDateAndDoctor(doctor: String): ResponseEntity<Any> {
         try {
-            val tikets: List<Tiket> = tiketRepository.findByDateGreaterThanEqual(date)
+            val dateTime: LocalDateTime = LocalDate.now().atStartOfDay()
+            val tikets: List<Tiket> = tiketRepository.findByDateBetweenAndDoctor(dateTime, dateTime.plusDays(1), doctor)
             if (tikets.isNotEmpty()) return ResponseEntity.ok().body(tikets)
             else return ResponseEntity.badRequest().body(Error("Нет задач на текущую дату"))
         } catch (e: Exception) {
