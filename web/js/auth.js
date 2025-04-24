@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const protectedPages = {
         'USER': ['personal-account.html', 'zapis.html'],
-        'MEDIC': ['vrach.html', 'vrach1.html', 'zapis.html'],
+        'DOCTOR': ['vrach.html', 'vrach1.html', 'zapis.html'],
         'ADMIN': ['admin.html','vrach.html', 'vrach1.html', 'zapis.html'],
     };
 
