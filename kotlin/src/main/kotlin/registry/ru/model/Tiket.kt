@@ -1,7 +1,6 @@
 package registry.ru.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -31,6 +30,6 @@ data class Tiket(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties(value = ["hibernateLazyInitializer","handler"])
+    @JsonIgnoreProperties(value = ["hibernateLazyInitializer","handler","role"])
     val user: User
 )

@@ -70,7 +70,7 @@ class MedController(private val userService: UserService, private val tiketServi
         return ResponseEntity.badRequest().body(Error("Не найдено записи с id $id"))
     }
 
-    @GetMapping("tikets/id/{id}")
+    @GetMapping("/tikets/id/{id}")
     fun getTiketById(@PathVariable id: String): ResponseEntity<Any> {
         val tiket: Tiket = tiketService.getTiketById(id)?: return ResponseEntity.badRequest().body(Error("Не найдено задачи с id $id"))
         return ResponseEntity.ok().body(tiket)
@@ -79,19 +79,19 @@ class MedController(private val userService: UserService, private val tiketServi
     @PutMapping("/id/{id}")
     fun updateDoctor(@PathVariable id: String, @RequestBody doc: StaffRequest): ResponseEntity<Any> = staffService.updateStaff(doc, id)
 
-    @GetMapping("email/{email}")
+    @GetMapping("/email/{email}")
     fun getDoctorByEmail(@PathVariable email: String): ResponseEntity<Any> {
         val doctor = staffService.getStaffByEmail(email)?: return ResponseEntity.badRequest().body(Error("Не найдено пользователя с email $email"))
         return ResponseEntity.ok().body(doctor)
     }
 
-    @GetMapping("id/{id}")
+    @GetMapping("/id/{id}")
     fun getDoctorById(@PathVariable id: String): ResponseEntity<Any> {
         val doctor = staffService.getStaffById(id)?: return ResponseEntity.badRequest().body(Error("Не найдено пользователя с id $id"))
         return ResponseEntity.ok().body(doctor)
     }
 
-    @DeleteMapping("id/{id}")
+    @DeleteMapping("/id/{id}")
     fun deleteDoctor(@PathVariable id: String): ResponseEntity<Any> = staffService.deleteStaff(id)
 }
 
