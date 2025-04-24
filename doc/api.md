@@ -133,6 +133,7 @@ curl --request POST \
 {
   "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NSIsImlhdCI6MTc0MzUyMTgyOCwiZXhwIjoxNzQzNjA4MjI4fQ.vXkDTsNhsrnXlRf_ei-eJK3q4X78YFcIZMzuyMUbCsY",
   "user": {
+    "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",
     "birthday": "12.3.4567",
     "email": " user",
     "fullName": "test user",
@@ -203,12 +204,21 @@ curl --request POST \
 {
   "message": "Запись успешно отправлена на подтверждение",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "подтверждается"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 }
 ```
@@ -271,12 +281,21 @@ curl --request PUT \
 {
   "message": "Прием отменен",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "отменен"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "отменен",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 }
 ```
@@ -342,7 +361,16 @@ curl --request GET \
     "description": "test",
     "results": null,
     "doctor": "test doc",
-    "status": "подтверждается"
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 ]
 ```
@@ -608,7 +636,7 @@ curl --request GET \
     "phone": "test",
     "email": "test doc",
     "prof": "Терапевт",
-    "role": "MEDIC"
+    "role": "DOCTOR"
   }
 ]
 ```
@@ -684,7 +712,7 @@ curl --request POST \
     "phone": "test",
     "email": "test doc",
     "prof": "Терапевт",
-    "role": "MEDIC"
+    "role": "DOCTOR"
   }
 }
 ```
@@ -725,20 +753,20 @@ curl --request POST \
     "email": "test doc",
     "prof": "Терапевт",
     "password": "123",
-    "role": "MEDIC"
+    "role": "DOCTOR"
 }'
 ```
 
 где: <br>
 
-| Параметр | Значение                                                                       |
-|----------|--------------------------------------------------------------------------------|
-| email    | Email пользователя (должен быть уникальным)                                    |
-| fullName | ФИО                                                                            |
-| phone    | Номер телефона (должен быть уникальным)                                        |
-| prof     | Врачебное направление/ профессия                                               |
-| password | Пароль                                                                         |
-| role     | Роль на сайте (регистратура/мед. работник - MEDIC; сис. администратор - ADMIN) |
+| Параметр | Значение                                                                                     |
+|----------|----------------------------------------------------------------------------------------------|
+| email    | Email пользователя (должен быть уникальным)                                                  |
+| fullName | ФИО                                                                                          |
+| phone    | Номер телефона (должен быть уникальным)                                                      |
+| prof     | Врачебное направление/ профессия                                                             |
+| password | Пароль                                                                                       |
+| role     | Роль на сайте (регистратура - REGISTRAR, мед. работник - DOCTOR; сис. администратор - ADMIN) |
 ### Ответ:
 
 ---
@@ -754,7 +782,7 @@ curl --request POST \
     "phone": "test",
     "email": "test doc",
     "prof": "Терапевт",
-    "role": "MEDIC"
+    "role": "DOCTOR"
   }
 }
 ```
@@ -814,7 +842,16 @@ curl --request GET \
     "description": "test",
     "results": null,
     "doctor": "test doc",
-    "status": "подтверждается"
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 ]
 ```
@@ -848,9 +885,10 @@ curl --request GET \
 
 где: <br>
 
-| Параметр                | Значение                                                 |
-|-------------------------|----------------------------------------------------------|
-| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)} |
+| Параметр                | Значение                                                                            |
+|-------------------------|-------------------------------------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}                            |
+| status                  | Искомый статус приемов (отменен, подтверждается, запланирован, обработка, завершен) |
 ### Ответ:
 
 ---
@@ -865,7 +903,16 @@ curl --request GET \
     "description": "test",
     "results": null,
     "doctor": "test doc",
-    "status": "подтверждается"
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 ]
 ```
@@ -894,6 +941,79 @@ Status Code = 403 Forbidden
 
 ---
 
+### Вывод приемов по дате и врачу:
+
+```http
+GET http://localhost:8080/api/v0.1/med/tikets/doctor/<doctor>
+```
+
+#### Запрос
+
+```curl
+curl --request GET \
+  --url http://localhost:8080/api/v0.1/med/tikets/doctor/<doctor> \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
+```
+
+где: <br>
+
+| Параметр                | Значение                                                 |
+|-------------------------|----------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)} |
+| doctor                  | ФИО врача, для которого надо получить список приемов     |
+### Ответ:
+
+---
+
+#### Правильный токен:
+
+```json
+[
+  {
+    "id": "ada353f5-4577-4694-8dc1-50294e7baea2",
+    "date": "07.04.2025 00:32",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "подтверждается",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
+  }
+]
+```
+```http
+Status Code = 200 OK
+```
+---
+#### Несуществуюущий адрес:
+
+```json
+{
+    "error": "Нет задач на текущую дату"
+}
+```
+
+```http
+Status Code = 400 Forbidden
+```
+
+---
+#### Просроченный/неверный токен:
+
+```http
+Status Code = 403 Forbidden
+```
+
+---
+
 ### Создание приема:
 
 ```http
@@ -904,7 +1024,7 @@ POST http://localhost:8080/api/v0.1/med/tikets/new
 
 ```curl
 curl --request POST \
-  --url http://localhost:8080/api/v0.1/mde/tikets/new \
+  --url http://localhost:8080/api/v0.1/med/tikets/new \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -912,8 +1032,7 @@ curl --request POST \
     "description": "test",
     "doctor": "test doc",
     "status": "запланирован",
-    "user":
-    {
+    "user": {
     "email": "pacient@clinic.ru",
     "birthday": "12.3.4567",
     "fullName": "Иван Иванов Иванович",
@@ -947,12 +1066,21 @@ curl --request POST \
 {
   "message": "Запись успешно отправлена на подтверждение",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "запланирован"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "запланирован",
+    "user": {
+      "email": "pacient@clinic.ru",
+      "birthday": "12.3.4567",
+      "fullName": "Иван Иванов Иванович",
+      "medPolicy": "1234567890",
+      "passport": "1234567890",
+      "phone": "+79120000000",
+      "snils": "1234567890"
+    }
   }
 }
 ```
@@ -993,7 +1121,7 @@ PUT http://localhost:8080/api/v0.1/med/tikets/update/<id>
 
 ```curl
 curl --request PUT \
-  --url http://localhost:8080/api/v0.1/mde/tikets/update/<id> \
+  --url http://localhost:8080/api/v0.1/med/tikets/update/<id> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -1029,12 +1157,23 @@ curl --request PUT \
 {
   "message": "Запись успешно обновлена",
   "tiket": {
-  "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
-  "date": "01.01.2001 00:00",
-  "description": "test",
-  "results": null,
-  "doctor": "test doc",
-  "status": "запланирован"
+    "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
+    "date": "01.01.2001 00:00",
+    "description": "test",
+    "results": null,
+    "doctor": "test doc",
+    "status": "запланирован",
+    "user": {
+      "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",
+      "fullName": "test user",
+      "birthday": "12.3.4567",
+      "phone": "test",
+      "email": "test user",
+      "passport": "test",
+      "snils": "test",
+      "medPolicy": "test",
+      "role": "USER"
+    }
   }
 }
 ```
@@ -1101,7 +1240,18 @@ curl --request GET \
   "description": "test",
   "results": null,
   "doctor": "test doc",
-  "status": "подтверждается"
+  "status": "подтверждается",
+  "user": {
+    "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",
+    "fullName": "test user",
+    "birthday": "12.3.4567",
+    "phone": "test",
+    "email": "test user",
+    "passport": "test",
+    "snils": "test",
+    "medPolicy": "test",
+    "role": "USER"
+  }
 }
 ```
 
@@ -1166,7 +1316,7 @@ curl --request GET \
   "phone": "test",
   "email": "test doc",
   "prof": "Терапевт",
-  "role": "MEDIC"
+  "role": "DOCTOR"
 }
 ```
 ```http
@@ -1207,7 +1357,7 @@ PUT http://localhost:8080/api/v0.1/med/id/<id>
 
 ```curl
 curl --request PUT \
-  --url http://localhost:8080/api/v0.1/user/id/{id} \
+  --url http://localhost:8080/api/v0.1/med/id/{id} \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -1216,22 +1366,22 @@ curl --request PUT \
     "email": "test doc",
     "prof": "Терапевт",
     "password": "123",
-    "role": "MEDIC"
+    "role": "DOCTOR"
 }'
 ```
 
 где: <br>
 
-| Параметр                | Значение                                                                       |
-|-------------------------|--------------------------------------------------------------------------------|
-| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}                       |
-| id                      | id обновляемого персонала                                                      |
-| email                   | Email пользователя (должен быть уникальным)                                    |
-| fullName                | ФИО                                                                            |
-| phone                   | Номер телефона (должен быть уникальным)                                        |
-| prof                    | Врачебное направление/ профессия                                               |
-| password                | Пароль                                                                         |
-| role                    | Роль на сайте (регистратура/мед. работник - MEDIC; сис. администратор - ADMIN) |
+| Параметр                | Значение                                                                                    |
+|-------------------------|---------------------------------------------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}                                    |
+| id                      | id обновляемого персонала                                                                   |
+| email                   | Email пользователя (должен быть уникальным)                                                 |
+| fullName                | ФИО                                                                                         |
+| phone                   | Номер телефона (должен быть уникальным)                                                     |
+| prof                    | Врачебное направление/ профессия                                                            |
+| password                | Пароль                                                                                      |
+| role                    | Роль на сайте (регистратура- REGISTRAR, мед. работник - DOCTOR; сис. администратор - ADMIN) |
 
 Поля, которые не требуется обновлять может = null
 ### Ответ:
@@ -1246,7 +1396,7 @@ curl --request PUT \
   "phone": "test",
   "email": "test doc",
   "prof": "Терапевт",
-  "role": "MEDIC"
+  "role": "DOCTOR"
 }
 ```
 ```http

@@ -27,7 +27,7 @@ class SecurityConfig(
     }
 
     @Bean
-    fun seсurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf{ it.disable()}
             .sessionManagement{ it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)}
@@ -36,8 +36,8 @@ class SecurityConfig(
                 it.requestMatchers("/actuator/health").permitAll()
 
                 it.requestMatchers("/api/v0.1/admin/**").hasAuthority("ADMIN")
-                it.requestMatchers("/api/v0.1/med/**").hasAnyAuthority("MEDIC","ADMIN")
-                it.requestMatchers("/api/v0.1/user/**").hasAnyAuthority("USER","MEDIC","ADMIN")
+                it.requestMatchers("/api/v0.1/med/**").hasAnyAuthority("DOCTOR","ADMIN","REGISTRAR")
+                it.requestMatchers("/api/v0.1/user/**").hasAnyAuthority("USER","DOCTOR","ADMIN","REGISTRAR")
                 it.anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
