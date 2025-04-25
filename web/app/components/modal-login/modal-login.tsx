@@ -39,7 +39,11 @@ export function ModalLogin(props:ModalLogin) {
         )
     } else {
         return (
-            <></>
+            <>
+                <div className={"background"}>
+                    <h2>Вход</h2>
+                </div>
+            </>
         )
     }
 }

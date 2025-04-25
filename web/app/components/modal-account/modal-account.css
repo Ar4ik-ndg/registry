@@ -1,0 +1,41 @@
+.userName{
+    cursor: pointer;
+}
+.burger {
+    position: absolute;
+    flex-direction: column;
+    text-align: center;
+    display: flex;
+    top: 5px;
+    right: 5px;
+    z-index: 1000;
+    padding: 8px 0;
+
+    min-width: 160px;
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    background: #21B4A3;
+    color: #fff;
+
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 1s ease;
+    pointer-events: none;
+}
+.line{
+    padding: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.divider{
+    border: 1px #FFFFFF solid;
+    margin: 0 15px;
+}
+
+.burger.open {
+    opacity: 1;
+    transform: translateY(70px);
+    transition: transform 0.2s ease;
+    pointer-events: auto;
+
+}
