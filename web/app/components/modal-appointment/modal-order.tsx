@@ -6,7 +6,7 @@ type ModalOrderProps = {
     showModalHandler: any //function (doChangeStateOfModal:bool) => void
     date: string
     status: string
-    doctor: string // TODO: заменить на тип из domain/models
+    doctor: any // TODO: заменить на тип из domain/models
 }
 
 // ModalOrder - Модальное окно записи
