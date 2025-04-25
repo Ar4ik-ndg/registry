@@ -18,7 +18,7 @@ export function MainPage() {
             </div>
             <div className="nav-buttons">
                 <a className="nav-button back-btn">Запись на приём</a>
-                <ModalAccount showModal={showModalAccount} setShowModal={handleChangeShowModal} isAuthenticated={true} userName={"Иванов Иван"} />
+                <ModalAccount showModal={showModalAccount} handleShowModal={handleChangeShowModal} isAuthenticated={true} userName={"Иванов Иван"} />
             </div>
         </header>
             <main className="main-container">

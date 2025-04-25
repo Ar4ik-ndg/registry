@@ -1,5 +1,5 @@
 import "./modal-login.css"
-import {useRef} from "react";
+import {useRef, useState} from "react";
 
 type ModalLogin = {
     showModal: boolean
@@ -9,13 +9,19 @@ type ModalLogin = {
 
 
 export function ModalLogin(props:ModalLogin) {
-    const emailRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
+    const [email, setEmail] = useState("HTML");
+    const [password, setPassword] = useState("")
+
+    function handleChangeEmail(e: any) {
+        setEmail(e.target.value);
+    }
+    function handleChangePassword(e: any) {
+        setPassword(e.target.value);
+    }
 
     function handleLoginClick() {
-        const email = emailRef.current?.value;
-        const password = passwordRef.current?.value;
-        if (!(email && email.includes("@") && email.includes("."))) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!(emailRegex.test(email))) {
             alert("Неверно введен email адрес")
         }
         else if (!password) {
@@ -29,8 +35,8 @@ export function ModalLogin(props:ModalLogin) {
             <>
                 <div className={"background"}>
                     <h2>Вход</h2>
-                    <input ref={emailRef} placeholder={"Почта"} className={"emailInput"}/>
-                    <input ref={passwordRef} placeholder={"Пароль"} className={"passwordInput"}/>
+                    <input placeholder={"Почта"} className={"emailInput"} onChange={handleChangeEmail} />
+                    <input placeholder={"Пароль"} className={"passwordInput"} onChange={handleChangePassword} />
                     <a>Регистрация</a>
                     <a>Восстановление пароля</a>
                     <div className={"confirmButton"} onClick={handleLoginClick}>Вход</div>

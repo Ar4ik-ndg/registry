@@ -5,21 +5,24 @@ import { ModalLogin } from "~/components/modal-login/modal-login";
 
 type ModalAccountProps = {
     showModal: boolean
-    setShowModal: any
+    handleShowModal: any
     isAuthenticated: boolean
     userName: string
 }
 
 export function ModalAccount(props:ModalAccountProps) {
+    const [showLoginModal, setShowLoginModal] = useState(false);
 
+    function showModalHandler(changeState: any) {
+        setShowLoginModal(changeState);
+    }
 
     if (props.isAuthenticated){
-        const [isOpen, setIsOpen] = useState(false);
         return (
             <>
-                <div onClick={() => setIsOpen(!isOpen)} className={`userName ${isOpen ? "open" : ""} nav-button`}>
+                <div onClick={()=> props.handleShowModal(!props.showModal)} className={`userName nav-button`}>
                     <p>{props.userName.split(" ")[1]}</p>
-                    <div className={`burger ${isOpen? "open" : ""}`}>
+                    <div className={`burger ${props.showModal? "open" : ""}`}>
                         <div className={"line"}><Link to="/account">Личный кабинет</Link></div>
                         <div className={"divider"}></div>
                         <div className={"line"}>Выход</div>
@@ -29,11 +32,6 @@ export function ModalAccount(props:ModalAccountProps) {
         )
     }
     else{
-        const [showLoginModal, setShowLoginModal] = useState(false);
-
-        function showModalHandler(changeState: any) {
-            setShowLoginModal(changeState);
-        }
         return (
             <>
                 <div onClick={() => showModalHandler(true)}>
