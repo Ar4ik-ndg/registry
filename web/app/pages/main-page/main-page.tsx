@@ -1,5 +1,5 @@
 import "./main-page.css"
-import logo from "../../assets/logo 2.png"
+import logo from "../../assets/logo.png"
 import { ModalAccount} from "~/components/modal-account/modal-account";
 import {useState} from "react";
 
