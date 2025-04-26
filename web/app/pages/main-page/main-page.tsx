@@ -1,6 +1,7 @@
 import "./main-page.css"
+import type { Route } from "./+types/main-page"
 
-export function MainPage() {
+export default function MainPage() {
 
     return (
         <>
