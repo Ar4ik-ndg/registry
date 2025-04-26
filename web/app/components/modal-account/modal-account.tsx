@@ -13,7 +13,7 @@ export function ModalAccount(props:ModalAccountProps) {
         return (
             <>
                 <div onClick={()=> props.handleShowModal(!props.showModal)} className={`userName nav-button`}>
-                    <p>{props.userName.split(" ")[1]}</p>
+                    <p>{props.userName}</p>
                     <div className={`burger ${props.showModal? "open" : ""}`}>
                         <div className={"line"}><Link to="/account">Личный кабинет</Link></div>
                         <div className={"divider"}></div>

@@ -6,7 +6,7 @@ type ModalOrderProps = {
     showModalHandler: any //function (doChangeStateOfModal:bool) => void
     date: string
     status: string
-    doctor: any // TODO: заменить на тип из domain/models
+    doctorName: string // TODO: заменить на тип из domain/models
 }
 
 // ModalAppointment - Модальное окно записи
@@ -21,7 +21,7 @@ export function ModalAppointment(props:ModalOrderProps){
                     <span onClick={()=>props.showModalHandler(false)}>Закрыть</span>
                     Приём <h1>{props.date}</h1>
                     <p>Статус: {props.status}</p>
-                    <p>Специалист: {props.doctor}</p>
+                    <p>Специалист: {props.doctorName}</p>
                 </div>
             </>
         )
