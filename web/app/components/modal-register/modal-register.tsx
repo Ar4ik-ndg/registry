@@ -69,7 +69,7 @@ export function ModalRegister(props: ModalRegister) {
             setMedPolicy("")
             setSnils("")
             setBirthday("")
-            // Отправка на регистрацию (/register)
+            // Отправка на регистрацию (/auth/register)
         }
     }
     switch (props.modalType) {

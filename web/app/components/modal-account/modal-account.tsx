@@ -12,13 +12,11 @@ export function ModalAccount(props:ModalAccountProps) {
     if (props.isAuthenticated){
         return (
             <>
-                <div onClick={()=> props.handleShowModal(!props.showModal)} className={`userName nav-button`}>
-                    <p>{props.userName}</p>
-                    <div className={`burger ${props.showModal? "open" : ""}`}>
-                        <div className={"line"}><Link to="/account">Личный кабинет</Link></div>
-                        <div className={"divider"}></div>
-                        <div className={"line"}>Выход</div>
-                    </div>
+                <div className={`burger ${props.showModal? "open" : ""}`}>
+                    {/*тут в Link /account/userId */}
+                    <div className={"line"}><Link to="/account/">Личный кабинет</Link></div>
+                    <div className={"divider"}></div>
+                    <div className={"line"}>Выход</div>
                 </div>
             </>
         )

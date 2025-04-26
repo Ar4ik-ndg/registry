@@ -35,12 +35,12 @@ export default function UserLayout(){
                     <a className="nav-button back-btn">Запись на приём</a>
                     <div>{(() => {
                         // Пока false или true, должно быть isAuth
-                        if (false) {
+                        if (true) {
                             return (
                                 <>
-                                    <div onClick={()=>handleChangeShowModal(true)} className={`userName nav-button`}>{"user.name"}</div>
+                                    <div onClick={()=>handleChangeShowModal(!showModal)} className={`userName nav-button`}>{"user.name"}</div>
                                     <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal}
-                                                  isAuthenticated={false} userName={"user.name"}/>
+                                                  isAuthenticated={true} userName={"user.name"}/>
                                 </>
                             )
                         } else {

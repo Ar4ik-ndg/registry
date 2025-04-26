@@ -35,6 +35,7 @@ export function ModalLogin(props:ModalLogin) {
             props.handleShowModal(false)
             setEmail("")
             setPassword("")
+            // Отправка на вход (/auth/login)
         }
     }
 
