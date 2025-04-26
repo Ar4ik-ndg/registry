@@ -1,0 +1,122 @@
+.login-button{
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 8px 15px;
+    box-sizing: border-box;
+    min-width: 160px;
+    border-radius: 20px;
+    background: #fff;
+    color: #21B4A3;
+}
+
+.blackout{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+}
+
+.login{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    top: calc(50% - 175px);
+    left: calc(50vw - 250px);
+
+    opacity: 0;
+    width: 0;
+    height: 0;
+    padding: 20px 10px;
+    box-sizing: border-box;
+
+    border-radius: 20px;
+    background-color: #FFFFFF;
+
+    color: black;
+}
+
+.blackout.open{
+    opacity: 1;
+    width: 100vw;
+    height: 100vh;
+    transition: opacity 0.2s ease;
+}
+
+.login.open{
+    opacity: 1;
+    width: 500px;
+    height: 350px;
+}
+
+.close{
+    cursor: pointer;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    right: 0;
+    top: 0;
+    margin: 20px 40px;
+    color: darkgray;
+    font-weight: bold;
+    font-size: large;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+h2{
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+input{
+    background-color: #EAEAEA;
+    padding: 5px 10px;
+    border: 2px solid #21B4A3;
+    border-radius: 20px;
+    color: black;
+}
+
+input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
+    background-color: #EAEAEA;
+    padding: 5px 10px;
+    border: 2px solid #21B4A3;
+    border-radius: 20px;
+    color: black;
+}
+
+
+.bottom-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+}
+
+.registration, .recovery{
+    cursor: pointer;
+    font-size: small;
+}
+
+.confirm-button{
+    cursor: pointer;
+    margin-top: 5%;
+    width: 100%;
+    text-align: center;
+    color: white;
+    padding: 5px 30px;
+    border-radius: 20px;
+    background-color: #4FAA39;
+}
+
