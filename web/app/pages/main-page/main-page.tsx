@@ -1,14 +1,21 @@
 import "./main-page.css"
 import logo from "../../assets/logo.png"
 import { ModalAccount} from "~/components/modal-account/modal-account";
-import {useState} from "react";
+import { useState } from "react";
+import { checkAuth, getUser} from "~/core/utils"
+import { ModalLogin } from "~/components/modal-login/modal-login";
+import type {User} from "~/core/models";
 
 export function MainPage() {
     const [showModalAccount, setShowModalAccount] = useState(false);
+    const user: User = getUser();
+    const isAuth: boolean = checkAuth();
+
 
     function handleChangeShowModal(changeState: boolean) {
         setShowModalAccount(changeState);
     }
+
     return (
         <>
         <header>
@@ -18,7 +25,20 @@ export function MainPage() {
             </div>
             <div className="nav-buttons">
                 <a className="nav-button back-btn">Запись на приём</a>
-                <ModalAccount showModal={showModalAccount} handleShowModal={handleChangeShowModal} isAuthenticated={true} userName={"Иванов Иван"} />
+                <div>{(() => {
+                    // Пока false или true, должно быть isAuth
+                    if (false) {
+                        return (
+                            <ModalAccount showModal={showModalAccount} handleShowModal={handleChangeShowModal} isAuthenticated={isAuth} userName={user.name} />
+                        )
+                    }
+                    else {
+                        return (
+                            <ModalLogin showModal={showModalAccount} handleShowModal={handleChangeShowModal}/>
+                        )
+                    }
+                })()}
+                </div>
             </div>
         </header>
             <main className="main-container">

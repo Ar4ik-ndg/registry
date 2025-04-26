@@ -9,8 +9,8 @@ type ModalOrderProps = {
     doctor: any // TODO: заменить на тип из domain/models
 }
 
-// ModalOrder - Модальное окно записи
-export function ModalOrder(props:ModalOrderProps){
+// ModalAppointment - Модальное окно записи
+export function ModalAppointment(props:ModalOrderProps){
     // React mojet vernut' tolko 1 result from function
     if (props.showModal){
         return (

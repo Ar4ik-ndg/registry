@@ -1,7 +1,5 @@
 import "./modal-account.css";
-import {useState} from "react";
 import { Link} from "react-router";
-import { ModalLogin } from "~/components/modal-login/modal-login";
 
 type ModalAccountProps = {
     showModal: boolean
@@ -11,12 +9,6 @@ type ModalAccountProps = {
 }
 
 export function ModalAccount(props:ModalAccountProps) {
-    const [showLoginModal, setShowLoginModal] = useState(false);
-
-    function showModalHandler(changeState: any) {
-        setShowLoginModal(changeState);
-    }
-
     if (props.isAuthenticated){
         return (
             <>
@@ -27,15 +19,6 @@ export function ModalAccount(props:ModalAccountProps) {
                         <div className={"divider"}></div>
                         <div className={"line"}>Выход</div>
                     </div>
-                </div>
-            </>
-        )
-    }
-    else{
-        return (
-            <>
-                <div onClick={() => showModalHandler(true)}>
-                    <ModalLogin showModal={showLoginModal} showModalHandler={showModalHandler} />
                 </div>
             </>
         )
