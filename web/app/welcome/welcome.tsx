@@ -19,8 +19,8 @@ export function Welcome() {
           {/*<div onClick={()=>handleChangeShowModal(true)}>Тестовое модальное окно</div>*/}
           {/*/!*handleChangeShowModal -> ссылка на функцию setShowModal, особенности реакта*!/*/}
           {/*<ModalAppointment showModal={showModal} showModalHandler={handleChangeShowModal} date={"some-date"} status={"завершен"} doctor={"Тестов Тест Тестович"}/>*/}
-          <div onClick={() => handleChangeShowModal(true)}>Вход</div>
-          <ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal}/>
+          {/*<div onClick={() => handleChangeShowModal(true)}>Вход</div>*/}
+          {/*<ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal}/>*/}
       </div>
   );
 }
