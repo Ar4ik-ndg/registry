@@ -17,8 +17,7 @@ export default function Home() {
     }
 
     return (
-        <div>
-            <ModalRegister showModal={showModal} handleShowModal={handleShowModal} />
-        </div>
+        <>
+        </>
     );
 }
