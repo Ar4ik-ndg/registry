@@ -1,0 +1,70 @@
+main{
+    min-height: fit-content;
+    min-width: fit-content;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: black;
+    padding: 20px 40px;
+}
+.appointments{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    min-width: 100%;
+    min-height: 40vh;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+}
+.user-info{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    width: 50%;
+    min-width: 750px;
+    box-sizing: border-box;
+}
+.user-info li{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: start;
+    padding: 10px;
+    p {
+        min-width: 250px;
+    }
+    input{
+        color: black;
+        width: 400px;
+    }
+    input:-webkit-autofill {
+        filter: invert(1);
+    }
+}
+
+.buttons{
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+    gap: 40px
+}
+
+.change-button, .cancel-button{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 200px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: white;
+}
+
+.change-button{
+    background: #4FAA39;
+}
+.cancel-button{
+    background: #E21B16;
+}

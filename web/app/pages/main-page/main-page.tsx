@@ -1,47 +1,11 @@
 import "./main-page.css"
-import logo from "../../assets/logo.png"
-import { ModalAccount} from "~/components/modal-account/modal-account";
-import { useState } from "react";
-import { checkAuth, getUser} from "~/core/utils"
-import { ModalLogin } from "~/components/modal-login/modal-login";
-import type {User} from "~/core/models";
+import type { Route } from "./+types/main-page"
 
-export function MainPage() {
-    const [showModalAccount, setShowModalAccount] = useState(false);
-    const user: User = getUser();
-    const isAuth: boolean = checkAuth();
-
-
-    function handleChangeShowModal(changeState: boolean) {
-        setShowModalAccount(changeState);
-    }
+export default function MainPage() {
 
     return (
         <>
-        <header>
-            <div className="logo">
-                <img src={logo} alt="logo"/>
-                <div>Медицинский центр</div>
-            </div>
-            <div className="nav-buttons">
-                <a className="nav-button back-btn">Запись на приём</a>
-                <div>{(() => {
-                    // Пока false или true, должно быть isAuth
-                    if (false) {
-                        return (
-                            <ModalAccount showModal={showModalAccount} handleShowModal={handleChangeShowModal} isAuthenticated={isAuth} userName={user.name} />
-                        )
-                    }
-                    else {
-                        return (
-                            <ModalLogin showModal={showModalAccount} handleShowModal={handleChangeShowModal}/>
-                        )
-                    }
-                })()}
-                </div>
-            </div>
-        </header>
-            <main className="main-container">
+            <main>
                 <div className="left-box">
                     <h1>Наши преимущества</h1>
                     <ul>
