@@ -87,9 +87,9 @@ export function ModalRegister(props: ModalRegister) {
                 fullName: fullName
             }
 
-            debugger;
-            let registryResult = registryUser(request)
 
+            let registryResult = registryUser(request)
+            debugger;
             if (registryResult) {
                 props.handleShowModal(false)
                 props.handleModelType(ModalTypes.Login)

@@ -20,7 +20,6 @@ export function logout(): void {
 }
 
 export function registryUser(user: RegistryUserRequest) : boolean {
-    debugger;
     let registerPromise = RegisterUser(user)
     registerPromise.then(r => {
         localStorage.setItem("user", JSON.stringify(r.user))
