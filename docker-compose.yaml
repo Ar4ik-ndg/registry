@@ -33,5 +33,13 @@ services:
       - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  web:
+    image: registry_front
+    build: ./web
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:3000"
 volumes:
   db-data:
