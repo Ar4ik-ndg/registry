@@ -10,6 +10,8 @@ type ModalRegister = {
     handleShowModal: any
     modalType: ModalTypes
     handleModelType: any
+    isAuth: boolean
+    handleIsAuth: any
 }
 
 
@@ -23,7 +25,6 @@ export function ModalRegister(props: ModalRegister) {
     const [medPolicy, setMedPolicy] = useState("");
     const [snils, setSnils] = useState("");
     const [birthday, setBirthday] = useState("");
-    const [isSuccess, setIsSuccess] = useState(false)
 
     function setAllValues(setValue: any){
         setEmail(setValue)
@@ -34,10 +35,6 @@ export function ModalRegister(props: ModalRegister) {
         setMedPolicy(setValue)
         setSnils(setValue)
         setBirthday(setValue)
-    }
-
-    function handleIsSuccess(res:any) {
-        setIsSuccess(res)
     }
 
     function handleChangeFullName(e: any) {
@@ -93,53 +90,57 @@ export function ModalRegister(props: ModalRegister) {
             }
 
 
-            registryUser(request,handleIsSuccess)
-
-            if (isSuccess) {
-                props.handleShowModal(false)
-                props.handleModelType(ModalTypes.Login)
-                setAllValues("")
-            }
-            // TODO: придумать обработку окна
-            alert("KRNIGE REGISTRY - remove this message at next commit!")
+            registryUser(request,(response:boolean) => {
+                console.log(`Получение в modal-register ${response}`)
+                if (response) {
+                    props.handleShowModal(false)
+                    props.handleModelType(ModalTypes.Login)
+                    props.handleIsAuth(true)
+                    setAllValues("")
+                }
+                // TODO: придумать обработку окна
+                alert("KRNIGE REGISTRY - remove this message at next commit!")
+            });
         }
     }
-    switch (props.modalType) {
-        case ModalTypes.Register:
-            return (
-            <>
-                <div className={`blackout ${props.showModal ? "open" : ""}`}>
-                    <div className={`register-box ${props.showModal ? "open" : ""}`}>
-                        <h2>Регистрация</h2>
-                        <div className={"close"} onClick={() => {
-                            props.handleShowModal(false)
-                            props.handleModelType(ModalTypes.Login)
-                            setAllValues("")
-                        }}>x
-                        </div>
-                        <input required placeholder={"ФИО"} autoComplete={"name"} type={"name"} onChange={handleChangeFullName} value={fullName}/>
-                        <input required placeholder={"Почта"} autoComplete={"email"} type={"email"} className={"email-input"} onChange={handleChangeEmail} value={email}/>
-                        <input required placeholder={"Номер телефона"} autoComplete={"tel"} onChange={handleChangePhone} value={phone} maxLength={12}/>
-                        <p className={"birthday-input"}>
-                            Дата рождения {birthday}
-                            <input required placeholder={"Дата рождения"} autoComplete={"off"} onChange={handleChangeBirthday} value={birthday} type={"date"}/>
-                        </p>
+    if(!props.isAuth){
+        switch (props.modalType) {
+            case ModalTypes.Register:
+                return (
+                    <>
+                        <div className={`blackout ${props.showModal ? "open" : ""}`}>
+                            <div className={`register-box ${props.showModal ? "open" : ""}`}>
+                                <h2>Регистрация</h2>
+                                <div className={"close"} onClick={() => {
+                                    props.handleShowModal(false)
+                                    props.handleModelType(ModalTypes.Login)
+                                    setAllValues("")
+                                }}>x
+                                </div>
+                                <input required placeholder={"ФИО"} autoComplete={"name"} type={"name"} onChange={handleChangeFullName} value={fullName}/>
+                                <input required placeholder={"Почта"} autoComplete={"email"} type={"email"} className={"email-input"} onChange={handleChangeEmail} value={email}/>
+                                <input required placeholder={"Номер телефона"} autoComplete={"tel"} onChange={handleChangePhone} value={phone} maxLength={12}/>
+                                <p className={"birthday-input"}>
+                                    Дата рождения {birthday}
+                                    <input required placeholder={"Дата рождения"} autoComplete={"off"} onChange={handleChangeBirthday} value={birthday} type={"date"}/>
+                                </p>
 
-                        <input required placeholder={"Паспорт"} autoComplete={"off"} onChange={handleChangePassport} value={passport} maxLength={10}/>
-                        <input required placeholder={"СНИЛС"} autoComplete={"off"} onChange={handleChangeSnils} value={snils} maxLength={11}/>
-                        <input required placeholder={"Номер мед. полиса"} autoComplete={"off"} onChange={handleChangeMedPolicy} value={medPolicy} maxLength={16}/>
-                        <input required placeholder={"Пароль"} autoComplete={"password"} type={"password"} className={"password-input"}
-                               onChange={handleChangePassword} value={password}/>
-                        <div className={"bottom-content"}>
-                            <div className={"login"} onClick={() => props.handleModelType(ModalTypes.Login)}>Уже есть аккаунт? Вход</div>
-                            <p className={"recovery"}>Восстановление пароля</p>
-                            <div className={"confirm-button"} onClick={handleConfirmClick}>Вход</div>
+                                <input required placeholder={"Паспорт"} autoComplete={"off"} onChange={handleChangePassport} value={passport} maxLength={10}/>
+                                <input required placeholder={"СНИЛС"} autoComplete={"off"} onChange={handleChangeSnils} value={snils} maxLength={11}/>
+                                <input required placeholder={"Номер мед. полиса"} autoComplete={"off"} onChange={handleChangeMedPolicy} value={medPolicy} maxLength={16}/>
+                                <input required placeholder={"Пароль"} autoComplete={"password"} type={"password"} className={"password-input"}
+                                       onChange={handleChangePassword} value={password}/>
+                                <div className={"bottom-content"}>
+                                    <div className={"login"} onClick={() => props.handleModelType(ModalTypes.Login)}>Уже есть аккаунт? Вход</div>
+                                    <p className={"recovery"}>Восстановление пароля</p>
+                                    <div className={"confirm-button"} onClick={handleConfirmClick}>Вход</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </>
-        )
-        case ModalTypes.Login:
-            return (<ModalLogin showModal={props.showModal} handleShowModal={props.handleShowModal} modalType={props.modalType} handleModelType={props.handleModelType}/>)
+                    </>
+                )
+            case ModalTypes.Login:
+                return (<ModalLogin showModal={props.showModal} handleShowModal={props.handleShowModal} modalType={props.modalType} handleModelType={props.handleModelType} isAuth={props.isAuth} handleIsAuth={props.handleIsAuth}/>)
+        }
     }
 }

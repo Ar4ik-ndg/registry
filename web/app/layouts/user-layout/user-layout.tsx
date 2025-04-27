@@ -57,7 +57,7 @@ export default function UserLayout(){
                             return (
                                 <>
                                     <div onClick={()=> handleChangeShowModal(true)} className={`userName nav-button`}>Вход</div>
-                                    <ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal} modalType={modalType} handleModelType={handleChangeModalType}/>
+                                    <ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal} modalType={modalType} handleModelType={handleChangeModalType} isAuth={isAuth} handleIsAuth={handleIsAuth}/>
                                 </>
                             )
                         }

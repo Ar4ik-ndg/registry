@@ -1,4 +1,4 @@
-import {type RegistryUserRequest, type User, type ApiError} from "./models"
+import {type RegistryUserRequest, type User, type ApiError, type RegistryResponse} from "./models"
 import {RegisterUser} from "~/core/api";
 
 export function getUser(): User | null {
@@ -19,14 +19,15 @@ export function logout(): void {
     localStorage.removeItem("user");
 }
 
-export function registryUser(user: RegistryUserRequest, handleIsSuccess:any) {
-    let registerPromise = RegisterUser(user)
-    registerPromise.then(r => {
+export function registryUser(user: RegistryUserRequest, isSuccsess: any) {
+    RegisterUser(user).then((r:RegistryResponse) => {
         localStorage.setItem("user", JSON.stringify(r.user))
         localStorage.setItem("token", r.token)
-        handleIsSuccess(true)
-    }).catch((e: ApiError) => {
+        console.log(`ответ registryUser ${true}`)
+        isSuccsess(true);
+    }).catch((e: Error) => {
         console.error(e)
-        handleIsSuccess(false)
+        console.log(`ответ registryUser ${false}`)
+        isSuccsess(false);
     })
 }
