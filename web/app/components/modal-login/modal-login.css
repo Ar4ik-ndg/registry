@@ -2,12 +2,12 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 0;
-    height: 0;
+    visibility: hidden;
+    opacity: 0;
     box-sizing: border-box;
     background-color: rgba(0, 0, 0, 0.7);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    opacity: 0;
+    transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+    pointer-events: none;
 }
 
 .login-box{
@@ -34,9 +34,9 @@
 
 .blackout.open{
     opacity: 1;
-    width: 100vw;
-    height: 100vh;
-    transition: opacity 0.2s ease;
+    visibility: visible;
+    transition: opacity 0.2s ease-in, visibility 0.2s ease-in;
+    pointer-events: auto;
 }
 
 .login-box.open{

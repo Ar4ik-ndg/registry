@@ -1,7 +1,8 @@
 import "./modal-login.css"
 import { useState } from "react";
 import { ModalRegister} from "~/components/modal-register/modal-register";
-import { ModalTypes } from "~/core/models";
+import {type AuthRequest, ModalTypes} from "~/core/models";
+import {loginUser} from "~/core/utils";
 
 type ModalLogin = {
     showModal: boolean
@@ -32,11 +33,20 @@ export function ModalLogin(props:ModalLogin) {
             alert("Введите пароль")
         }
         else {
-            props.handleShowModal(false)
-            props.handleIsAuth(true)
-            setEmail("")
-            setPassword("")
-            // Отправка на вход (/auth/login)
+            let request : AuthRequest = {
+                password: password,
+                email: email
+            }
+
+            loginUser(request,(response:boolean) => {
+                if (response) {
+                    props.handleShowModal(false)
+                    props.handleModelType(ModalTypes.Login)
+                    props.handleIsAuth(true)
+                    setEmail("")
+                    setPassword("")
+                }
+            });
         }
     }
     if(!props.isAuth){

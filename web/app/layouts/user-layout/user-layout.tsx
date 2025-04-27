@@ -7,13 +7,14 @@ import {ModalLogin} from "~/components/modal-login/modal-login";
 import {useEffect, useState} from "react";
 import { ModalTypes } from "~/core/models";
 import type {User} from "~/core/models";
-import {checkAuth, getUser} from "~/core/utils";
+import {checkAuth, getMessage, getUser} from "~/core/utils";
 
 export default function UserLayout(){
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState(ModalTypes.Login);
     const [user, setUser] = useState<User>();
     const [isAuth, setIsAuth] = useState(false);
+    const [message, setMessage] = useState<string|null>(null);
 
     useEffect(() => {
         setIsAuth(checkAuth())
@@ -32,6 +33,13 @@ export default function UserLayout(){
 
     function handleIsAuth() {
         setIsAuth(checkAuth())
+    }
+
+    function handleMessage(msg: string|null) {
+        if (msg === null && getMessage()) {
+            localStorage.removeItem("message");
+        }
+        setMessage(msg);
     }
 
     return (

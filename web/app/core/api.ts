@@ -1,4 +1,4 @@
-import type {RegistryResponse, RegistryUserRequest, User} from "~/core/models";
+import type {Message, AuthRequest, UserResponse, RegistryUserRequest, User} from "~/core/models";
 
 const API_LINK = "http://localhost:8080"
 
@@ -16,8 +16,27 @@ export async function RegisterUser(request: RegistryUserRequest) {
     })
 
     if (!response.ok) {
-        throw new Error(await response.json());
+        const error = await response.json() as Message
+        throw new Error(error.message);
     }
 
-    return await response.json() as RegistryResponse;
+    return await response.json() as UserResponse;
+}
+
+export async function LoginUser(request: AuthRequest) {
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(request)
+    })
+
+    if (!response.ok) {
+        const error = await response.json() as Message
+        throw new Error(error.message);
+    }
+
+    return await response.json() as UserResponse;
 }

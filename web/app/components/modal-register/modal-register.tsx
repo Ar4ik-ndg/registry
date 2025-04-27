@@ -4,6 +4,7 @@ import {ModalLogin} from "~/components/modal-login/modal-login";
 import {ModalTypes, type RegistryUserRequest} from "~/core/models";
 import {RegisterUser} from "~/core/api";
 import {registryUser} from "~/core/utils";
+import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 
 type ModalRegister = {
     showModal: boolean
@@ -25,6 +26,7 @@ export function ModalRegister(props: ModalRegister) {
     const [medPolicy, setMedPolicy] = useState("");
     const [snils, setSnils] = useState("");
     const [birthday, setBirthday] = useState("");
+    const [showMessage, setShowMessage] = useState(false);
 
     function setAllValues(setValue: any){
         setEmail(setValue)
@@ -68,6 +70,10 @@ export function ModalRegister(props: ModalRegister) {
         setPassword(e.target.value);
     }
 
+    function handleShowModalMessage(e: any){
+        setShowMessage(e)
+    }
+
     function handleConfirmClick() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!(emailRegex.test(email))) {
@@ -91,15 +97,12 @@ export function ModalRegister(props: ModalRegister) {
 
 
             registryUser(request,(response:boolean) => {
-                console.log(`Получение в modal-register ${response}`)
                 if (response) {
                     props.handleShowModal(false)
                     props.handleModelType(ModalTypes.Login)
                     props.handleIsAuth(true)
                     setAllValues("")
                 }
-                // TODO: придумать обработку окна
-                alert("KRNIGE REGISTRY - remove this message at next commit!")
             });
         }
     }
@@ -121,7 +124,7 @@ export function ModalRegister(props: ModalRegister) {
                                 <input required placeholder={"Почта"} autoComplete={"email"} type={"email"} className={"email-input"} onChange={handleChangeEmail} value={email}/>
                                 <input required placeholder={"Номер телефона"} autoComplete={"tel"} onChange={handleChangePhone} value={phone} maxLength={12}/>
                                 <p className={"birthday-input"}>
-                                    Дата рождения {birthday}
+                                    Дата рождения
                                     <input required placeholder={"Дата рождения"} autoComplete={"off"} onChange={handleChangeBirthday} value={birthday} type={"date"}/>
                                 </p>
 
@@ -133,7 +136,7 @@ export function ModalRegister(props: ModalRegister) {
                                 <div className={"bottom-content"}>
                                     <div className={"login"} onClick={() => props.handleModelType(ModalTypes.Login)}>Уже есть аккаунт? Вход</div>
                                     <p className={"recovery"}>Восстановление пароля</p>
-                                    <div className={"confirm-button"} onClick={handleConfirmClick}>Вход</div>
+                                    <div className={"confirm-button"} onClick={handleConfirmClick}>Регистрация</div>
                                 </div>
                             </div>
                         </div>

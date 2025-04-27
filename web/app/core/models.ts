@@ -10,8 +10,27 @@ export type User = {
     role: string,
 }
 
-export type ApiError = {
-    error: string
+export type Staff = {
+    id: string,
+    fullName: string,
+    phone: string,
+    email: string,
+    prof: string|null,
+    role: string,
+}
+
+export type Tiket = {
+    id: string,
+    date: string,
+    description: string,
+    result: string|null,
+    doctor: string,
+    status: string,
+    user: User
+}
+
+export type Message = {
+    message: string
 }
 
 export enum ModalTypes {
@@ -31,7 +50,12 @@ export type RegistryUserRequest = {
     password: string
 }
 
-export type RegistryResponse = {
+export type AuthRequest = {
+    email: string,
+    password: string
+}
+
+export type UserResponse = {
     token: string,
-    user: User
+    user: User|Staff
 }
