@@ -666,6 +666,64 @@ Status Code = 403 Forbidden
 ```
 ---
 
+### Получение списка врачей отдельного направления:
+
+```http
+GET http://localhost:8080/api/v0.1/user/med/profs
+```
+
+#### Запрос
+
+```curl
+curl --request GET \
+  --url http://localhost:8080/api/v0.1/user/med/profs \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...'
+```
+
+где: <br>
+
+| Параметр                | Значение                                                 |
+|-------------------------|----------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)} |
+### Ответ:
+
+---
+
+#### Правильный токен:
+
+```json
+[
+  "Терапевт",
+  "Офтальмолог"
+]
+```
+```http
+Status Code = 200 OK
+```
+
+---
+
+#### Нет ни 1 направления:
+
+```json
+{
+  "error": "Нет докторов данного направления"
+}
+```
+```http
+Status Code = 400 Bad Request
+```
+
+---
+
+#### Просроченный/неверный токен:
+
+```http
+Status Code = 403 Forbidden
+```
+---
+
 # Персонал
 
 Запросы роли пользователя также доступны для данной роли

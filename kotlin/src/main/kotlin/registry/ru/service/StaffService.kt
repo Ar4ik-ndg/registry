@@ -51,7 +51,7 @@ class StaffService(private val staffRepository: StaffRepository, private val jwt
                 fullName = staffRequest.fullName?: existStaff.fullName,
                 phone = staffRequest.phone?: existStaff.phone,
                 email = staffRequest.email?: existStaff.email,
-                prof = staffRequest.prof?: existStaff.prof,
+                prof = staffRequest.prof,
                 password = password,
                 role = role
             )
@@ -73,4 +73,8 @@ class StaffService(private val staffRepository: StaffRepository, private val jwt
     fun getStaffByEmail(email: String): Staff? = staffRepository.findByEmail(email)
     fun getStaffByProf(prof: String): List<Staff> = staffRepository.findByProf(prof)
     fun getStaffById(id: String): Staff? = staffRepository.findById(id).orElse(null)
+    fun getStaffPofs(): List<String>? {
+        val profs = staffRepository.findDistinctProf()
+        if (profs.filterNotNull().isEmpty()) return null else return profs
+    }
 }

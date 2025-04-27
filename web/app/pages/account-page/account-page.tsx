@@ -11,7 +11,7 @@ export default function AccountPage({params}: Route.ComponentProps) {
     const name = params.userId
     return (
         <>
-            <main>
+            <main className="account-page">
                 <h2>Ваши приемы</h2>
                 <div className="appointments">
                 </div>

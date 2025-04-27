@@ -4,17 +4,24 @@ import {Link, Outlet} from "react-router";
 import logo from "~/assets/logo.png";
 import {ModalAccount} from "~/components/modal-account/modal-account";
 import {ModalLogin} from "~/components/modal-login/modal-login";
-import {useState} from "react";
-import { ModalTypes} from "~/core/models";
+import {useEffect, useState} from "react";
+import { ModalTypes } from "~/core/models";
 import type {User} from "~/core/models";
-import {checkAuth, getUser} from "~/core/utils";
+import {checkAuth, getMessage, getUser} from "~/core/utils";
 
 export default function UserLayout(){
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState(ModalTypes.Login);
-    // const user: User = getUser();
-    // const isAuth: boolean = checkAuth();
+    const [user, setUser] = useState<User>();
+    const [isAuth, setIsAuth] = useState(false);
+    const [message, setMessage] = useState<string|null>(null);
 
+    useEffect(() => {
+        setIsAuth(checkAuth())
+
+        let user = getUser();
+        if (user !== null) setUser(user)
+    }, [isAuth])
 
     function handleChangeShowModal(changeState: boolean) {
         setShowModal(changeState);
@@ -22,6 +29,17 @@ export default function UserLayout(){
 
     function handleChangeModalType(changeState: ModalTypes) {
         setModalType(changeState);
+    }
+
+    function handleIsAuth() {
+        setIsAuth(checkAuth())
+    }
+
+    function handleMessage(msg: string|null) {
+        if (msg === null && getMessage()) {
+            localStorage.removeItem("message");
+        }
+        setMessage(msg);
     }
 
     return (
@@ -35,19 +53,19 @@ export default function UserLayout(){
                     <a className="nav-button back-btn">Запись на приём</a>
                     <div>{(() => {
                         // Пока false или true, должно быть isAuth
-                        if (true) {
+                        if (isAuth) {
                             return (
                                 <>
-                                    <div onClick={()=>handleChangeShowModal(!showModal)} className={`userName nav-button`}>{"user.name"}</div>
+                                    <div onClick={()=>handleChangeShowModal(!showModal)} className={`userName nav-button`}>{user?.fullName}</div>
                                     <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal}
-                                                  isAuthenticated={true} userName={"user.name"}/>
+                                                  isAuth={true} handleIsAuth={handleIsAuth}/>
                                 </>
                             )
                         } else {
                             return (
                                 <>
                                     <div onClick={()=> handleChangeShowModal(true)} className={`userName nav-button`}>Вход</div>
-                                    <ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal} modalType={modalType} handleModelType={handleChangeModalType}/>
+                                    <ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal} modalType={modalType} handleModelType={handleChangeModalType} isAuth={isAuth} handleIsAuth={handleIsAuth}/>
                                 </>
                             )
                         }
