@@ -19,8 +19,8 @@ data class Staff(
     @Column(name = "email",unique = true, nullable = false, columnDefinition = "TEXT")
     val email: String,
 
-    @Column(name = "prof", nullable = false, columnDefinition = "TEXT")
-    val prof: String,
+    @Column(name = "prof", columnDefinition = "TEXT")
+    val prof: String?,
 
     @JsonIgnore
     @Column(name = "password", nullable = false, columnDefinition = "TEXT")

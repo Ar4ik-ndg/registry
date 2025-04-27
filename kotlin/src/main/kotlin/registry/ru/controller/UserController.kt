@@ -76,6 +76,12 @@ class UserController(private val userService: UserService, private val tiketServ
         else return ResponseEntity.ok().body(doctors)
     }
 
+    @GetMapping("/med/profs")
+    fun getProfsDoctors(): ResponseEntity<Any> {
+        val profs: List<String>? = staffService.getStaffPofs()
+        if (profs.isNullOrEmpty()) return ResponseEntity.internalServerError().body(Error("нет врачей")) else return ResponseEntity.ok().body(profs)
+    }
+
     @PutMapping("/id/{id}")
     fun updateUser(@PathVariable id: String, @RequestBody updUser: UserUpdRequest): ResponseEntity<Any> = userService.updateUser(updUser, id)
 
