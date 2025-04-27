@@ -4,7 +4,7 @@ import {Link, Outlet} from "react-router";
 import logo from "~/assets/logo.png";
 import {ModalAccount} from "~/components/modal-account/modal-account";
 import {ModalLogin} from "~/components/modal-login/modal-login";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { ModalTypes} from "~/core/models";
 import type {User} from "~/core/models";
 import {checkAuth, getUser} from "~/core/utils";
@@ -15,6 +15,11 @@ export default function UserLayout(){
     // const user: User = getUser();
     // const isAuth: boolean = checkAuth();
 
+    const [isAuth, setIsAuth] = useState(false);
+
+    useEffect(() => {
+        setIsAuth(checkAuth())
+    }, [isAuth])
 
     function handleChangeShowModal(changeState: boolean) {
         setShowModal(changeState);
@@ -35,7 +40,7 @@ export default function UserLayout(){
                     <a className="nav-button back-btn">Запись на приём</a>
                     <div>{(() => {
                         // Пока false или true, должно быть isAuth
-                        if (true) {
+                        if (isAuth) {
                             return (
                                 <>
                                     <div onClick={()=>handleChangeShowModal(!showModal)} className={`userName nav-button`}>{"user.name"}</div>

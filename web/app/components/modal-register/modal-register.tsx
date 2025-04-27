@@ -1,7 +1,9 @@
 import "./modal-register.css"
 import {useState} from "react";
 import {ModalLogin} from "~/components/modal-login/modal-login";
-import { ModalTypes } from "~/core/models";
+import {ModalTypes, type RegistryUserRequest} from "~/core/models";
+import {RegisterUser} from "~/core/api";
+import {registryUser} from "~/core/utils";
 
 type ModalRegister = {
     showModal: boolean
@@ -70,6 +72,24 @@ export function ModalRegister(props: ModalRegister) {
             setSnils("")
             setBirthday("")
             // Отправка на регистрацию (/auth/register)
+            let request : RegistryUserRequest = {
+                medPolicy: medPolicy,
+                passport: passport,
+                password: password,
+                phone: phone,
+                snils: snils,
+                birthday: birthday,
+                email: email,
+                fullName: fullName
+            }
+
+            let registryResult = registryUser(request)
+
+            if (registryResult){
+                props.handleShowModal(false)
+            }
+            // TODO: придумать обработку окна
+            alert("KRNIGE REGISTRY - remove this message at next commit!")
         }
     }
     switch (props.modalType) {
