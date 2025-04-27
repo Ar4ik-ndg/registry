@@ -19,16 +19,14 @@ export function logout(): void {
     localStorage.removeItem("user");
 }
 
-export function registryUser(user: RegistryUserRequest) : boolean {
+export function registryUser(user: RegistryUserRequest, handleIsSuccess:any) {
     let registerPromise = RegisterUser(user)
     registerPromise.then(r => {
         localStorage.setItem("user", JSON.stringify(r.user))
         localStorage.setItem("token", r.token)
-        return true
+        handleIsSuccess(true)
     }).catch((e: ApiError) => {
         console.error(e)
-        return false
+        handleIsSuccess(false)
     })
-
-    return false
 }

@@ -23,6 +23,7 @@ export function ModalRegister(props: ModalRegister) {
     const [medPolicy, setMedPolicy] = useState("");
     const [snils, setSnils] = useState("");
     const [birthday, setBirthday] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false)
 
     function setAllValues(setValue: any){
         setEmail(setValue)
@@ -33,6 +34,10 @@ export function ModalRegister(props: ModalRegister) {
         setMedPolicy(setValue)
         setSnils(setValue)
         setBirthday(setValue)
+    }
+
+    function handleIsSuccess(res:any) {
+        setIsSuccess(res)
     }
 
     function handleChangeFullName(e: any) {
@@ -88,9 +93,9 @@ export function ModalRegister(props: ModalRegister) {
             }
 
 
-            let registryResult = registryUser(request)
-            debugger;
-            if (registryResult) {
+            registryUser(request,handleIsSuccess)
+
+            if (isSuccess) {
                 props.handleShowModal(false)
                 props.handleModelType(ModalTypes.Login)
                 setAllValues("")
