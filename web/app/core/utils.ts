@@ -14,7 +14,13 @@ export function checkAuth(): boolean {
     return localStorage.getItem("token") !== null;
 }
 
+export function logout(): void {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+}
+
 export function registryUser(user: RegistryUserRequest) : boolean {
+    debugger;
     let registerPromise = RegisterUser(user)
     registerPromise.then(r => {
         localStorage.setItem("user", JSON.stringify(r.user))

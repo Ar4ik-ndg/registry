@@ -6,6 +6,7 @@ const API_VERSION = "v0.1"
 
 // RegisterUser - регистрация пользователя
 export async function RegisterUser(request: RegistryUserRequest) {
+    debugger;
     const response = await fetch(`${API_LINK}/api/${API_VERSION}/auth/register`, {
         method: 'POST',
         headers: {

@@ -5,20 +5,21 @@ import logo from "~/assets/logo.png";
 import {ModalAccount} from "~/components/modal-account/modal-account";
 import {ModalLogin} from "~/components/modal-login/modal-login";
 import {useEffect, useState} from "react";
-import { ModalTypes} from "~/core/models";
+import { ModalTypes } from "~/core/models";
 import type {User} from "~/core/models";
 import {checkAuth, getUser} from "~/core/utils";
 
 export default function UserLayout(){
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState(ModalTypes.Login);
-    // const user: User = getUser();
-    // const isAuth: boolean = checkAuth();
-
+    const [user, setUser] = useState<User>();
     const [isAuth, setIsAuth] = useState(false);
 
     useEffect(() => {
         setIsAuth(checkAuth())
+
+        let user = getUser();
+        if (user !== null) setUser(user)
     }, [isAuth])
 
     function handleChangeShowModal(changeState: boolean) {
@@ -27,6 +28,10 @@ export default function UserLayout(){
 
     function handleChangeModalType(changeState: ModalTypes) {
         setModalType(changeState);
+    }
+
+    function handleIsAuth() {
+        setIsAuth(checkAuth())
     }
 
     return (
@@ -43,9 +48,9 @@ export default function UserLayout(){
                         if (isAuth) {
                             return (
                                 <>
-                                    <div onClick={()=>handleChangeShowModal(!showModal)} className={`userName nav-button`}>{"user.name"}</div>
+                                    <div onClick={()=>handleChangeShowModal(!showModal)} className={`userName nav-button`}>{user?.fullName}</div>
                                     <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal}
-                                                  isAuthenticated={true} userName={"user.name"}/>
+                                                  isAuth={true} handleIsAuth={handleIsAuth}/>
                                 </>
                             )
                         } else {
