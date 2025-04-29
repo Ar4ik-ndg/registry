@@ -50,6 +50,26 @@ export type RegistryUserRequest = {
     password: string
 }
 
+export type UserUpdateRequest = {
+    birthday: string | null,
+    email: string | null,
+    fullName: string | null,
+    medPolicy: string | null,
+    passport: string | null,
+    phone: string | null,
+    snils: string | null,
+    role: string | null
+}
+
+export type CreateTiketRequest = {
+    date: string,
+    description: string,
+    result: string|null,
+    doctor: string,
+    status: string|null,
+    user: UserUpdateRequest
+}
+
 export type AuthRequest = {
     email: string,
     password: string

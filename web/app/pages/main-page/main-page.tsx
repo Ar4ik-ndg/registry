@@ -5,7 +5,7 @@ export default function MainPage() {
 
     return (
         <>
-            <main>
+            <main className="main-page">
                 <div className="left-box">
                     <h1>Наши преимущества</h1>
                     <ul>

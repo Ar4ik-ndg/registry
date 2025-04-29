@@ -1,5 +1,6 @@
 package registry.ru.controller
 
+import org.springframework.format.annotation.DateTimeFormat
 import registry.ru.service.UserService
 import registry.ru.service.TiketService
 import org.springframework.web.bind.annotation.*
@@ -22,6 +23,11 @@ class UserController(private val userService: UserService, private val tiketServ
             return tiketService.getTiketsByUserId(user.id)
         }
         return ResponseEntity.badRequest().body(Error("Не найдено пользователя с id $id"))
+    }
+
+    @GetMapping("/tikets/busy/{date}")
+    fun getTiketsBusy(@PathVariable @DateTimeFormat(pattern = "dd.MM.yyyy") date: LocalDate): ResponseEntity<Any> {
+        return tiketService.getBusyTime(date)
     }
 
     @PostMapping("/tikets/new")

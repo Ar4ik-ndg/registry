@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
-import java.util.*
 
 @Service
 class TiketService(private val tiketRepository: TiketRepository) {
@@ -40,6 +38,12 @@ class TiketService(private val tiketRepository: TiketRepository) {
         val tikets = tiketRepository.findByStatus(parsedStatus)
         if (tikets.isNotEmpty()) return ResponseEntity.ok().body(tikets)
         else return ResponseEntity.badRequest().body(Error("Нет осмотров со статусом $parsedStatus"))
+    }
+    fun getBusyTime(start: LocalDate): ResponseEntity<Any> {
+        val startDay = start.atStartOfDay()
+        val endDay = start.plusDays(1).atStartOfDay()
+        val busyTime: List<LocalDateTime>? = tiketRepository.findByDateBetween(startDay, endDay, listOf(TiketStatus.отменен.name, TiketStatus.завершен.name))
+        return ResponseEntity.ok().body(busyTime)
     }
     fun createNewTiket(tiket: Tiket): Tiket = tiketRepository.save(tiket)
     fun updateTiket(id: String, tiket: TiketRequest, user: User): ResponseEntity<Any> {

@@ -666,7 +666,7 @@ Status Code = 403 Forbidden
 ```
 ---
 
-### Получение списка врачей отдельного направления:
+### Получение специальностей врачей:
 
 ```http
 GET http://localhost:8080/api/v0.1/user/med/profs
@@ -713,6 +713,62 @@ Status Code = 200 OK
 ```
 ```http
 Status Code = 400 Bad Request
+```
+
+---
+
+#### Просроченный/неверный токен:
+
+```http
+Status Code = 403 Forbidden
+```
+---
+
+### Получение занятого времени:
+
+```http
+GET http://localhost:8080/api/v0.1/user/tikets/busy/{date}
+```
+
+#### Запрос
+
+```curl
+curl --request GET \
+  --url http://localhost:8080/api/v0.1/user/tikets/busy/{date} \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...'
+```
+
+где: <br>
+
+| Параметр                | Значение                                                          |
+|-------------------------|-------------------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}          |
+| date                    | Дата (формат dd.MM.yyyy), с которой хотите получить занятое время |
+### Ответ:
+
+---
+
+#### Правильный токен:
+
+```json
+[
+  "07.05.1764 17:49",
+  "14.12.2239 04:26"
+]
+```
+```http
+Status Code = 200 OK
+```
+
+---
+
+#### Нет занятых:
+```json
+[]
+```
+```http
+Status Code = 200 OK
 ```
 
 ---

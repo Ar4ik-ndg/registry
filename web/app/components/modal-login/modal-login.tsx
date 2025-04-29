@@ -69,7 +69,10 @@ export function ModalLogin(props:ModalLogin) {
                                        onChange={handleChangePassword} value={password}/>
                                 <div className={"bottom-content"}>
                                     <div className={"register"}
-                                         onClick={() => props.handleModelType(ModalTypes.Register)}>Регистрация
+                                         onClick={() => {
+                                             debugger;
+                                             props.handleModelType(ModalTypes.Register)
+                                         }}>Регистрация
                                     </div>
                                     <p className={"recovery"}>Восстановление пароля</p>
                                     <div className={"confirm-button"} onClick={handleLoginClick}>Вход</div>
