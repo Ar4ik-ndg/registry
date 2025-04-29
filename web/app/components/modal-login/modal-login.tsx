@@ -70,7 +70,6 @@ export function ModalLogin(props:ModalLogin) {
                                 <div className={"bottom-content"}>
                                     <div className={"register"}
                                          onClick={() => {
-                                             debugger;
                                              props.handleModelType(ModalTypes.Register)
                                          }}>Регистрация
                                     </div>

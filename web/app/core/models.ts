@@ -25,7 +25,7 @@ export type Tiket = {
     description: string,
     result: string|null,
     doctor: string,
-    status: string,
+    status: TiketStatus,
     user: User
 }
 
@@ -37,6 +37,21 @@ export enum ModalTypes {
     Login,
     Register,
     Recovery,
+}
+
+export enum TiketStatus {
+    отменен = "отменен",
+    подтверждается = "подтверждается",
+    запланирован = "запланирован",
+    обработка = "обработка",
+    завершен = "завершен"
+}
+
+export enum Roles {
+    USER,
+    DOCTOR,
+    REGISTRAR,
+    ADMIN
 }
 
 export type RegistryUserRequest = {

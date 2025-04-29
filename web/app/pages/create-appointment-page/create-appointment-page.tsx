@@ -4,8 +4,8 @@ import DatePicker from "react-datepicker"
 import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
 import type { Route } from "./+types/create-appointment-page"
-import {useEffect, useState} from "react";
-import {Link} from "react-router";
+import { useEffect, useState } from "react";
+import { Link } from "react-router";
 
 export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [showDocs, setShowDocs] = useState(false)
