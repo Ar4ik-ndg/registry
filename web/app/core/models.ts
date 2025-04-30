@@ -41,11 +41,11 @@ export enum ModalTypes {
 }
 
 export enum TiketStatus {
-    отменен = "отменен",
-    подтверждается = "подтверждается",
-    запланирован = "запланирован",
-    обработка = "обработка",
-    завершен = "завершен"
+    canceled = "отменен",
+    confirmed = "подтверждается",
+    scheduled = "запланирован",
+    processing = "обработка",
+    completed = "завершен"
 }
 
 export enum Roles {

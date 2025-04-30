@@ -45,8 +45,8 @@ export function ModalUserAppointment(props:ModalOrderProps){
                     </div>
                     <div className={"buttons"}>
                         {(() => {
-                            if ((tiket.status === TiketStatus.подтверждается
-                            || tiket.status === TiketStatus.запланирован)
+                            if ((tiket.status === TiketStatus.confirmed
+                            || tiket.status === TiketStatus.scheduled)
                             && isAvaliable) {
                                 return (<>
                                     <div className={"cancel-button"} onClick={handleCancel}>Отменить</div>
