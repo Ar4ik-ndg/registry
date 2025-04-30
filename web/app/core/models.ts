@@ -30,7 +30,8 @@ export type Tiket = {
 }
 
 export type Message = {
-    message: string
+    message: string|null,
+    error: string|null
 }
 
 export enum ModalTypes {
