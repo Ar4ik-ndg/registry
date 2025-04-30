@@ -1,6 +1,6 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
-import {ModalAppointment} from "~/components/modal-appointment/modal-appointment";
+import {ModalUserAppointment} from "~/components/modal-user-appointment/modal-user-appointment";
 import {ModalLogin} from "~/components/modal-login/modal-login";
 import {useState} from 'react'
 

@@ -1,9 +1,9 @@
 import "./modal-register.css"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ModalLogin} from "~/components/modal-login/modal-login";
 import {ModalTypes, type RegistryUserRequest} from "~/core/models";
 import {RegisterUser} from "~/core/api";
-import {registryUser} from "~/core/utils";
+import {getMessage, registryUser} from "~/core/utils";
 import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 
 type ModalRegister = {
@@ -15,8 +15,6 @@ type ModalRegister = {
     handleIsAuth: any
 }
 
-
-
 export function ModalRegister(props: ModalRegister) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
@@ -27,6 +25,7 @@ export function ModalRegister(props: ModalRegister) {
     const [snils, setSnils] = useState("");
     const [birthday, setBirthday] = useState("");
     const [showMessage, setShowMessage] = useState(false);
+    const [message, setMessage] = useState("");
 
     function setAllValues(setValue: any){
         setEmail(setValue)
@@ -74,6 +73,14 @@ export function ModalRegister(props: ModalRegister) {
         setShowMessage(e)
     }
 
+    function handleMessage(e: any) {
+        if (e === null && getMessage()) {
+            localStorage.removeItem("message");
+        }
+        setMessage(e)
+
+    }
+
     function handleConfirmClick() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!(emailRegex.test(email))) {
@@ -103,16 +110,25 @@ export function ModalRegister(props: ModalRegister) {
                     props.handleIsAuth(true)
                     setAllValues("")
                 }
+                else {
+                    handleShowModalMessage(true)
+                    handleMessage(getMessage())
+                }
             });
         }
     }
+
+    useEffect(() => {
+        setAllValues("")
+    }, [])
+
     if(!props.isAuth){
         switch (props.modalType) {
             case ModalTypes.Register:
                 return (
                     <>
                         <div className={`blackout ${props.showModal ? "open" : ""}`}>
-                            <div className={`register-box ${props.showModal ? "open" : ""}`}>
+                            <form autoComplete={"off"} className={`register-box ${props.showModal ? "open" : ""}`}>
                                 <h2>Регистрация</h2>
                                 <div className={"close"} onClick={() => {
                                     props.handleShowModal(false)
@@ -120,25 +136,33 @@ export function ModalRegister(props: ModalRegister) {
                                     setAllValues("")
                                 }}>x
                                 </div>
-                                <input required placeholder={"ФИО"} autoComplete={"name"} type={"name"} onChange={handleChangeFullName} value={fullName}/>
-                                <input required placeholder={"Почта"} autoComplete={"email"} type={"email"} className={"email-input"} onChange={handleChangeEmail} value={email}/>
-                                <input required placeholder={"Номер телефона"} autoComplete={"tel"} onChange={handleChangePhone} value={phone} maxLength={12}/>
+                                <input required placeholder={"ФИО"} name={"fullName"}
+                                       onChange={handleChangeFullName} value={fullName} type={"text"}/>
+                                <input required placeholder={"Почта"} autoComplete={"email"} name={"email"}
+                                       onChange={handleChangeEmail} value={email} type={"email"} className={"email-input"}/>
+                                <input required placeholder={"Номер телефона"} autoComplete={"tel"} name={"phone"}
+                                       onChange={handleChangePhone} value={phone} maxLength={12}/>
                                 <p className={"birthday-input"}>
                                     Дата рождения
-                                    <input required placeholder={"Дата рождения"} autoComplete={"off"} onChange={handleChangeBirthday} value={birthday} type={"date"}/>
+                                    <input required placeholder={"Дата рождения"} autoComplete={"bday"} name={"birthday"}
+                                           onChange={handleChangeBirthday} value={birthday} type={"date"}/>
                                 </p>
 
-                                <input required placeholder={"Паспорт"} autoComplete={"off"} onChange={handleChangePassport} value={passport} maxLength={10}/>
-                                <input required placeholder={"СНИЛС"} autoComplete={"off"} onChange={handleChangeSnils} value={snils} maxLength={11}/>
-                                <input required placeholder={"Номер мед. полиса"} autoComplete={"off"} onChange={handleChangeMedPolicy} value={medPolicy} maxLength={16}/>
-                                <input required placeholder={"Пароль"} autoComplete={"password"} type={"password"} className={"password-input"}
-                                       onChange={handleChangePassword} value={password}/>
+                                <input required placeholder={"Паспорт"} name={"passport"}
+                                       onChange={handleChangePassport} value={passport} maxLength={10}/>
+                                <input required placeholder={"СНИЛС"} name={"snils"}
+                                       onChange={handleChangeSnils} value={snils} maxLength={11}/>
+                                <input required placeholder={"Номер мед. полиса"} name={"medPolicy"}
+                                       onChange={handleChangeMedPolicy} value={medPolicy} maxLength={16}/>
+                                <input required placeholder={"Пароль"} autoComplete={"current-password"} name={"password"}
+                                       onChange={handleChangePassword} value={password} type={"password"} className={"password-input"}/>
+                                <ModalMessageBox showModal={showMessage} handleShowModal={handleShowModalMessage} message={message} handleMessage={handleMessage}/>
                                 <div className={"bottom-content"}>
                                     <div className={"login"} onClick={() => props.handleModelType(ModalTypes.Login)}>Уже есть аккаунт? Вход</div>
                                     <p className={"recovery"}>Восстановление пароля</p>
                                     <div className={"confirm-button"} onClick={handleConfirmClick}>Регистрация</div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </>
                 )

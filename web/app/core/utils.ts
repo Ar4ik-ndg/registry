@@ -25,8 +25,7 @@ export function getMessage(): string {
 }
 
 export function logout(): void {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.clear();
 }
 
 export function registryUser(user: RegistryUserRequest, isSuccsess: any) {

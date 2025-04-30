@@ -1,8 +1,9 @@
 import type { Route } from "./+types/test";
-import { ModalMessageBox } from "~/components/modal-message-box/modal-message-box";
+import { ModalUserAppointment } from "~/components/modal-user-appointment/modal-user-appointment";
 import {useEffect, useState} from "react";
-import {getMessage} from "~/core/utils";
-import {color} from "motion-dom";
+import {getMessage, getUser} from "~/core/utils";
+import {Roles, type Tiket, TiketStatus, type User} from "~/core/models"
+import {addDays, format} from "date-fns";
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -15,6 +16,23 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
     const [showModal, setShowModal] = useState(true);
     const [message, setMessage] = useState<string|null>(null);
+    const [user, setUser] = useState<User|null>(null);
+
+    const tiket: Tiket = {id: "123",
+        date: format(addDays(new Date(),2), "dd.MM.yyyy HH:mm"),
+        description: "test description",
+        result: null,
+        doctor: "ТЕст тест",
+        status: TiketStatus.подтверждается,
+        user: user? user : { id: "123",
+            birthday: "string",
+            email: "string",
+            fullName: "string",
+            medPolicy: "string",
+            passport: "string",
+            phone: "string",
+            snils: "string",
+            role: "Roles",}}
 
     function handleShowModal(change: any) {
         setShowModal(change);
@@ -29,12 +47,13 @@ export default function Home() {
 
     useEffect(() => {
         setMessage(getMessage());
-    })
+        setUser(getUser());
+    },[])
 
     return (
         <>
             <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}>[]</div>
-            <ModalMessageBox showModal={showModal} handleShowModal={handleShowModal} message={message} handleMessage={handleMessage}/>
+            <ModalUserAppointment showModal={showModal} handleShowModal={handleShowModal} tiket={tiket}/>
         </>
     );
 }

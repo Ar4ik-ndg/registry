@@ -18,7 +18,6 @@ export default function UserLayout(){
 
     useEffect(() => {
         setIsAuth(checkAuth())
-
         let user = getUser();
         if (user !== null) setUser(user)
     }, [isAuth])
@@ -49,28 +48,26 @@ export default function UserLayout(){
                     <img src={logo} alt="logo"/>
                     <Link to={"/"} className={"logo"}>Медицинский центр</Link>
                 </div>
-                <div className="nav-buttons">
-                    <a className="nav-button back-btn">Запись на приём</a>
-                    <div>{(() => {
-                        // Пока false или true, должно быть isAuth
-                        if (isAuth) {
-                            return (
-                                <>
-                                    <div onClick={()=>handleChangeShowModal(!showModal)} className={`userName nav-button`}>{user?.fullName}</div>
-                                    <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal}
-                                                  isAuth={true} handleIsAuth={handleIsAuth}/>
-                                </>
-                            )
-                        } else {
-                            return (
-                                <>
-                                    <div onClick={()=> handleChangeShowModal(true)} className={`userName nav-button`}>Вход</div>
-                                    <ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal} modalType={modalType} handleModelType={handleChangeModalType} isAuth={isAuth} handleIsAuth={handleIsAuth}/>
-                                </>
-                            )
-                        }
+                <div className="nav-buttons">{(() => {
+                    if (isAuth) {
+                        return (
+                            <>
+                                <Link to={`/appointment/${user?.id}/new`} className="nav-button back-btn">Запись на приём</Link>
+                                <div onClick={() => handleChangeShowModal(!showModal)}
+                                     className={`userName nav-button`}>{user?.fullName}</div>
+                                <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal} isAuth={true} handleIsAuth={handleIsAuth}/>
+                            </>
+                        )
+                    } else {
+                        return (
+                            <>
+                                <div onClick={()=> handleChangeShowModal(true)} className="nav-button back-btn">Запись на прием</div>
+                                <div onClick={()=> handleChangeShowModal(true)} className={`userName nav-button`}>Вход</div>
+                                <ModalLogin showModal={showModal} handleShowModal={handleChangeShowModal} modalType={modalType} handleModelType={handleChangeModalType} isAuth={isAuth} handleIsAuth={handleIsAuth}/>
+                            </>
+                        )
+                    }
                     })()}
-                    </div>
                 </div>
             </header>
             <Outlet/>

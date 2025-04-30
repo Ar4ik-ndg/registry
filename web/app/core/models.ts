@@ -25,18 +25,34 @@ export type Tiket = {
     description: string,
     result: string|null,
     doctor: string,
-    status: string,
+    status: TiketStatus,
     user: User
 }
 
 export type Message = {
-    message: string
+    message: string|null,
+    error: string|null
 }
 
 export enum ModalTypes {
     Login,
     Register,
     Recovery,
+}
+
+export enum TiketStatus {
+    canceled = "отменен",
+    confirmed = "подтверждается",
+    scheduled = "запланирован",
+    processing = "обработка",
+    completed = "завершен"
+}
+
+export enum Roles {
+    USER,
+    DOCTOR,
+    REGISTRAR,
+    ADMIN
 }
 
 export type RegistryUserRequest = {
@@ -48,6 +64,26 @@ export type RegistryUserRequest = {
     phone: string,
     snils: string,
     password: string
+}
+
+export type UserUpdateRequest = {
+    birthday: string | null,
+    email: string | null,
+    fullName: string | null,
+    medPolicy: string | null,
+    passport: string | null,
+    phone: string | null,
+    snils: string | null,
+    role: string | null
+}
+
+export type CreateTiketRequest = {
+    date: string,
+    description: string,
+    result: string|null,
+    doctor: string,
+    status: string|null,
+    user: UserUpdateRequest
 }
 
 export type AuthRequest = {

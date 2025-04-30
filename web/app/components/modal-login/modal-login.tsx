@@ -1,8 +1,9 @@
 import "./modal-login.css"
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { ModalRegister} from "~/components/modal-register/modal-register";
 import {type AuthRequest, ModalTypes} from "~/core/models";
-import {loginUser} from "~/core/utils";
+import {getMessage, loginUser} from "~/core/utils";
+import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 
 type ModalLogin = {
     showModal: boolean
@@ -16,6 +17,8 @@ type ModalLogin = {
 export function ModalLogin(props:ModalLogin) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
+    const [showMessage, setShowMessage] = useState(false);
+    const [message, setMessage] = useState("");
 
     function handleChangeEmail(e: any) {
         setEmail(e.target.value);
@@ -24,13 +27,26 @@ export function ModalLogin(props:ModalLogin) {
         setPassword(e.target.value);
     }
 
+    function handleShowModalMessage(e: any){
+        setShowMessage(e)
+    }
+
+    function handleMessage(e: any) {
+        if (e === null && getMessage()) {
+            localStorage.removeItem("message");
+        }
+        setMessage(e)
+    }
+
     function handleLoginClick() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!(emailRegex.test(email))) {
-            alert("Неверно введен email адрес")
+            handleMessage("Неверно введен email адрес")
+            handleShowModalMessage(true)
         }
         else if (!password) {
-            alert("Введите пароль")
+            handleMessage("Введите пароль")
+            handleShowModalMessage(true)
         }
         else {
             let request : AuthRequest = {
@@ -46,9 +62,20 @@ export function ModalLogin(props:ModalLogin) {
                     setEmail("")
                     setPassword("")
                 }
+                else {
+                    debugger
+                    handleShowModalMessage(true)
+                    handleMessage(getMessage())
+                }
             });
         }
     }
+
+    useEffect(() => {
+        setEmail("")
+        setPassword("")
+    }, [])
+
     if(!props.isAuth){
         switch (props.modalType) {
             case ModalTypes.Login:
@@ -64,12 +91,15 @@ export function ModalLogin(props:ModalLogin) {
                                 }}>x
                                 </div>
                                 <input required placeholder={"Почта"} type={"email"} className={"email-input"}
-                                       onChange={handleChangeEmail} value={email}/>
+                                       onChange={handleChangeEmail} value={email} autoComplete="email"/>
                                 <input required placeholder={"Пароль"} type={"password"} className={"password-input"}
-                                       onChange={handleChangePassword} value={password}/>
+                                       onChange={handleChangePassword} value={password} autoComplete="password"/>
+                                <ModalMessageBox showModal={showMessage} handleShowModal={handleShowModalMessage} message={message} handleMessage={handleMessage}/>
                                 <div className={"bottom-content"}>
                                     <div className={"register"}
-                                         onClick={() => props.handleModelType(ModalTypes.Register)}>Регистрация
+                                         onClick={() => {
+                                             props.handleModelType(ModalTypes.Register)
+                                         }}>Регистрация
                                     </div>
                                     <p className={"recovery"}>Восстановление пароля</p>
                                     <div className={"confirm-button"} onClick={handleLoginClick}>Вход</div>

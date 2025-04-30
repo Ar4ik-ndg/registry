@@ -17,7 +17,7 @@ export async function RegisterUser(request: RegistryUserRequest) {
 
     if (!response.ok) {
         const error = await response.json() as Message
-        throw new Error(error.message);
+        throw new Error(error.message?? error.error?? "ошибка сервера");
     }
 
     return await response.json() as UserResponse;
@@ -35,7 +35,7 @@ export async function LoginUser(request: AuthRequest) {
 
     if (!response.ok) {
         const error = await response.json() as Message
-        throw new Error(error.message);
+        throw new Error(error.message?? error.error?? "ошибка сервера");
     }
 
     return await response.json() as UserResponse;

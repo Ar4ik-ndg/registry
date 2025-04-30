@@ -169,14 +169,14 @@ Status Code = 400 Bad Request
 ### Создание приема:
 
 ```http
-POST http://localhost:8080/api/v0.1/user/tikets/new
+POST http://localhost:8080/api/v0.1/user/tickets/new
 ```
 
 #### Запрос
 
 ```curl
 curl --request POST \
-  --url http://localhost:8080/api/v0.1/user/tikets/new \
+  --url http://localhost:8080/api/v0.1/user/tickets/new \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -203,7 +203,7 @@ curl --request POST \
 ```json
 {
   "message": "Запись успешно отправлена на подтверждение",
-  "tiket": {
+  "ticket": {
     "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
     "date": "01.01.2001 00:00",
     "description": "test",
@@ -251,14 +251,14 @@ Status Code = 403 Forbidden
 ### Отмена приема:
 
 ```http
-PUT http://localhost:8080/api/v0.1/user/tikets/cancel/<id>
+PUT http://localhost:8080/api/v0.1/user/tickets/cancel/<id>
 ```
 
 #### Запрос
 
 ```curl
 curl --request PUT \
-  --url http://localhost:8080/api/v0.1/user/tikets/cancel/<id> \
+  --url http://localhost:8080/api/v0.1/user/tickets/cancel/<id> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
 ```
@@ -280,7 +280,7 @@ curl --request PUT \
 ```json
 {
   "message": "Прием отменен",
-  "tiket": {
+  "ticket": {
     "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
     "date": "01.01.2001 00:00",
     "description": "test",
@@ -329,14 +329,14 @@ Status Code = 403 Forbidden
 ### Вывод всех приемов, закрепленных за пользователем:
 
 ```http
-GET http://localhost:8080/api/v0.1/user/tikets/<id>
+GET http://localhost:8080/api/v0.1/user/tickets/<id>
 ```
 
 #### Запрос
 
 ```curl
 curl --request GET \
-  --url http://localhost:8080/api/v0.1/user/tikets/<id> \
+  --url http://localhost:8080/api/v0.1/user/tickets/<id> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
 ```
@@ -666,7 +666,7 @@ Status Code = 403 Forbidden
 ```
 ---
 
-### Получение списка врачей отдельного направления:
+### Получение специальностей врачей:
 
 ```http
 GET http://localhost:8080/api/v0.1/user/med/profs
@@ -713,6 +713,62 @@ Status Code = 200 OK
 ```
 ```http
 Status Code = 400 Bad Request
+```
+
+---
+
+#### Просроченный/неверный токен:
+
+```http
+Status Code = 403 Forbidden
+```
+---
+
+### Получение занятого времени:
+
+```http
+GET http://localhost:8080/api/v0.1/user/tickets/busy/{date}
+```
+
+#### Запрос
+
+```curl
+curl --request GET \
+  --url http://localhost:8080/api/v0.1/user/tickets/busy/{date} \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...'
+```
+
+где: <br>
+
+| Параметр                | Значение                                                          |
+|-------------------------|-------------------------------------------------------------------|
+| --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}          |
+| date                    | Дата (формат dd.MM.yyyy), с которой хотите получить занятое время |
+### Ответ:
+
+---
+
+#### Правильный токен:
+
+```json
+[
+  "07.05.1764 17:49",
+  "14.12.2239 04:26"
+]
+```
+```http
+Status Code = 200 OK
+```
+
+---
+
+#### Нет занятых:
+```json
+[]
+```
+```http
+Status Code = 200 OK
 ```
 
 ---
@@ -869,14 +925,14 @@ Status Code = 400 Bad Request
 ### Вывод всех приемов:
 
 ```http
-GET http://localhost:8080/api/v0.1/med/tikets/all
+GET http://localhost:8080/api/v0.1/med/tickets/all
 ```
 
 #### Запрос
 
 ```curl
 curl --request GET \
-  --url http://localhost:8080/api/v0.1/med/tikets/all \
+  --url http://localhost:8080/api/v0.1/med/tickets/all \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
 ```
@@ -929,14 +985,14 @@ Status Code = 403 Forbidden
 ### Вывод приемов по статусу:
 
 ```http
-GET http://localhost:8080/api/v0.1/med/tikets/status/<status>
+GET http://localhost:8080/api/v0.1/med/tickets/status/<status>
 ```
 
 #### Запрос
 
 ```curl
 curl --request GET \
-  --url http://localhost:8080/api/v0.1/med/tikets/status/<status> \
+  --url http://localhost:8080/api/v0.1/med/tickets/status/<status> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
 ```
@@ -1002,14 +1058,14 @@ Status Code = 403 Forbidden
 ### Вывод приемов по дате и врачу:
 
 ```http
-GET http://localhost:8080/api/v0.1/med/tikets/doctor/<doctor>
+GET http://localhost:8080/api/v0.1/med/tickets/doctor/<doctor>
 ```
 
 #### Запрос
 
 ```curl
 curl --request GET \
-  --url http://localhost:8080/api/v0.1/med/tikets/doctor/<doctor> \
+  --url http://localhost:8080/api/v0.1/med/tickets/doctor/<doctor> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
 ```
@@ -1075,14 +1131,14 @@ Status Code = 403 Forbidden
 ### Создание приема:
 
 ```http
-POST http://localhost:8080/api/v0.1/med/tikets/new
+POST http://localhost:8080/api/v0.1/med/tickets/new
 ```
 
 #### Запрос
 
 ```curl
 curl --request POST \
-  --url http://localhost:8080/api/v0.1/med/tikets/new \
+  --url http://localhost:8080/api/v0.1/med/tickets/new \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -1123,7 +1179,7 @@ curl --request POST \
 ```json
 {
   "message": "Запись успешно отправлена на подтверждение",
-  "tiket": {
+  "ticket": {
     "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
     "date": "01.01.2001 00:00",
     "description": "test",
@@ -1172,14 +1228,14 @@ Status Code = 403 Forbidden
 ### Обновление приема:
 
 ```http
-PUT http://localhost:8080/api/v0.1/med/tikets/update/<id>
+PUT http://localhost:8080/api/v0.1/med/tickets/update/<id>
 ```
 
 #### Запрос
 
 ```curl
 curl --request PUT \
-  --url http://localhost:8080/api/v0.1/med/tikets/update/<id> \
+  --url http://localhost:8080/api/v0.1/med/tickets/update/<id> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
   --data '{
@@ -1214,7 +1270,7 @@ curl --request PUT \
 ```json
 {
   "message": "Запись успешно обновлена",
-  "tiket": {
+  "ticket": {
     "id": "608280f5-1f7f-4735-a102-fbcaf396c171",
     "date": "01.01.2001 00:00",
     "description": "test",
@@ -1266,14 +1322,14 @@ Status Code = 403 Forbidden
 ### Вывод приема по id:
 
 ```http
-GET http://localhost:8080/api/v0.1/med/tikets/id/<id>
+GET http://localhost:8080/api/v0.1/med/tickets/id/<id>
 ```
 
 #### Запрос
 
 ```curl
 curl --request GET \
-  --url http://localhost:8080/api/v0.1/mde/tikets/id/<id> \
+  --url http://localhost:8080/api/v0.1/mde/tickets/id/<id> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
 ```
