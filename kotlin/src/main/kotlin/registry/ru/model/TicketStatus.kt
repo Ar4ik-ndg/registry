@@ -1,6 +1,6 @@
 package registry.ru.model
 
-enum class TiketStatus {
+enum class TicketStatus {
     отменен,
     подтверждается,
     запланирован,

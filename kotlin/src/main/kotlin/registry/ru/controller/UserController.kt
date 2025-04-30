@@ -2,60 +2,59 @@ package registry.ru.controller
 
 import org.springframework.format.annotation.DateTimeFormat
 import registry.ru.service.UserService
-import registry.ru.service.TiketService
+import registry.ru.service.TicketService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import registry.ru.model.*
 import registry.ru.service.StaffService
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 
 @RestController
 @RequestMapping("/api/v0.1/user")
-class UserController(private val userService: UserService, private val tiketService: TiketService, private val staffService: StaffService) {
+class UserController(private val userService: UserService, private val ticketService: TicketService, private val staffService: StaffService) {
 
-    @GetMapping("/tikets/{id}")
-    fun getTiketsById(@PathVariable id: String): ResponseEntity<Any> {
+    @GetMapping("/tickets/{id}")
+    fun getTicketsById(@PathVariable id: String): ResponseEntity<Any> {
         val user = userService.getUserById(id)
         user?.let {
-            return tiketService.getTiketsByUserId(user.id)
+            return ticketService.getTicketsByUserId(user.id)
         }
         return ResponseEntity.badRequest().body(Error("Не найдено пользователя с id $id"))
     }
 
-    @GetMapping("/tikets/busy/{date}")
-    fun getTiketsBusy(@PathVariable @DateTimeFormat(pattern = "dd.MM.yyyy") date: LocalDate): ResponseEntity<Any> {
-        return tiketService.getBusyTime(date)
+    @GetMapping("/tickets/busy/{date}")
+    fun getTicketsBusy(@PathVariable @DateTimeFormat(pattern = "dd.MM.yyyy") date: LocalDate): ResponseEntity<Any> {
+        return ticketService.getBusyTime(date)
     }
 
-    @PostMapping("/tikets/new")
-    fun createNewTiket(@RequestBody tiket: TiketCreateRequest): ResponseEntity<Any> {
-        val user: User? = userService.getUserByEmail(tiket.user.email?: return ResponseEntity.badRequest().body(Error("Не найден пользователь с email: ${tiket.user.email}")))
+    @PostMapping("/tickets/new")
+    fun createNewTicket(@RequestBody ticket: TicketCreateRequest): ResponseEntity<Any> {
+        val user: User? = userService.getUserByEmail(ticket.user.email?: return ResponseEntity.badRequest().body(Error("Не найден пользователь с email: ${ticket.user.email}")))
         user?.let {
             val parsedStatus = try {
-                TiketStatus.подтверждается.toString()
+                TicketStatus.подтверждается.toString()
             } catch (e: Exception) {
                 return ResponseEntity.badRequest().body(Error("Неверно задан статус"))
             }
-            if (tiket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
-            val newTiket: Tiket = Tiket(
+            if (ticket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
+            val newTicket: Ticket = Ticket(
                 UUID.randomUUID().toString(),
-                tiket.date,
-                tiket.description,
-                tiket.results,
-                tiket.doctor,
+                ticket.date,
+                ticket.description,
+                ticket.results,
+                ticket.doctor,
                 parsedStatus,
                 user)
-            tiketService.createNewTiket(newTiket)
-            return ResponseEntity.ok().body(Response("Запись успешно отправлена на подтвержнение", newTiket))
+            ticketService.createNewTicket(newTicket)
+            return ResponseEntity.ok().body(Response("Запись успешно отправлена на подтвержнение", newTicket))
         }
-        return ResponseEntity.badRequest().body(Error("Пользователь с id ${tiket.user} не найден"))
+        return ResponseEntity.badRequest().body(Error("Пользователь с id ${ticket.user} не найден"))
     }
 
-    @PutMapping("/tikets/cancel/{id}")
-    fun cancelTiket(@PathVariable id: String): ResponseEntity<Any> = tiketService.cancelTiket(id)
+    @PutMapping("/tickets/cancel/{id}")
+    fun cancelTicket(@PathVariable id: String): ResponseEntity<Any> = ticketService.cancelTicket(id)
 
     @GetMapping("/id/{id}")
     fun getUserById(@PathVariable id: String): ResponseEntity<Any> {

@@ -6,8 +6,8 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "tikets")
-data class Tiket(
+@Table(name = "tickets")
+data class Ticket(
     @Id
     @Column(name = "id", nullable = false, unique = true)
     val id: String,

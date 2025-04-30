@@ -3,7 +3,7 @@ package registry.ru.model
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 
-data class TiketCreateRequest(
+data class TicketCreateRequest(
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     val date: LocalDateTime,
     val description: String,

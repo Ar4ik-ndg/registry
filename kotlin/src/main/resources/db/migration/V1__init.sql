@@ -10,7 +10,7 @@ CREATE TABLE staff
     CONSTRAINT pk_staff PRIMARY KEY (id)
 );
 
-CREATE TABLE tikets
+CREATE TABLE tickets
 (
     id          VARCHAR(255) NOT NULL,
     date        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE tikets
     doctor      TEXT         NOT NULL,
     status      TEXT         NOT NULL,
     user_id     VARCHAR(255) NOT NULL,
-    CONSTRAINT pk_tikets PRIMARY KEY (id)
+    CONSTRAINT pk_tickets PRIMARY KEY (id)
 );
 
 CREATE TABLE users
@@ -58,8 +58,8 @@ ALTER TABLE users
 ALTER TABLE users
     ADD CONSTRAINT uc_users_snils UNIQUE (snils);
 
-ALTER TABLE tikets
-    ADD CONSTRAINT FK_TIKETS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+ALTER TABLE tickets
+    ADD CONSTRAINT FK_TICKETS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
 
 INSERT INTO public.staff(
     id, email, full_name, password, phone, prof, role)
