@@ -49,10 +49,10 @@ export enum TiketStatus {
 }
 
 export enum Roles {
-    USER,
-    DOCTOR,
-    REGISTRAR,
-    ADMIN
+    USER = "USER",
+    DOCTOR = "DOCTOR",
+    REGISTRAR = "REGISTRAR",
+    ADMIN = "ADMIN"
 }
 
 export type RegistryUserRequest = {

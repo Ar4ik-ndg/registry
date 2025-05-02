@@ -5,6 +5,7 @@ import {ModalTypes, type RegistryUserRequest} from "~/core/models";
 import {RegisterUser} from "~/core/api";
 import {getMessage, registryUser} from "~/core/utils";
 import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
+import {useNavigate} from "react-router";
 
 type ModalRegister = {
     showModal: boolean
@@ -26,6 +27,7 @@ export function ModalRegister(props: ModalRegister) {
     const [birthday, setBirthday] = useState("");
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
     function setAllValues(setValue: any){
         setEmail(setValue)
@@ -90,7 +92,6 @@ export function ModalRegister(props: ModalRegister) {
             alert("Не все данные введены")
         }
         else {
-            // Отправка на регистрацию (/auth/register)
             let request : RegistryUserRequest = {
                 medPolicy: medPolicy,
                 passport: passport,
@@ -101,14 +102,13 @@ export function ModalRegister(props: ModalRegister) {
                 email: email,
                 fullName: fullName
             }
-
-
             registryUser(request,(response:boolean) => {
                 if (response) {
                     props.handleShowModal(false)
                     props.handleModelType(ModalTypes.Login)
                     props.handleIsAuth(true)
                     setAllValues("")
+                    navigate("/")
                 }
                 else {
                     handleShowModalMessage(true)
