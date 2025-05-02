@@ -3,12 +3,13 @@ import type { Route } from "./+types/account-page"
 import type { User } from "~/core/models"
 import {useState} from "react";
 
-export async function loader({params}: Route.LoaderArgs) {
-    return {}
+export async function loader({params}: Route.ComponentProps) {
+    return {/*по сути тут должна быть логика с загрузкой userа по его id, до сих пор не понимаю как оно реализовывается, есть упоминание в https://reactrouter.com/start/framework/route-module#component-default*/}
 }
 
-export default function AccountPage({params}: Route.ComponentProps) {
-    const name = params.userId
+export default function AccountPage({loaderData}: Route.ComponentProps) {
+    // тут должно загружаться по примеру: loaderData.user.fullName (т.е. loader должен возвращать user: User)
+    const name = "test name"
     return (
         <>
             <main className="account-page">
