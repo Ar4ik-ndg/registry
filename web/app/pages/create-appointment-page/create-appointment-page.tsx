@@ -39,7 +39,8 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     function handleSubmit() {
-
+        // создание тикета POST http://localhost:8080/api/v0.1/user/tickets/new
+        // headers передает токен --header 'Authorization: Bearer {token}
     }
 
     useEffect(() => {
@@ -67,7 +68,8 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                     <h3>Выбор специальности</h3>
                     <ul className={"list"}>
                         {/*тут список специальностей врачей GET http://localhost:8080/api/v0.1/user/med/profs
-                           пример:*/}
+                           пример:
+                           в handleChangeProf передаем название специальности*/}
                         <li className={"line"} onClick={() => handleChangeProf("Терапевт")}>Терапевт</li>
                         <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
                         <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
@@ -78,7 +80,8 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                     <h3>Выбор врача</h3>
                     <ul className={"list"}>
                         {/*тут список врачей данной специальности GET http://localhost:8080/api/v0.1/user/med/<profession>
-                           пример:*/}
+                           пример:
+                           в handleChangeDoctor передаем имя специалиста*/}
                         <li className={"line"} onClick={() => handleChangeDoctor("Тест")}>Тест</li>
                     </ul>
                 </div>
