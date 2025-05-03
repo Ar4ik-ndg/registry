@@ -1,5 +1,6 @@
 import "./create-appointment-page.css"
 import "react-datepicker/dist/react-datepicker.css"
+import { useLoaderData } from "react-router"
 import DatePicker from "react-datepicker"
 import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
@@ -44,9 +45,9 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     useEffect(() => {
-        //тут надо получение занятого времени GET http://localhost:8080/api/v0.1/user/tikets/busy/{date}
+        //тут надо получение занятого времени GET http://localhost:8080/api/v0.1/user/tickets/busy/{date}
         setBusyTime([
-            "30.04.2025 08:30",
+            "5.05.2025 08:30",
             "01.05.2025 08:00",
         ])
     }, [])
@@ -63,7 +64,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     return (
         <main className={"create-appointment-page"}>
             <h1>Запись к специалисту</h1>
-            <div className={"tiket-creator-box"}>
+            <div className={"ticket-creator-box"}>
                 <div className="prof">
                     <h3>Выбор специальности</h3>
                     <ul className={"list"}>

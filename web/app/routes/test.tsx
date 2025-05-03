@@ -3,8 +3,9 @@ import Loading from "~/assets/loading.svg"
 import { ModalUserAppointment } from "~/components/modal-user-appointment/modal-user-appointment";
 import {useEffect, useState} from "react";
 import {getMessage, getUser} from "~/core/utils";
-import {Roles, type Tiket, TiketStatus, type User} from "~/core/models"
+import {Roles, type Ticket, TicketStatus, type User} from "~/core/models"
 import {addDays, format} from "date-fns";
+import { ModalStaffAppointment } from "~/components/modal-staff-appointment/modal-staff-appointment";
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -19,12 +20,12 @@ export default function Home() {
     const [message, setMessage] = useState<string|null>(null);
     const [user, setUser] = useState<User|null>(null);
 
-    const tiket: Tiket = {id: "123",
+    const ticket: Ticket = {id: "123",
         date: format(addDays(new Date(),2), "dd.MM.yyyy HH:mm"),
         description: "test description",
         result: null,
         doctor: "ТЕст тест",
-        status: TiketStatus.confirmed,
+        status: TicketStatus.confirmed,
         user: user? user : { id: "123",
             birthday: "string",
             email: "string",
@@ -54,7 +55,7 @@ export default function Home() {
     return (
         <>
             <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}><img src={Loading} alt={"не загрузилось"} className={"loading"}/></div>
-            <ModalUserAppointment showModal={showModal} handleShowModal={handleShowModal} tiket={tiket}/>
+            <ModalStaffAppointment showModal={showModal} handleShowModal={handleShowModal} ticket={ticket}/>
         </>
     );
 }
