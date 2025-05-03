@@ -34,9 +34,7 @@ export function ModalAccount(props:ModalAccountProps) {
         return (
             <>
                 <div ref={modalRef} className={`burger ${props.showModal? "open" : ""}`}>
-                    <div className={`line`}><Link to={`/account/${userId}`} onClick={() => {
-                        props.handleShowModal(false);
-                    }}>Личный кабинет</Link></div>
+                    <div className={`line`}><Link to={`/account/${userId}`}>Личный кабинет</Link></div>
                     <div className={"divider"}></div>
                     <Link to={"/"} className={"line"} onClick={() => {
                         logout();

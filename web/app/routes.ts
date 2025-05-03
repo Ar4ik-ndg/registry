@@ -1,7 +1,7 @@
 import { type RouteConfig, index, route, layout, prefix } from "@react-router/dev/routes";
 
 export default [
-    index("routes/role-redirect-page.tsx"),
+    index("routes/role-redirect/role-redirect.tsx"),
 
     route("/auth", "pages/auth-page/auth-page.tsx"),
 
@@ -13,7 +13,9 @@ export default [
     ]),
 
     ...prefix("admin", [
-        index("routes/test.tsx"),
+        layout("layouts/staff-layout/staff-layout.tsx", [
+            index("routes/test.tsx"),
+        ]),
     ])
 
 ] satisfies RouteConfig;

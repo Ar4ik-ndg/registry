@@ -8,7 +8,6 @@ import {
 import {LoginUser, RegisterUser} from "~/core/api";
 
 export function getUser(): User | null {
-    debugger
     let rawUserString = localStorage.getItem("user")
 
     if ( rawUserString != null ){

@@ -21,7 +21,7 @@ export default function roleRedirect(){
             }
         }
         else { navigate("/auth"); }
-    }, [navigate])
+    }, [])
 
     return (
         <>

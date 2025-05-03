@@ -14,6 +14,7 @@ export default function AuthPage() {
 
     useEffect(() => {
         setIsAuth(checkAuth())
+        if (checkAuth()) navigate("/");
     }, [isAuth])
 
     function handleChangeShowModal(changeState: boolean) {
@@ -29,7 +30,6 @@ export default function AuthPage() {
     }
 
     if (!isAuth) {
-        debugger
         return (
             <>
                 <header>
@@ -88,9 +88,5 @@ export default function AuthPage() {
                 </footer>
             </>
         )
-    }
-    else {
-        navigate("/")
-        return (<></>)
     }
 }

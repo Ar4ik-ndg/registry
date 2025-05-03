@@ -53,7 +53,7 @@ export default function Home() {
 
     return (
         <>
-            <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}><img src={Loading} alt={"не загрузилось"}/></div>
+            <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}><img src={Loading} alt={"не загрузилось"} className={"loading"}/></div>
             <ModalUserAppointment showModal={showModal} handleShowModal={handleShowModal} tiket={tiket}/>
         </>
     );
