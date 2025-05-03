@@ -95,3 +95,8 @@ export type UserResponse = {
     token: string,
     user: User|Staff
 }
+
+export type TicketResponse = {
+    message: string,
+    ticket: Ticket
+}

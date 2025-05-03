@@ -12,13 +12,13 @@ CREATE TABLE staff
 
 CREATE TABLE tickets
 (
-    id          VARCHAR(255) NOT NULL,
+    id          VARCHAR(255)                NOT NULL,
     date        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    description TEXT         NOT NULL,
+    description TEXT                        NOT NULL,
     results     TEXT,
-    doctor      TEXT         NOT NULL,
-    status      TEXT         NOT NULL,
-    user_id     VARCHAR(255) NOT NULL,
+    doctor      VARCHAR(255)                NOT NULL,
+    status      TEXT                        NOT NULL,
+    user_id     VARCHAR(255)                NOT NULL,
     CONSTRAINT pk_tickets PRIMARY KEY (id)
 );
 
@@ -57,6 +57,9 @@ ALTER TABLE users
 
 ALTER TABLE users
     ADD CONSTRAINT uc_users_snils UNIQUE (snils);
+
+ALTER TABLE tickets
+    ADD CONSTRAINT FK_TICKETS_ON_DOCTOR FOREIGN KEY (doctor) REFERENCES staff (id);
 
 ALTER TABLE tickets
     ADD CONSTRAINT FK_TICKETS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);

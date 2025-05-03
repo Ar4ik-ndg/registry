@@ -1,12 +1,13 @@
 import "./create-appointment-page.css"
 import "react-datepicker/dist/react-datepicker.css"
-import { useLoaderData } from "react-router"
 import DatePicker from "react-datepicker"
 import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
 import type { Route } from "./+types/create-appointment-page"
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import {Link, useLoaderData} from "react-router";
+import type {Staff} from "~/core/models";
+import {getBusyTime, getDoctorList, getProfs} from "~/core/utils";
 
 export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [showDocs, setShowDocs] = useState(false)
@@ -14,13 +15,28 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [showButton, setShowButton] = useState(false)
     const [prof, setProf] = useState("")
     const [doctor, setDoctor] = useState("")
+    const [doctorsList, setDoctorsList] = useState<Array<Staff>>()
     const [description, setDescription] = useState("")
     const [date, setDate] = useState<Date| null>(null)
     const [busyTime, setBusyTime] = useState<string[]>([])
+    const [isProfsSuccess, setIsProfsSuccess] = useState<boolean>()
+    const [profs, setProfs] = useState<Array<string>>()
+
+    function handleSetProfs(l:any){
+        setProfs(l)
+    }
+
+    function handleIsProfsSuccess(l:any){
+        setIsProfsSuccess(l)
+    }
+
+    function handleDoctorsList (l:any){
+        setDoctorsList(l)
+    }
 
     function handleChangeProf(e: string) {
         setProf(e)
-        setShowDocs(true)
+        getDoctorList(e, setShowDocs, handleDoctorsList)
         setShowDescriptionAndDate(false)
     }
 
@@ -31,12 +47,30 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     function handleChangeDescription(e: any) {
         setDescription(e.target.value)
-        if (description !== "" && description !== null && date !== null) { setShowButton(true) }
+        debugger
+        if (e.target.value !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
     }
 
     function handleChangeDate(e: any) {
         setDate(e)
-        if (description !== "" && description !== null && date !== null) { setShowButton(true) }
+
+        console.error(e)
+
+        let isSuccess = false;
+        function handleIsSuccess(e:any){
+            isSuccess = e
+        }
+
+        function handleBusyDate(e:any){
+            setBusyTime(e)
+        }
+
+        getBusyTime(e,handleIsSuccess,handleBusyDate)
+
+        if (isSuccess){
+            if (description !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
+        }
+
     }
 
     function handleSubmit() {
@@ -45,11 +79,8 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     useEffect(() => {
-        //тут надо получение занятого времени GET http://localhost:8080/api/v0.1/user/tickets/busy/{date}
-        setBusyTime([
-            "5.05.2025 08:30",
-            "01.05.2025 08:00",
-        ])
+        getProfs(handleIsProfsSuccess,handleSetProfs)
+        //тут надо получение занятого времени GET http://localhost:8080/api/v0.1/user/tikets/busy/{date}
     }, [])
 
     function formatDate(date: Date) {
@@ -68,22 +99,17 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                 <div className="prof">
                     <h3>Выбор специальности</h3>
                     <ul className={"list"}>
-                        {/*тут список специальностей врачей GET http://localhost:8080/api/v0.1/user/med/profs
-                           пример:
-                           в handleChangeProf передаем название специальности*/}
-                        <li className={"line"} onClick={() => handleChangeProf("Терапевт")}>Терапевт</li>
-                        <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
-                        <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
-                        <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
+                        {profs?.map((prof) => {
+                            return (<li className={"line"} onClick={() => handleChangeProf(prof)}>{prof}</li>)
+                        })}
                     </ul>
                 </div>
                 <div className={`doctor${showDocs ? " open" : ""}`}>
                     <h3>Выбор врача</h3>
                     <ul className={"list"}>
-                        {/*тут список врачей данной специальности GET http://localhost:8080/api/v0.1/user/med/<profession>
-                           пример:
-                           в handleChangeDoctor передаем имя специалиста*/}
-                        <li className={"line"} onClick={() => handleChangeDoctor("Тест")}>Тест</li>
+                        {doctorsList?.map((doctor:Staff) =>{
+                            return (<li className={"line"} onClick={() => handleChangeDoctor(doctor.fullName)}>{doctor.fullName}</li>)
+                        })}
                     </ul>
                 </div>
                 <div className={`content-container${showDescriptionAndDate ? " open" : ""}`}>
@@ -120,7 +146,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                             inline/>
                     </div>
                 </div>
-                <Link to={"/"} className={`confirm-button${showButton? " open" : ""}`} onClick={handleSubmit}>Подтвердить</Link>
+                <Link to={"/"} className={`confirm-appointment-button${showButton? " open" : ""}`} onClick={handleSubmit}>Подтвердить</Link>
             </div>
         </main>
     )
