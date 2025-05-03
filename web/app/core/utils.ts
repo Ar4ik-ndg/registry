@@ -3,9 +3,9 @@ import {
     type User,
     type Message,
     type AuthRequest,
-    type UserResponse, type Staff, type BusyTimeRequest
+    type UserResponse, type Staff, type BusyTimeRequest, type CreateTicketRequest, type Ticket, type TicketResponse
 } from "./models"
-import {GetBusyTime, GetDoctorList, GetProfs, LoginUser, RegisterUser} from "~/core/api";
+import {CreateTicket, GetBusyTime, GetDoctorList, GetProfs, LoginUser, RegisterUser} from "~/core/api";
 import {format} from "date-fns";
 
 export function getUser(): User | null {
@@ -83,6 +83,18 @@ export function getProfs(isSuccess:any, handleResult:any){
 export function getBusyTime(date:BusyTimeRequest,isSuccess:any, handleResult:any){
     GetBusyTime(date).then((r:Array<string>) => {
         handleResult(r);
+        isSuccess(true);
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccess(false);
+    })
+}
+
+export function createTicket(request:CreateTicketRequest, isSuccess:any, handleResult:any, handleMessage:any){
+    CreateTicket(request).then((r :TicketResponse) => {
+        handleMessage(r.message);
+        handleResult(r.ticket);
         isSuccess(true);
     }).catch((e:Error) => {
         console.error(e)
