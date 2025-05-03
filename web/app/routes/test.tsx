@@ -55,7 +55,7 @@ export default function Home() {
     return (
         <>
             <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}><img src={Loading} alt={"не загрузилось"} className={"loading"}/></div>
-            <ModalStaffAppointment showModal={showModal} handleShowModal={handleShowModal} ticket={ticket}/>
+            <ModalStaffAppointment ticket={ticket}/>
         </>
     );
 }
