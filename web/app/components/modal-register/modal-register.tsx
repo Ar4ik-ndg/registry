@@ -102,7 +102,7 @@ export function ModalRegister(props: ModalRegister) {
                 email: email,
                 fullName: fullName
             }
-            registryUser(request,(response:boolean) => {
+            registryUser(request , (response:boolean) => {
                 if (response) {
                     props.handleShowModal(false)
                     props.handleModelType(ModalTypes.Login)

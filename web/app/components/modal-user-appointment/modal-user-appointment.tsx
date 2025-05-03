@@ -7,17 +7,17 @@ import {format, parse, differenceInHours} from "date-fns";
 type ModalOrderProps = {
     showModal: boolean
     handleShowModal: any
-    tiket: Ticket
+    ticket: Ticket
 }
 
 export function ModalUserAppointment(props:ModalOrderProps){
-    const tiket = props.tiket;
+    const ticket = props.ticket;
     const [isAvaliable, setAvaliable] = useState(true)
 
     function checkAvaliable() {
         const today = new Date()
-        const tiketDate = parse(tiket.date, "dd.MM.yyyy HH:mm", new Date())
-        setAvaliable(Math.abs(differenceInHours(tiketDate, today)) >= 12);
+        const ticketDate = parse(ticket.date, "dd.MM.yyyy HH:mm", new Date())
+        setAvaliable(Math.abs(differenceInHours(ticketDate, today)) >= 12);
     }
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export function ModalUserAppointment(props:ModalOrderProps){
     },[])
 
     function handleCancel() {
-        // PUT http://localhost:8080/api/v0.1/user/tikets/cancel/{tiket.id}
+        // PUT http://localhost:8080/api/v0.1/user/tickets/cancel/{ticket.id}
         setAvaliable(false)
     }
 
@@ -33,20 +33,21 @@ export function ModalUserAppointment(props:ModalOrderProps){
         return (
             <>
                 <div className={"card"}>
-                    {/*tiket обязательно содержит дату формата dd.MM.yyyy HH:mm*/}
+                    {/*ticket обязательно содержит дату формата dd.MM.yyyy HH:mm*/}
                     <div className={"card-header"}>
-                        <div className={"card-name"}>Прием {tiket.date.split(" ")[0]}</div>
-                        <div className={"tiket-status"}>Статус: {tiket.status}</div>
+                        <div className={"card-name"}>Прием {ticket.date.split(" ")[0]}</div>
+                        <div className={"ticket-status"}>Статус: {ticket.status}</div>
                     </div>
                     <div className={"card-description"}>
-                        <div className={"doctor"}>Специалист: {tiket.doctor}</div>
-                        <div className={"description"}>{tiket.result?? "пока нет результата"}</div>
-                        <div className={"time"}>Время: {tiket.date.split(" ")[1]}</div>
+                        <div className={"doctor"}>Специалист: {ticket.doctor}</div>
+                        <div className={"result"}>Результат:<br/>{ticket.result ?? "пока нет результата"}</div>
+                        <div className={"description"}>Жалоба:<br/>{ticket.description}</div>
+                        <div className={"time"}>Время: {ticket.date.split(" ")[1]}</div>
                     </div>
                     <div className={"buttons"}>
                         {(() => {
-                            if ((tiket.status === TicketStatus.confirmed
-                            || tiket.status === TicketStatus.scheduled)
+                            if ((ticket.status === TicketStatus.confirmed
+                            || ticket.status === TicketStatus.scheduled)
                             && isAvaliable) {
                                 return (<>
                                     <div className={"cancel-button"} onClick={handleCancel}>Отменить</div>
@@ -57,10 +58,6 @@ export function ModalUserAppointment(props:ModalOrderProps){
                     </div>
                 </div>
             </>
-        )
-    }else{
-        return (
-            <></>
         )
     }
 }

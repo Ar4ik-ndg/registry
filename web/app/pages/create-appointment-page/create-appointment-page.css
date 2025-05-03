@@ -29,7 +29,7 @@ h3 {
     font-size: x-large;
     font-weight: bold;
 }
-.tiket-creator-box{
+.ticket-creator-box{
     width: 100%;
     display: flex;
     flex-direction: column;
