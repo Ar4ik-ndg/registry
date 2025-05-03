@@ -127,7 +127,7 @@ export function ModalRegister(props: ModalRegister) {
             case ModalTypes.Register:
                 return (
                     <>
-                        <div className={`blackout ${props.showModal ? "open" : ""}`}>
+                        <div className={`blackout-auth ${props.showModal ? "open" : ""}`}>
                             <form autoComplete={"off"} className={`register-box ${props.showModal ? "open" : ""}`}>
                                 <h2>Регистрация</h2>
                                 <div className={"close"} onClick={() => {

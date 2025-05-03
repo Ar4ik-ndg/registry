@@ -44,7 +44,7 @@ export function ModalUserAppointment(props:ModalOrderProps){
                         <div className={"description"}>Жалоба:<br/>{ticket.description}</div>
                         <div className={"time"}>Время: {ticket.date.split(" ")[1]}</div>
                     </div>
-                    <div className={"buttons"}>
+                    <div className={"card-buttons"}>
                         {(() => {
                             if ((ticket.status === TicketStatus.confirmed
                             || ticket.status === TicketStatus.scheduled)

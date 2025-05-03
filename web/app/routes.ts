@@ -22,10 +22,10 @@ export default [
         ]),
     ]),
 
-    // ...prefix("admin", [
-    //     layout("layouts/staff-layout/staff-layout.tsx", [
-    //         index("routes/test.tsx"),
-    //     ]),
-    // ])
+    ...prefix("admin", [
+        layout("layouts/admin-layout/admin-layout.tsx", [
+            index("routes/test.tsx"),
+        ]),
+    ])
 
 ] satisfies RouteConfig;

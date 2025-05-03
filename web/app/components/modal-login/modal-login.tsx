@@ -83,7 +83,7 @@ export function ModalLogin(props:ModalLogin) {
             case ModalTypes.Login:
                 return(
                     <>
-                        <div className={`blackout ${props.showModal ? "open" : ""}`}>
+                        <div className={`blackout-auth ${props.showModal ? "open" : ""}`}>
                             <div className={`login-box ${props.showModal ? "open" : ""}`}>
                                 <h2>Вход</h2>
                                 <div className={"close"} onClick={() => {
