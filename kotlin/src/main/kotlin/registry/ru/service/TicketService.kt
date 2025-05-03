@@ -13,7 +13,7 @@ class TicketService(private val ticketRepository: TicketRepository) {
     fun getTicketsByDateAndDoctor(doctor: String): ResponseEntity<Any> {
         try {
             val dateTime: LocalDateTime = LocalDate.now().atStartOfDay()
-            val tickets: List<Ticket> = ticketRepository.findByDateBetweenAndDoctor(dateTime, dateTime.plusDays(1), doctor)
+            val tickets: List<Ticket> = ticketRepository.findByDateBetweenAndDoctorId(dateTime, dateTime.plusDays(1), doctor)
             if (tickets.isNotEmpty()) return ResponseEntity.ok().body(tickets)
             else return ResponseEntity.badRequest().body(Error("Нет задач на текущую дату"))
         } catch (e: Exception) {
