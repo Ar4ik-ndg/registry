@@ -3,9 +3,10 @@ import {
     type User,
     type Message,
     type AuthRequest,
-    type UserResponse, type Staff
+    type UserResponse, type Staff, type BusyTimeRequest, type CreateTicketRequest, type Ticket, type TicketResponse
 } from "./models"
-import {GetBusyTime, GetDoctorList, GetProfs, LoginUser, RegisterUser} from "~/core/api";
+import {CreateTicket, GetBusyTime, GetDoctorList, GetProfs, GetTicketsList, LoginUser, RegisterUser} from "~/core/api";
+import {format} from "date-fns";
 
 export function getUser(): User | null {
     let rawUserString = localStorage.getItem("user")
@@ -79,7 +80,18 @@ export function getProfs(isSuccess:any, handleResult:any){
     })
 }
 
-export function getBusyTime(date:string,isSuccess:any, handleResult:any){
+export function getTicketsList(id:string,isSuccess:any, handleResult:any){
+    GetTicketsList(id).then((r:Array<Ticket>) => {
+        isSuccess(true);
+        handleResult(r)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccess(false);
+    })
+}
+
+export function getBusyTime(date:BusyTimeRequest,isSuccess:any, handleResult:any){
     GetBusyTime(date).then((r:Array<string>) => {
         handleResult(r);
         isSuccess(true);
@@ -88,4 +100,24 @@ export function getBusyTime(date:string,isSuccess:any, handleResult:any){
         localStorage.setItem("message", e.message)
         isSuccess(false);
     })
+}
+
+export function createTicket(request:CreateTicketRequest, isSuccess:any, handleResult:any, handleMessage:any){
+    CreateTicket(request).then((r :TicketResponse) => {
+        handleMessage(r.message);
+        handleResult(r.ticket);
+        isSuccess(true);
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccess(false);
+    })
+}
+
+export function formatDate(date: Date) {
+    return format(date, "dd.MM.yyyy HH:mm")
+}
+
+export function formatDateWithoutTime(date:Date){
+    return format(date, "dd.MM.yyyy")
 }

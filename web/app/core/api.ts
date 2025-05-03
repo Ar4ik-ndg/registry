@@ -5,7 +5,7 @@ import type {
     RegistryUserRequest,
     User,
     CreateTicketRequest,
-    Ticket, TicketResponse, Staff
+    Ticket, TicketResponse, Staff, BusyTimeRequest
 } from "~/core/models";
 import {getToken} from "~/core/utils";
 
@@ -85,13 +85,14 @@ export async function GetProfs(){
     return await response.json() as Array<string>
 }
 
-export async function GetBusyTime(date:string){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/busy/${date}`,{
-        method: 'GET',
+export async function GetBusyTime(req:BusyTimeRequest){
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/busy`,{
+        method: 'POST',
         headers:{
             'Content-Type': 'application/json',
             'Authorization': getToken(),
         },
+        body: JSON.stringify(req)
     })
     if (!response.ok){
         const error = await response.json() as Message
@@ -116,4 +117,21 @@ export async function GetDoctorList(prof :string){
     }
 
     return await response.json() as Array<Staff>
+}
+
+export async function GetTicketsList(id:string){
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/${id}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': getToken(),
+        }
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка на стороне сервера")
+    }
+
+    return await response.json() as Array<Ticket>
 }

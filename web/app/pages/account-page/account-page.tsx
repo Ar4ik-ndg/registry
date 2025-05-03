@@ -1,20 +1,43 @@
 import "./account-page.css"
 import type { Route } from "./+types/account-page"
-import type { User } from "~/core/models"
-import {useState} from "react";
-
-export async function loader({params}: Route.ComponentProps) {
-    return {/*по сути тут должна быть логика с загрузкой userа по его id, до сих пор не понимаю как оно реализовывается, есть упоминание в https://reactrouter.com/start/framework/route-module#component-default*/}
-}
+import type {Ticket, User} from "~/core/models"
+import {useEffect, useState} from "react";
+import {getTicketsList, getUser} from "~/core/utils";
+import {ModalUserAppointment} from "~/components/modal-user-appointment/modal-user-appointment";
 
 export default function AccountPage({loaderData}: Route.ComponentProps) {
     // тут должно загружаться по примеру: loaderData.user.fullName (т.е. loader должен возвращать user: User)
-    const name = "test name"
+
+    const [user,setUser] = useState<User | null>(null)
+
+    const [isSuccessGetTickets, setIsSuccessGetTickets] = useState<boolean>(false)
+    const [ticketsList, setTicketsList] = useState<Array<Ticket>>([])
+
+    function handleSetUser(u:any){
+        setUser(u)
+    }
+
+    function handleSetTicketsList(l:any){
+        setTicketsList(l)
+    }
+
+    function handleSetIsSuccessGetTickets(a:any){
+        setIsSuccessGetTickets(a)
+    }
+
+    useEffect(() => {
+        handleSetUser(getUser())
+        getTicketsList(getUser()?.id!!, handleSetIsSuccessGetTickets, handleSetTicketsList)
+    }, []);
+
     return (
         <>
             <main className="account-page">
                 <h2>Ваши приемы</h2>
                 <div className="appointments">
+                    {ticketsList.map((t:Ticket) => {
+                        return (<ModalUserAppointment showModal={true} handleShowModal={()=>{}} ticket={t}/>)
+                    })}
                 </div>
                 <h2 className="user-info">Личная информация</h2>
                 <div className="user-info">
@@ -53,7 +76,6 @@ export default function AccountPage({loaderData}: Route.ComponentProps) {
                         <div className="change-button">Изменить пароль</div>
                         <div className="cancel-button">Выйти</div>
                     </div>
-
                 </div>
             </main>
         </>

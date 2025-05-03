@@ -24,7 +24,7 @@ export type Ticket = {
     date: string,
     description: string,
     result: string|null,
-    doctor: string,
+    doctor: Staff,
     status: TicketStatus,
     user: User
 }
@@ -99,4 +99,9 @@ export type UserResponse = {
 export type TicketResponse = {
     message: string,
     ticket: Ticket
+}
+
+export type BusyTimeRequest = {
+    date: string,
+    doctor: string
 }
