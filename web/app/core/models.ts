@@ -19,13 +19,13 @@ export type Staff = {
     role: string,
 }
 
-export type Tiket = {
+export type Ticket = {
     id: string,
     date: string,
     description: string,
     result: string|null,
     doctor: string,
-    status: TiketStatus,
+    status: TicketStatus,
     user: User
 }
 
@@ -40,7 +40,7 @@ export enum ModalTypes {
     Recovery,
 }
 
-export enum TiketStatus {
+export enum TicketStatus {
     canceled = "отменен",
     confirmed = "подтверждается",
     scheduled = "запланирован",
@@ -77,7 +77,7 @@ export type UserUpdateRequest = {
     role: string | null
 }
 
-export type CreateTiketRequest = {
+export type CreateTicketRequest = {
     date: string,
     description: string,
     result: string|null,
@@ -94,4 +94,9 @@ export type AuthRequest = {
 export type UserResponse = {
     token: string,
     user: User|Staff
+}
+
+export type TicketResponse = {
+    message: string,
+    ticket: Ticket
 }

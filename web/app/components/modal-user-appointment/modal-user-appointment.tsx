@@ -1,13 +1,13 @@
 import './modal-user-appointment.css'
-import type {Tiket} from "~/core/models";
-import { TiketStatus } from "~/core/models";
+import type {Ticket} from "~/core/models";
+import { TicketStatus } from "~/core/models";
 import {useEffect, useState} from "react";
 import {format, parse, differenceInHours} from "date-fns";
 
 type ModalOrderProps = {
     showModal: boolean
     handleShowModal: any
-    tiket: Tiket
+    tiket: Ticket
 }
 
 export function ModalUserAppointment(props:ModalOrderProps){
@@ -45,8 +45,8 @@ export function ModalUserAppointment(props:ModalOrderProps){
                     </div>
                     <div className={"buttons"}>
                         {(() => {
-                            if ((tiket.status === TiketStatus.confirmed
-                            || tiket.status === TiketStatus.scheduled)
+                            if ((tiket.status === TicketStatus.confirmed
+                            || tiket.status === TicketStatus.scheduled)
                             && isAvaliable) {
                                 return (<>
                                     <div className={"cancel-button"} onClick={handleCancel}>Отменить</div>

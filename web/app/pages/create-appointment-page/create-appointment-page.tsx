@@ -5,7 +5,9 @@ import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
 import type { Route } from "./+types/create-appointment-page"
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import {Link, useLoaderData} from "react-router";
+import type {Staff} from "~/core/models";
+import {getDoctorList, getProfs} from "~/core/utils";
 
 export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [showDocs, setShowDocs] = useState(false)
@@ -13,13 +15,28 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [showButton, setShowButton] = useState(false)
     const [prof, setProf] = useState("")
     const [doctor, setDoctor] = useState("")
+    const [doctorsList, setDoctorsList] = useState<Array<Staff>>()
     const [description, setDescription] = useState("")
     const [date, setDate] = useState<Date| null>(null)
     const [busyTime, setBusyTime] = useState<string[]>([])
+    const [isProfsSuccess, setIsProfsSuccess] = useState<boolean>()
+    const [profs, setProfs] = useState<Array<string>>()
+
+    function handleSetProfs(l:any){
+        setProfs(l)
+    }
+
+    function handleIsProfsSuccess(l:any){
+        setIsProfsSuccess(l)
+    }
+
+    function handleDoctorsList (l:any){
+        setDoctorsList(l)
+    }
 
     function handleChangeProf(e: string) {
         setProf(e)
-        setShowDocs(true)
+        getDoctorList(e, setShowDocs, handleDoctorsList)
         setShowDescriptionAndDate(false)
     }
 
@@ -44,6 +61,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     useEffect(() => {
+        getProfs(handleIsProfsSuccess,handleSetProfs)
         //тут надо получение занятого времени GET http://localhost:8080/api/v0.1/user/tikets/busy/{date}
         setBusyTime([
             "30.04.2025 08:30",
@@ -67,22 +85,17 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                 <div className="prof">
                     <h3>Выбор специальности</h3>
                     <ul className={"list"}>
-                        {/*тут список специальностей врачей GET http://localhost:8080/api/v0.1/user/med/profs
-                           пример:
-                           в handleChangeProf передаем название специальности*/}
-                        <li className={"line"} onClick={() => handleChangeProf("Терапевт")}>Терапевт</li>
-                        <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
-                        <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
-                        <li className={"line"} onClick={() => handleChangeProf("Тест")}>Тест</li>
+                        {profs?.map((prof) => {
+                            return (<li className={"line"} onClick={() => handleChangeProf(prof)}>{prof}</li>)
+                        })}
                     </ul>
                 </div>
                 <div className={`doctor${showDocs ? " open" : ""}`}>
                     <h3>Выбор врача</h3>
                     <ul className={"list"}>
-                        {/*тут список врачей данной специальности GET http://localhost:8080/api/v0.1/user/med/<profession>
-                           пример:
-                           в handleChangeDoctor передаем имя специалиста*/}
-                        <li className={"line"} onClick={() => handleChangeDoctor("Тест")}>Тест</li>
+                        {doctorsList?.map((doctor:Staff) =>{
+                            return (<li className={"line"} onClick={() => handleChangeDoctor(doctor.fullName)}>{doctor.fullName}</li>)
+                        })}
                     </ul>
                 </div>
                 <div className={`content-container${showDescriptionAndDate ? " open" : ""}`}>

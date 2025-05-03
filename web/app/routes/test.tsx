@@ -3,7 +3,7 @@ import Loading from "~/assets/loading.svg"
 import { ModalUserAppointment } from "~/components/modal-user-appointment/modal-user-appointment";
 import {useEffect, useState} from "react";
 import {getMessage, getUser} from "~/core/utils";
-import {Roles, type Tiket, TiketStatus, type User} from "~/core/models"
+import {Roles, type Ticket, TicketStatus, type User} from "~/core/models"
 import {addDays, format} from "date-fns";
 
 export function meta({}: Route.MetaArgs) {
@@ -19,12 +19,12 @@ export default function Home() {
     const [message, setMessage] = useState<string|null>(null);
     const [user, setUser] = useState<User|null>(null);
 
-    const tiket: Tiket = {id: "123",
+    const tiket: Ticket = {id: "123",
         date: format(addDays(new Date(),2), "dd.MM.yyyy HH:mm"),
         description: "test description",
         result: null,
         doctor: "ТЕст тест",
-        status: TiketStatus.confirmed,
+        status: TicketStatus.confirmed,
         user: user? user : { id: "123",
             birthday: "string",
             email: "string",
