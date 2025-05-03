@@ -85,6 +85,22 @@ export async function GetProfs(){
     return await response.json() as Array<string>
 }
 
+export async function GetBusyTime(date:string){
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/busy/${date}`,{
+        method: 'GET',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization': getToken(),
+        },
+    })
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка на стороне сервера")
+    }
+
+    return await response.json() as Array<string>
+}
+
 export async function GetDoctorList(prof :string){
     const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/med/${prof}`,{
         method: 'GET',

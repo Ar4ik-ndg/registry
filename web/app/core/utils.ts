@@ -5,7 +5,7 @@ import {
     type AuthRequest,
     type UserResponse, type Staff
 } from "./models"
-import {GetDoctorList, GetProfs, LoginUser, RegisterUser} from "~/core/api";
+import {GetBusyTime, GetDoctorList, GetProfs, LoginUser, RegisterUser} from "~/core/api";
 
 export function getUser(): User | null {
     let rawUserString = localStorage.getItem("user")
@@ -72,6 +72,17 @@ export function getProfs(isSuccess:any, handleResult:any){
     GetProfs().then((r:Array<string>) => {
         isSuccess(true);
         handleResult(r)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccess(false);
+    })
+}
+
+export function getBusyTime(date:string,isSuccess:any, handleResult:any){
+    GetBusyTime(date).then((r:Array<string>) => {
+        handleResult(r);
+        isSuccess(true);
     }).catch((e:Error) => {
         console.error(e)
         localStorage.setItem("message", e.message)
