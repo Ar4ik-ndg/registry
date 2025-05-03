@@ -1,7 +1,7 @@
 import "./confirmation-appointments-page.css"
-import {ModalStaffAppointment} from "~/components/modal-staff-appointment/modal-staff-appointment"
 import { useState } from "react";
 import type {Ticket} from "~/core/models";
+import {ModalRegistryAppointment} from "~/components/modal-registry-appointment/modal-registry-appointment";
 
 export default function ConfirmationAppointmentsPage() {
     const [ticketsList, setTicketsList] = useState<Array<Ticket>>([])
@@ -12,7 +12,7 @@ export default function ConfirmationAppointmentsPage() {
         <>
             <div className={"appointments-container"}>
                 {ticketsList?.map((ticket: Ticket) => {
-                    return (<ModalStaffAppointment ticket={ticket}/>)
+                    return (<ModalRegistryAppointment ticket={ticket}/>)
                 })}
             </div>
         </>

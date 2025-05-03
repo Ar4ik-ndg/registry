@@ -1,12 +1,12 @@
-import "./modal-staff-appointment.css"
+import "./modal-registry-appointment.css"
 import {type Ticket, TicketStatus} from "~/core/models";
 import {useState} from "react";
 
-type ModalStaffAppointment = {
+type ModalRegistryAppointment = {
     ticket: Ticket;
 }
 
-export function ModalStaffAppointment(props: ModalStaffAppointment) {
+export function ModalRegistryAppointment(props: ModalRegistryAppointment) {
     const ticket = props.ticket;
     const [showCancel, setShowCancel] = useState(false)
     const [reason, setReason] = useState("")

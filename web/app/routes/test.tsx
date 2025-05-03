@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import {getMessage, getUser} from "~/core/utils";
 import {Roles, type Ticket, TicketStatus, type User} from "~/core/models"
 import {addDays, format} from "date-fns";
-import { ModalStaffAppointment } from "~/components/modal-staff-appointment/modal-staff-appointment";
+import { ModalStaffAppointment } from "~/components/modal-registry-appointment/modal-rename-appointment";
 
 export function meta({}: Route.MetaArgs) {
     return [

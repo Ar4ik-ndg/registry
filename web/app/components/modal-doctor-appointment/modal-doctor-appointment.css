@@ -1,0 +1,67 @@
+.card, .card-fs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    color: black;
+    width: 250px;
+    height: 350px;
+    border: 2px solid #21B4A3;
+    border-radius: 20px;
+    padding: 10px 20px;
+    .card-header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-name{
+        font-weight: bold;
+        font-size: larger;
+    }
+
+    .ticket-status{
+        font-size: smaller;
+    }
+
+    .card-description{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        gap: 10px;
+        text-align: start;
+        width: 100%;
+    }
+
+    .card-buttons{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        .cancel-button, .confirm-button{
+            text-align: center;
+            background-color: #E21B16;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 30px;
+            font-weight: bold;
+            font-size: large;
+            cursor: pointer;
+            margin: 5px;
+            width: fit-content;
+        }
+        .confirm-button{
+            background-color: #4FAA39;
+        }
+    }
+}
+
+.card-fs{
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+}
+
+
