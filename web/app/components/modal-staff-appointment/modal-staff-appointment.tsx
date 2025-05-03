@@ -9,9 +9,14 @@ type ModalStaffAppointment = {
 export function ModalStaffAppointment(props: ModalStaffAppointment) {
     const ticket = props.ticket;
     const [showCancel, setShowCancel] = useState(false)
+    const [reason, setReason] = useState("")
 
-    function handleShowCancel() {
-        setShowCancel(!showCancel)
+    function handleShowCancel(e: boolean) {
+        setShowCancel(e)
+    }
+
+    function handleReason(e: any) {
+        setReason(e.target.value)
     }
 
     function confirmAppointment() {
@@ -19,6 +24,13 @@ export function ModalStaffAppointment(props: ModalStaffAppointment) {
     }
 
     function cancelAppointment(reason: string) {
+        if (reason !== "") {
+            handleShowCancel(false)
+            setReason("")
+        }
+        else {
+            console.log("Необходимо ввести причину")
+        }
         //обновление тикета (статус -> TicketStatus.canceled; result -> отклонено по причине: ${reason}) PUT http://localhost:8080/api/v0.1/med/tickets/update/<ticketId>
     }
 
@@ -37,8 +49,25 @@ export function ModalStaffAppointment(props: ModalStaffAppointment) {
                 </div>
                 <div className={"card-buttons"}>
                     <div className={"confirm-button"} onClick={confirmAppointment}>Подтвердить</div>
-                    <div className={"cancel-button"} onClick={handleShowCancel}>Отклонить</div>
-                    <div className={"cancel-reason"}></div>
+                    <div className={"cancel-button"} onClick={()=>handleShowCancel(true)}>Отклонить</div>
+                    <div className={`card-blackout${showCancel ? " open" : ""}`}>
+                        <div className={`cancel-reason`}>
+                            <div className={"close-cancel"}>x</div>
+                            <input required={true} list={"reasons"} type={"text"} name={"reasons"}
+                                   placeholder={"Введите причину отказа"} onChange={handleReason}
+                                   className={"input-cancel"}/>
+                            <datalist id={"reasons"}>
+                                <option>Врач отсутствует в выбранную дату</option>
+                                <option>Повторная запись</option>
+                                <option>Данное время уже занято</option>
+                                <option>Ошибка при выборе врача или отделения</option>
+                                <option>Жалоба отсутствует или не является медицинской</option>
+                                <option>Жалоба не соответствует профилю врача</option>
+                            </datalist>
+                            <div className={"cancel-button"} onClick={() => cancelAppointment(reason)}>Отклонить прием
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
