@@ -66,6 +66,14 @@ export type RegistryUserRequest = {
     password: string
 }
 
+export type RegistryStaffRequest = {
+    fullName: string,
+    phone: string,
+    email: string,
+    prof: string|null,
+    role: string,
+}
+
 export type UserUpdateRequest = {
     birthday: string | null,
     email: string | null,

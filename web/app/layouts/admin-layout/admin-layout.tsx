@@ -6,9 +6,11 @@ import {ModalAccount} from "~/components/modal-account/modal-account";
 import {useEffect, useState} from "react";
 import type {User} from "~/core/models";
 import {checkAuth, getMessage, getUser, logout} from "~/core/utils";
+import {ModalRegisterStaff} from "~/components/modal-register-staff/modal-register-staff";
 
 export default function AdminLayout(){
-    const [showModal, setShowModal] = useState(false);
+    const [showModalAccount, setShowModalAccount] = useState(false);
+    const [showModalRegisterStaff, setShowModalRegisterStaff] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [isAuth, setIsAuth] = useState<boolean | null>(null);
     const allowedRoles: string[] = ["ADMIN"];
@@ -29,9 +31,12 @@ export default function AdminLayout(){
 
     }, []);
 
-    function handleChangeShowModal(changeState: boolean) {
-        debugger
-        setShowModal(changeState);
+    function handleChangeShowModalAccount(changeState: boolean) {
+        setShowModalAccount(changeState);
+    }
+
+    function handleChangeShowModalRegisterStaff(changeState: boolean) {
+        setShowModalRegisterStaff(changeState);
     }
 
     function handleIsAuth() {
@@ -52,11 +57,12 @@ export default function AdminLayout(){
                     <Link to={"/admin"} className={"logo"}>Медицинский центр</Link>
                 </div>
                 <div className="nav-buttons">
-                    <Link to={`/appointment/new`} className="nav-button back-btn">Добавить нового сотрудника</Link>
-                    <div onClick={() => handleChangeShowModal(!showModal)}
+                    <div className={"nav-button back-btn"} onClick={()=>handleChangeShowModalRegisterStaff(true)}>Добавить нового сотрудника</div>
+                    <ModalRegisterStaff handleShowModal={handleChangeShowModalRegisterStaff} showModal={showModalRegisterStaff}/>
+                    <div onClick={() => handleChangeShowModalAccount(!showModalAccount)}
                          className={`userName nav-button`}>{user?.fullName}</div>
                     {/*надо заменить на ссылку на страницу с приемами врача*/}
-                    <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal} isAuth={true}
+                    <ModalAccount showModal={showModalAccount} handleShowModal={handleChangeShowModalAccount} isAuth={true}
                                   handleIsAuth={handleIsAuth}/>
                 </div>
             </header>

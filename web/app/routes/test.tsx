@@ -3,8 +3,7 @@ import Loading from "~/assets/loading.svg"
 import {useEffect, useState} from "react";
 import {getMessage, getUser} from "~/core/utils";
 import {type Ticket, TicketStatus, type User, type Staff} from "~/core/models"
-
-import {ModalDoctorAppointment} from "~/components/modal-doctor-appointment/modal-doctor-appointment"
+import {ModalRegisterStaff} from "~/components/modal-register-staff/modal-register-staff";
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -66,7 +65,7 @@ export default function Home() {
     return (
         <>
             <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}><img src={Loading} alt={"не загрузилось"} className={"loading"}/></div>
-            <ModalDoctorAppointment handleShowModal={handleShowModal} showModal={showModal} ticket={test_ticket}/>
+            <ModalRegisterStaff handleShowModal={handleShowModal} showModal={showModal}/>
         </>
     );
 }

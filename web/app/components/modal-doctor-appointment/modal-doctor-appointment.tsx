@@ -17,11 +17,11 @@ export function ModalDoctorAppointment(props: ModalDoctorAppointment) {
     }
 
     function closeAppointment() {
-        //обновление тикета (статус -> TicketStatus.scheduled) PUT http://localhost:8080/api/v0.1/med/tickets/update/<ticketId>
+        //обновление тикета (статус -> TicketStatus.completed) PUT http://localhost:8080/api/v0.1/med/tickets/update/<ticketId>
     }
 
     function continueAppointment() {
-        //обновление тикета (статус -> TicketStatus.canceled; result -> отклонено по причине: ${reason}) PUT http://localhost:8080/api/v0.1/med/tickets/update/<ticketId>
+        //обновление тикета (статус -> TicketStatus.processing; PUT http://localhost:8080/api/v0.1/med/tickets/update/<ticketId>
     }
 
     return (
@@ -54,8 +54,8 @@ export function ModalDoctorAppointment(props: ModalDoctorAppointment) {
                         <div className={"time"}>Время: {ticket.date.split(" ")[1]}</div>
                     </div>
                     <div className={"card-buttons"}>
-                        <div className={"confirm-button"}>Закрыть прием</div>
-                        <div className={"continue-button"}>Отправить на обработку</div>
+                        <div className={"confirm-button"} onClick={closeAppointment}>Закрыть прием</div>
+                        <div className={"continue-button"} onClick={continueAppointment}>Отправить на обработку</div>
                     </div>
                 </div>
             </div>
