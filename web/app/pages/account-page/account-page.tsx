@@ -3,6 +3,7 @@ import type { Route } from "./+types/account-page"
 import type {Ticket, User} from "~/core/models"
 import {useEffect, useState} from "react";
 import {getTicketsList, getUser} from "~/core/utils";
+import {ModalUserAppointment} from "~/components/modal-user-appointment/modal-user-appointment";
 
 export default function AccountPage({loaderData}: Route.ComponentProps) {
     // тут должно загружаться по примеру: loaderData.user.fullName (т.е. loader должен возвращать user: User)
@@ -26,7 +27,7 @@ export default function AccountPage({loaderData}: Route.ComponentProps) {
 
     useEffect(() => {
         handleSetUser(getUser())
-        getTicketsList(user?.id!!, handleSetIsSuccessGetTickets, handleSetTicketsList)
+        getTicketsList(getUser()?.id!!, handleSetIsSuccessGetTickets, handleSetTicketsList)
     }, []);
 
     return (
@@ -34,6 +35,9 @@ export default function AccountPage({loaderData}: Route.ComponentProps) {
             <main className="account-page">
                 <h2>Ваши приемы</h2>
                 <div className="appointments">
+                    {ticketsList.map((t:Ticket) => {
+                        return (<ModalUserAppointment showModal={true} handleShowModal={()=>{}} ticket={t}/>)
+                    })}
                 </div>
                 <h2 className="user-info">Личная информация</h2>
                 <div className="user-info">
@@ -71,11 +75,6 @@ export default function AccountPage({loaderData}: Route.ComponentProps) {
                         <div className="change-button">Изменить данные</div>
                         <div className="change-button">Изменить пароль</div>
                         <div className="cancel-button">Выйти</div>
-                    </div>
-                    <div>
-                        {ticketsList.map((t:Ticket) => {
-                            return (<li>{t.description} {t.date} {t.doctor}</li>)
-                        })}
                     </div>
                 </div>
             </main>

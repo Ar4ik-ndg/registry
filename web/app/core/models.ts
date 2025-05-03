@@ -24,7 +24,7 @@ export type Ticket = {
     date: string,
     description: string,
     result: string|null,
-    doctor: string,
+    doctor: Staff,
     status: TicketStatus,
     user: User
 }
