@@ -10,10 +10,10 @@ import java.time.LocalDateTime
 @Service
 class TicketService(private val ticketRepository: TicketRepository) {
     fun getAllTickets(): List<Ticket> = ticketRepository.findAll()
-    fun getTicketsByDateAndDoctor(doctor: String): ResponseEntity<Any> {
+    fun getTicketsByDateAndDoctor(doctorId: String): ResponseEntity<Any> {
         try {
             val dateTime: LocalDateTime = LocalDate.now().atStartOfDay()
-            val tickets: List<Ticket> = ticketRepository.findByDateBetweenAndDoctor(dateTime, dateTime.plusDays(1), doctor)
+            val tickets: List<Ticket> = ticketRepository.findByDateBetweenAndDoctorId(dateTime, dateTime.plusDays(1), doctorId)
             if (tickets.isNotEmpty()) return ResponseEntity.ok().body(tickets)
             else return ResponseEntity.badRequest().body(Error("Нет задач на текущую дату"))
         } catch (e: Exception) {
@@ -39,14 +39,14 @@ class TicketService(private val ticketRepository: TicketRepository) {
         if (tickets.isNotEmpty()) return ResponseEntity.ok().body(tickets)
         else return ResponseEntity.badRequest().body(Error("Нет осмотров со статусом $parsedStatus"))
     }
-    fun getBusyTime(start: LocalDate): ResponseEntity<Any> {
+    fun getBusyTime(start: LocalDate, doctor: String): ResponseEntity<Any> {
         val startDay = start.atStartOfDay()
         val endDay = start.plusDays(1).atStartOfDay()
-        val busyTime: List<LocalDateTime>? = ticketRepository.findByDateBetween(startDay, endDay, listOf(TicketStatus.отменен.name, TicketStatus.завершен.name))
+        val busyTime: List<LocalDateTime>? = ticketRepository.findByDateBetweenAndStatusAndDoctor(startDay, endDay, listOf(TicketStatus.отменен.name, TicketStatus.завершен.name), doctor)
         return ResponseEntity.ok().body(busyTime)
     }
     fun createNewTicket(ticket: Ticket): Ticket = ticketRepository.save(ticket)
-    fun updateTicket(id: String, ticket: TicketRequest, user: User): ResponseEntity<Any> {
+    fun updateTicket(id: String, ticket: TicketRequest, doctor: Staff, user: User): ResponseEntity<Any> {
         val existTicket: Ticket = ticketRepository.findById(id).orElse(null)
         val status = try {
                 TicketStatus.valueOf((ticket.status?: existTicket.status).lowercase()).toString()
@@ -59,7 +59,7 @@ class TicketService(private val ticketRepository: TicketRepository) {
             date = date,
             description = ticket.description?: existTicket.description,
             results = ticket.results?: existTicket.results,
-            doctor = ticket.doctor?: existTicket.doctor,
+            doctor = doctor,
             status = status,
             user = user)
         ticketRepository.save(updTicket)

@@ -22,8 +22,10 @@ data class Ticket(
     @Column(name = "results", columnDefinition = "TEXT")
     val results: String?,
 
-    @Column(name = "doctor", nullable = false, columnDefinition = "TEXT")
-    val doctor: String,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor", nullable = false)
+    @JsonIgnoreProperties(value = ["hibernateLazyInitializer","handler","role"])
+    val doctor: Staff,
 
     @Column(name = "status", nullable = false, columnDefinition = "TEXT")
     val status: String,

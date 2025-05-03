@@ -1,6 +1,5 @@
 package registry.ru.controller
 
-import org.springframework.format.annotation.DateTimeFormat
 import registry.ru.service.UserService
 import registry.ru.service.TicketService
 import org.springframework.web.bind.annotation.*
@@ -24,33 +23,41 @@ class UserController(private val userService: UserService, private val ticketSer
         return ResponseEntity.badRequest().body(Error("Не найдено пользователя с id $id"))
     }
 
-    @GetMapping("/tickets/busy/{date}")
-    fun getTicketsBusy(@PathVariable @DateTimeFormat(pattern = "dd.MM.yyyy") date: LocalDate): ResponseEntity<Any> {
-        return ticketService.getBusyTime(date)
+    @PostMapping("/tickets/busy")
+    fun getTicketsBusy(@RequestBody request: TicketBusyTimeRequest): ResponseEntity<Any> {
+        val doctor = staffService.getStaffById(request.doctor)
+        doctor?.let {
+            return ticketService.getBusyTime(request.date, request.doctor)
+        }
+        return ResponseEntity.badRequest().body(Error("Не передан врач"))
     }
 
     @PostMapping("/tickets/new")
     fun createNewTicket(@RequestBody ticket: TicketCreateRequest): ResponseEntity<Any> {
         val user: User? = userService.getUserByEmail(ticket.user.email?: return ResponseEntity.badRequest().body(Error("Не найден пользователь с email: ${ticket.user.email}")))
         user?.let {
-            val parsedStatus = try {
-                TicketStatus.подтверждается.toString()
-            } catch (e: Exception) {
-                return ResponseEntity.badRequest().body(Error("Неверно задан статус"))
+            val doctor: Staff? = staffService.getStaffById(ticket.doctor)
+            doctor?.let {
+                val parsedStatus = try {
+                    TicketStatus.подтверждается.toString()
+                } catch (e: Exception) {
+                    return ResponseEntity.badRequest().body(Error("Неверно задан статус"))
+                }
+                if (ticket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
+                val newTicket: Ticket = Ticket(
+                    UUID.randomUUID().toString(),
+                    ticket.date,
+                    ticket.description,
+                    ticket.results,
+                    doctor,
+                    parsedStatus,
+                    user)
+                ticketService.createNewTicket(newTicket)
+                return ResponseEntity.ok().body(Response("Запись успешно отправлена на подтвержнение", newTicket))
             }
-            if (ticket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
-            val newTicket: Ticket = Ticket(
-                UUID.randomUUID().toString(),
-                ticket.date,
-                ticket.description,
-                ticket.results,
-                ticket.doctor,
-                parsedStatus,
-                user)
-            ticketService.createNewTicket(newTicket)
-            return ResponseEntity.ok().body(Response("Запись успешно отправлена на подтвержнение", newTicket))
+            return ResponseEntity.badRequest().body(Error("Доктор с id ${ticket.doctor} не найден"))
         }
-        return ResponseEntity.badRequest().body(Error("Пользователь с id ${ticket.user} не найден"))
+        return ResponseEntity.badRequest().body(Error("Пользователь с email ${ticket.user.email} не найден"))
     }
 
     @PutMapping("/tickets/cancel/{id}")

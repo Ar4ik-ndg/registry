@@ -182,7 +182,7 @@ curl --request POST \
   --data '{
     "date": "01.01.2001 00:00",
     "description": "test",
-    "doctor": "test doc",
+    "doctor": "d3aad82a-3865-4801-aaa6-5908a95bfea6",
     "user": {"email" : "pacient@clinic.ru"}
 ```
 
@@ -193,7 +193,7 @@ curl --request POST \
 | --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)} |
 | date                    | Дата и время приема (по паттерну: dd.MM.yyyy HH:mm)      |
 | description             | Описание болезни (жалоба)                                |
-| doctor                  | ФИО лечащего врача                                       |
+| doctor                  | id лечащего врача                                        |
 | user                    | email пользователя, за которым закрепляется прием        |
 ### Ответ:
 
@@ -208,7 +208,13 @@ curl --request POST \
     "date": "01.01.2001 00:00",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "подтверждается",
     "user": {
       "email": "pacient@clinic.ru",
@@ -285,7 +291,13 @@ curl --request PUT \
     "date": "01.01.2001 00:00",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "отменен",
     "user": {
       "email": "pacient@clinic.ru",
@@ -360,7 +372,13 @@ curl --request GET \
     "date": "01.01.2001 00:00",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "подтверждается",
     "user": {
       "email": "pacient@clinic.ru",
@@ -727,16 +745,19 @@ Status Code = 403 Forbidden
 ### Получение занятого времени:
 
 ```http
-GET http://localhost:8080/api/v0.1/user/tickets/busy/{date}
+GET http://localhost:8080/api/v0.1/user/tickets/busy
 ```
 
 #### Запрос
 
 ```curl
 curl --request GET \
-  --url http://localhost:8080/api/v0.1/user/tickets/busy/{date} \
+  --url http://localhost:8080/api/v0.1/user/tickets/busy \
   --header 'Content-Type: application/json' \
-  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...'
+  --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...'\
+  --data '{
+    "date": "12.03.4567",
+    "doctor": "d3aad82a-3865-4801-aaa6-5908a95bfea6"}'
 ```
 
 где: <br>
@@ -745,6 +766,7 @@ curl --request GET \
 |-------------------------|-------------------------------------------------------------------|
 | --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}          |
 | date                    | Дата (формат dd.MM.yyyy), с которой хотите получить занятое время |
+| docotr                  | id доктора, занятое время которого надо найти                     |
 ### Ответ:
 
 ---
@@ -955,7 +977,13 @@ curl --request GET \
     "date": "07.04.2025 00:32",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "подтверждается",
     "user": {
       "email": "pacient@clinic.ru",
@@ -1016,7 +1044,13 @@ curl --request GET \
     "date": "07.04.2025 00:32",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "подтверждается",
     "user": {
       "email": "pacient@clinic.ru",
@@ -1058,14 +1092,14 @@ Status Code = 403 Forbidden
 ### Вывод приемов по дате и врачу:
 
 ```http
-GET http://localhost:8080/api/v0.1/med/tickets/doctor/<doctor>
+GET http://localhost:8080/api/v0.1/med/tickets/doctor/<doctorId>
 ```
 
 #### Запрос
 
 ```curl
 curl --request GET \
-  --url http://localhost:8080/api/v0.1/med/tickets/doctor/<doctor> \
+  --url http://localhost:8080/api/v0.1/med/tickets/doctor/<doctorId> \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...' \
 ```
@@ -1075,7 +1109,7 @@ curl --request GET \
 | Параметр                | Значение                                                 |
 |-------------------------|----------------------------------------------------------|
 | --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)} |
-| doctor                  | ФИО врача, для которого надо получить список приемов     |
+| doctorId                | id врача, для которого надо получить список приемов      |
 ### Ответ:
 
 ---
@@ -1089,7 +1123,13 @@ curl --request GET \
     "date": "07.04.2025 00:32",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "подтверждается",
     "user": {
       "email": "pacient@clinic.ru",
@@ -1112,6 +1152,20 @@ Status Code = 200 OK
 ```json
 {
     "error": "Нет задач на текущую дату"
+}
+```
+
+```http
+Status Code = 400 Forbidden
+```
+
+---
+
+#### Несуществуюущий id:
+
+```json
+{
+    "error": "Не найдено врача"
 }
 ```
 
@@ -1144,7 +1198,7 @@ curl --request POST \
   --data '{
     "date": "01.01.2001 00:00",
     "description": "test",
-    "doctor": "test doc",
+    "doctor": "d3aad82a-3865-4801-aaa6-5908a95bfea6",
     "status": "запланирован",
     "user": {
     "email": "pacient@clinic.ru",
@@ -1164,7 +1218,7 @@ curl --request POST \
 | --header 'Authorization | Bearer ${token (получается при авторизации/регистрации)}                                                                                                            |
 | date                    | Дата и время приема (по паттерну: dd.MM.yyyy HH:mm                                                                                                                  |
 | description             | Описание болезни (жалоба)                                                                                                                                           |
-| doctor                  | ФИО лечащего врача                                                                                                                                                  |
+| doctor                  | id лечащего врача                                                                                                                                                   |
 | status                  | Статус заявки (отменен, подтверждается, запланирован, обработка, завершен)<br/> при null по умолчанию ставится подтверждается                                       |
 | user                    | Только email, если пользователь уже существует.<br/>Необходимая для создания пользователя информация, если пользователь ранее не создавал заявок (для регистратуры) |
 
@@ -1184,7 +1238,13 @@ curl --request POST \
     "date": "01.01.2001 00:00",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "запланирован",
     "user": {
       "email": "pacient@clinic.ru",
@@ -1241,7 +1301,7 @@ curl --request PUT \
   --data '{
     "date": "01.01.2001 00:00",
     "description": "test",
-    "doctor": "test doc",
+    "doctor": "d3aad82a-3865-4801-aaa6-5908a95bfea6",
     "status": "запланирован",
     "user": "50c96c35-1b53-48a2-9d7a-b097aff2defa"
 ```
@@ -1254,7 +1314,7 @@ curl --request PUT \
 | id                      | id приема, который надо обновить                                                                                              |
 | date                    | Дата и время приема (по паттерну: dd.MM.yyyy HH:mm                                                                            |
 | description             | Описание болезни (жалоба)                                                                                                     |
-| doctor                  | ФИО лечащего врача                                                                                                            |
+| doctor                  | id лечащего врача                                                                                                             |
 | status                  | Статус заявки (отменен, подтверждается, запланирован, обработка, завершен)<br/> при null по умолчанию ставится подтверждается |
 | user                    | id пользователя, за которым закрепляется прием                                                                                |
 
@@ -1275,7 +1335,13 @@ curl --request PUT \
     "date": "01.01.2001 00:00",
     "description": "test",
     "results": null,
-    "doctor": "test doc",
+    "doctor": {
+      "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+      "fullName": "test user",
+      "phone": "test",
+      "email": "test doc",
+      "prof": "Терапевт"
+    },
     "status": "запланирован",
     "user": {
       "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",
@@ -1353,7 +1419,13 @@ curl --request GET \
   "date": "01.02.2025 22:22",
   "description": "test",
   "results": null,
-  "doctor": "test doc",
+  "doctor": {
+    "id": "e0db2437-e7b1-449a-a73f-acc6889995c1",
+    "fullName": "test user",
+    "phone": "test",
+    "email": "test doc",
+    "prof": "Терапевт"
+  },
   "status": "подтверждается",
   "user": {
     "id": "5a86f10d-a94f-41f2-a192-8ec5d7c1b7c8",

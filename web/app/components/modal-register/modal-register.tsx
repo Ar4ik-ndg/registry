@@ -67,6 +67,7 @@ export function ModalRegister(props: ModalRegister) {
     function handleChangeEmail(e: any) {
         setEmail(e.target.value);
     }
+
     function handleChangePassword(e: any) {
         setPassword(e.target.value);
     }
@@ -80,7 +81,6 @@ export function ModalRegister(props: ModalRegister) {
             localStorage.removeItem("message");
         }
         setMessage(e)
-
     }
 
     function handleConfirmClick() {

@@ -18,8 +18,11 @@ class MedController(private val userService: UserService, private val ticketServ
     @GetMapping("/tickets/status/{status}")
     fun getTicketsByStatus(@PathVariable status: String): ResponseEntity<Any> = ticketService.getTicketsByStatus(status)
 
-    @GetMapping("tickets/doctor/{doctor}")
-    fun getTicketsByDoctor(@PathVariable doctor: String): ResponseEntity<Any> = ticketService.getTicketsByDateAndDoctor(doctor)
+    @GetMapping("tickets/doctor/{doctorId}")
+    fun getTicketsByDoctor(@PathVariable doctorId: String): ResponseEntity<Any> {
+        staffService.getStaffById(doctorId)?: return ResponseEntity.badRequest().body(Error("Не найдено врача"))
+        return ticketService.getTicketsByDateAndDoctor(doctorId)
+    }
 
     @PostMapping("/tickets/new")
     fun createNewTicket(@RequestBody ticket: TicketCreateRequest): ResponseEntity<Any> {
@@ -42,11 +45,15 @@ class MedController(private val userService: UserService, private val ticketServ
                 TicketStatus.valueOf((ticket.status?: TicketStatus.подтверждается.toString()).lowercase()).toString()
             } catch (e: Exception) {return ResponseEntity.badRequest().body(Error("Неверно передан статус"))}
             if (ticket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
-            val newTicket: Ticket = Ticket(UUID.randomUUID().toString(),
+
+            val doctor = staffService.getStaffById(ticket.doctor)?: return ResponseEntity.badRequest().body(Error("Не передан врач"))
+
+            val newTicket: Ticket = Ticket(
+                UUID.randomUUID().toString(),
                 ticket.date,
                 ticket.description,
                 ticket.results,
-                ticket.doctor,
+                doctor,
                 parsedStatus,
                 user)
             ticketService.createNewTicket(newTicket)
@@ -59,12 +66,9 @@ class MedController(private val userService: UserService, private val ticketServ
     fun updateTicket(@PathVariable id: String, @RequestBody ticket: TicketRequest, ): ResponseEntity<Any> {
         val existTicket: Ticket? = ticketService.getTicketById(id)
         existTicket?.let {
-            ticket.user?.let {
-                val user = userService.getUserById(ticket.user) ?: return ResponseEntity.badRequest()
-                    .body(Error("Неверно указан пользователь"))
-                return ticketService.updateTicket(id, ticket, user)
-            }
-            return ticketService.updateTicket(id, ticket, existTicket.user)
+            val user = userService.getUserById(ticket.user?: return ResponseEntity.badRequest().body(Error("Неверно указан пользователь")))
+            val doctor = staffService.getStaffById(ticket.doctor?: return ResponseEntity.badRequest().body(Error("Неверно указан доктор")))
+            return ticketService.updateTicket(id, ticket, doctor?: existTicket.doctor, user?: existTicket.user)
         }
         return ResponseEntity.badRequest().body(Error("Не найдено записи с id $id"))
     }
