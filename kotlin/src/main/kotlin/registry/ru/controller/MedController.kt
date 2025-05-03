@@ -18,8 +18,11 @@ class MedController(private val userService: UserService, private val ticketServ
     @GetMapping("/tickets/status/{status}")
     fun getTicketsByStatus(@PathVariable status: String): ResponseEntity<Any> = ticketService.getTicketsByStatus(status)
 
-    @GetMapping("tickets/doctor/{doctor}")
-    fun getTicketsByDoctor(@PathVariable doctor: String): ResponseEntity<Any> = ticketService.getTicketsByDateAndDoctor(doctor)
+    @GetMapping("tickets/doctor/{doctorId}")
+    fun getTicketsByDoctor(@PathVariable doctorId: String): ResponseEntity<Any> {
+        staffService.getStaffById(doctorId)?: return ResponseEntity.badRequest().body(Error("Не найдено врача"))
+        return ticketService.getTicketsByDateAndDoctor(doctorId)
+    }
 
     @PostMapping("/tickets/new")
     fun createNewTicket(@RequestBody ticket: TicketCreateRequest): ResponseEntity<Any> {

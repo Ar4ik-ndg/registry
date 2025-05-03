@@ -10,10 +10,10 @@ import java.time.LocalDateTime
 @Service
 class TicketService(private val ticketRepository: TicketRepository) {
     fun getAllTickets(): List<Ticket> = ticketRepository.findAll()
-    fun getTicketsByDateAndDoctor(doctor: String): ResponseEntity<Any> {
+    fun getTicketsByDateAndDoctor(doctorId: String): ResponseEntity<Any> {
         try {
             val dateTime: LocalDateTime = LocalDate.now().atStartOfDay()
-            val tickets: List<Ticket> = ticketRepository.findByDateBetweenAndDoctorId(dateTime, dateTime.plusDays(1), doctor)
+            val tickets: List<Ticket> = ticketRepository.findByDateBetweenAndDoctorId(dateTime, dateTime.plusDays(1), doctorId)
             if (tickets.isNotEmpty()) return ResponseEntity.ok().body(tickets)
             else return ResponseEntity.badRequest().body(Error("Нет задач на текущую дату"))
         } catch (e: Exception) {

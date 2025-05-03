@@ -108,7 +108,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                     <h3>Выбор врача</h3>
                     <ul className={"list"}>
                         {doctorsList?.map((doctor:Staff) =>{
-                            return (<li className={"line"} onClick={() => handleChangeDoctor(doctor.fullName)}>{doctor.fullName}</li>)
+                            return (<li className={"line"} onClick={() => handleChangeDoctor(doctor.id)}>{doctor.fullName}</li>)
                         })}
                     </ul>
                 </div>

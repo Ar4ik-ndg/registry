@@ -7,28 +7,29 @@
     max-width: 1000px;
     min-height: fit-content;
     margin: 20px auto;
+    h1 {
+        text-align: center;
+        width: 100%;
+        font-size: xx-large;
+        font-weight: bold;
+        color: black;
+        margin-bottom: 30px;
+    }
+
+    h3 {
+        margin-bottom: 20px;
+        text-align: start;
+        width: 100%;
+        font-size: x-large;
+        font-weight: bold;
+    }
 }
 
 .line{
     cursor: pointer;
 }
 
-h1 {
-    text-align: center;
-    width: 100%;
-    font-size: xx-large;
-    font-weight: bold;
-    color: black;
-    margin-bottom: 30px;
-}
 
-h3 {
-    margin-bottom: 20px;
-    text-align: start;
-    width: 100%;
-    font-size: x-large;
-    font-weight: bold;
-}
 .ticket-creator-box{
     width: 100%;
     display: flex;
