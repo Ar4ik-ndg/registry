@@ -7,7 +7,15 @@ import type { Route } from "./+types/create-appointment-page"
 import { useEffect, useState } from "react";
 import {Link, useLoaderData} from "react-router";
 import type {Staff, Ticket, User} from "~/core/models";
-import {createTicket, formatDate, formatDateWithoutTime, getBusyTime, getDoctorList, getProfs} from "~/core/utils";
+import {
+    createTicket,
+    formatDate,
+    formatDateWithoutTime,
+    getBusyTime,
+    getDoctorList,
+    getProfs,
+    getUser
+} from "~/core/utils";
 import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 
 export default function CreateAppointmentPage({params}: Route.ComponentProps) {
@@ -26,7 +34,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [message,setMessage] = useState<string>("")
     const [ticket,setTicket] = useState<Ticket>()
     const [isSuccessSubmit, setIsSuccessSubmit] = useState<boolean>(false)
-    const [user, setUser] = useState<User>()
+    const [user, setUser] = useState<User | null>(null)
 
     function handleSetUser(u:any){
         setUser(u)
@@ -106,12 +114,20 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     function handleSubmit() {
         // создание тикета POST http://localhost:8080/api/v0.1/user/tickets/new
         createTicket({
-            result: "", status: "",
+            result: null,
+            status: null,
             date: formatDate(date!!) ?? "",
             description: description,
             doctor: doctor,
             user: {
-                email: user?.email ?? "",
+                email: user?.email ?? null,
+                birthday: user?.birthday ?? null,
+                fullName: user?.fullName ?? null,
+                medPolicy: user?.medPolicy ?? null,
+                passport: user?.passport ?? null,
+                phone: user?.phone ?? null,
+                snils: user?.snils ?? null,
+                role: user?.role ?? null,
             }
         }, handleIsSuccessSubmit, handleSetTicket, handleSetMessage)
 
@@ -122,6 +138,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     useEffect(() => {
+        handleSetUser(getUser())
         getProfs(handleIsProfsSuccess,handleSetProfs)
     }, [])
 
