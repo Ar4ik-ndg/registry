@@ -6,8 +6,17 @@ import { ru } from "date-fns/locale";
 import type { Route } from "./+types/create-appointment-page"
 import { useEffect, useState } from "react";
 import {Link, useLoaderData} from "react-router";
-import type {Staff} from "~/core/models";
-import {getBusyTime, getDoctorList, getProfs} from "~/core/utils";
+import type {Staff, Ticket, User} from "~/core/models";
+import {
+    createTicket,
+    formatDate,
+    formatDateWithoutTime,
+    getBusyTime,
+    getDoctorList,
+    getProfs,
+    getUser
+} from "~/core/utils";
+import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 
 export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [showDocs, setShowDocs] = useState(false)
@@ -21,6 +30,15 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [busyTime, setBusyTime] = useState<string[]>([])
     const [isProfsSuccess, setIsProfsSuccess] = useState<boolean>()
     const [profs, setProfs] = useState<Array<string>>()
+    const [showMessageBox, setShowMessageBox] = useState<boolean>(false)
+    const [message,setMessage] = useState<string>("")
+    const [ticket,setTicket] = useState<Ticket>()
+    const [isSuccessSubmit, setIsSuccessSubmit] = useState<boolean>(false)
+    const [user, setUser] = useState<User | null>(null)
+
+    function handleSetUser(u:any){
+        setUser(u)
+    }
 
     function handleSetProfs(l:any){
         setProfs(l)
@@ -42,6 +60,8 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     function handleChangeDoctor(e: string) {
         setDoctor(e)
+        setDate(null)
+        setDescription("")
         setShowDescriptionAndDate(true)
     }
 
@@ -51,41 +71,76 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
         if (e.target.value !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
     }
 
+    const [isSuccessChangeDate, setIsSuccessChangeDate] = useState<boolean>()
+
+    function handleIsSuccessChangeDate(e:any){
+        setIsSuccessChangeDate(e)
+    }
+
+    function handleBusyDate(e:any){
+        setBusyTime(e)
+    }
+
     function handleChangeDate(e: any) {
         setDate(e)
 
-        console.error(e)
+        getBusyTime({
+            date: formatDateWithoutTime(e),
+            doctor: doctor
+        },handleIsSuccessChangeDate,handleBusyDate)
 
-        let isSuccess = false;
-        function handleIsSuccess(e:any){
-            isSuccess = e
-        }
-
-        function handleBusyDate(e:any){
-            setBusyTime(e)
-        }
-
-        getBusyTime(e,handleIsSuccess,handleBusyDate)
-
-        if (isSuccess){
+        if (isSuccessChangeDate){
             if (description !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
         }
 
     }
 
+    function handleSetMessage(e:any){
+        setMessage(e)
+    }
+
+    function handleIsSuccessSubmit(e:any){
+        setIsSuccessSubmit(e)
+    }
+
+    function handleSetShowMessageBox(e:any){
+        setShowMessageBox(e)
+    }
+
+    function handleSetTicket(e:any){
+        setTicket(e)
+    }
+
     function handleSubmit() {
         // создание тикета POST http://localhost:8080/api/v0.1/user/tickets/new
-        // headers передает токен --header 'Authorization: Bearer {token}
+        createTicket({
+            result: null,
+            status: null,
+            date: formatDate(date!!) ?? "",
+            description: description,
+            doctor: doctor,
+            user: {
+                email: user?.email ?? null,
+                birthday: user?.birthday ?? null,
+                fullName: user?.fullName ?? null,
+                medPolicy: user?.medPolicy ?? null,
+                passport: user?.passport ?? null,
+                phone: user?.phone ?? null,
+                snils: user?.snils ?? null,
+                role: user?.role ?? null,
+            }
+        }, handleIsSuccessSubmit, handleSetTicket, handleSetMessage)
+
+        if (isSuccessSubmit){
+            handleSetShowMessageBox(true)
+        }
+
     }
 
     useEffect(() => {
+        handleSetUser(getUser())
         getProfs(handleIsProfsSuccess,handleSetProfs)
-        //тут надо получение занятого времени GET http://localhost:8080/api/v0.1/user/tikets/busy/{date}
     }, [])
-
-    function formatDate(date: Date) {
-        return format(date, "dd.MM.yyyy HH:mm")
-    }
 
     const filterTime = (time: Date) =>  {
         const formattedDate = formatDate(time)
@@ -94,6 +149,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     return (
         <main className={"create-appointment-page"}>
+            <ModalMessageBox showModal={showMessageBox} handleShowModal={handleSetShowMessageBox} message={message} handleMessage={handleSetMessage}/>
             <h1>Запись к специалисту</h1>
             <div className={"ticket-creator-box"}>
                 <div className="prof">

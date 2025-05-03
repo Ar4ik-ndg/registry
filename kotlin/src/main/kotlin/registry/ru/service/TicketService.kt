@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
 class TicketService(private val ticketRepository: TicketRepository) {
@@ -40,10 +41,15 @@ class TicketService(private val ticketRepository: TicketRepository) {
         else return ResponseEntity.badRequest().body(Error("Нет осмотров со статусом $parsedStatus"))
     }
     fun getBusyTime(start: LocalDate, doctor: String): ResponseEntity<Any> {
+        val result = mutableListOf<String>()
         val startDay = start.atStartOfDay()
         val endDay = start.plusDays(1).atStartOfDay()
         val busyTime: List<LocalDateTime>? = ticketRepository.findByDateBetweenAndStatusAndDoctor(startDay, endDay, listOf(TicketStatus.отменен.name, TicketStatus.завершен.name), doctor)
-        return ResponseEntity.ok().body(busyTime)
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+        busyTime?.forEach {
+            result.add(formatter.format(it))
+        }
+        return ResponseEntity.ok().body(result)
     }
     fun createNewTicket(ticket: Ticket): Ticket = ticketRepository.save(ticket)
     fun updateTicket(id: String, ticket: TicketRequest, doctor: Staff, user: User): ResponseEntity<Any> {
