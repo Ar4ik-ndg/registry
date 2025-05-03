@@ -4,7 +4,9 @@ import { useState } from "react";
 import type {Ticket} from "~/core/models";
 
 export default function ConfirmationAppointmentsPage() {
-    const [ticketsList, setTicketsList] = useState<Array<Ticket>>()
+    const [ticketsList, setTicketsList] = useState<Array<Ticket>>([])
+
+    // тикеты со статусом confirmed
 
     return (
         <>
