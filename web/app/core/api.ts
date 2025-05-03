@@ -5,7 +5,7 @@ import type {
     RegistryUserRequest,
     User,
     CreateTicketRequest,
-    Ticket, TicketResponse, Staff, BusyTimeRequest
+    Ticket, TicketResponse, Staff, BusyTimeRequest, UpdateTicketRequest
 } from "~/core/models";
 import {getToken} from "~/core/utils";
 
@@ -52,6 +52,24 @@ export async function LoginUser(request: AuthRequest) {
 
 export async function CreateTicket(request: CreateTicketRequest) {
     const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/new`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': getToken()
+        },
+        body: JSON.stringify(request)
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка создания тикета на стороне сервера")
+    }
+    return await response.json() as TicketResponse
+}
+
+export async function CreateTicketStaff(request: CreateTicketRequest) {
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/new`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -134,4 +152,89 @@ export async function GetTicketsList(id:string){
     }
 
     return await response.json() as Array<Ticket>
+}
+
+export async function GetUserByEmail(email :string){
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/email/${email}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': getToken(),
+        }
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка на стороне сервера")
+    }
+
+    return await response.json() as User
+}
+
+export async function GetTicketListByStatus(status :string){
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/status/${status}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': getToken(),
+        }
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка на стороне сервера")
+    }
+
+    return await response.json() as Array<Ticket>
+}
+
+export async function GetTicketListByDoctor(doctor :string){
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/doctor/${doctor}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': getToken(),
+        }
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка на стороне сервера")
+    }
+
+    return await response.json() as Array<Ticket>
+}
+
+export async function UpdateTicket(id: String, request: UpdateTicketRequest) {
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/update/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': getToken()
+        },
+        body: JSON.stringify(request)
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка обновления тикета на стороне сервера")
+    }
+    return await response.json() as TicketResponse
+}
+
+export async function CancelTicket(id:string) {
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/cancel/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': getToken(),
+        }
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка обновления тикета на стороне сервера")
+    }
+    return await response.json() as TicketResponse
 }

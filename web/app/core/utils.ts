@@ -5,7 +5,17 @@ import {
     type AuthRequest,
     type UserResponse, type Staff, type BusyTimeRequest, type CreateTicketRequest, type Ticket, type TicketResponse
 } from "./models"
-import {CreateTicket, GetBusyTime, GetDoctorList, GetProfs, GetTicketsList, LoginUser, RegisterUser} from "~/core/api";
+import {
+    CancelTicket,
+    CreateTicket,
+    CreateTicketStaff,
+    GetBusyTime,
+    GetDoctorList,
+    GetProfs,
+    GetTicketsList,
+    LoginUser,
+    RegisterUser
+} from "~/core/api";
 import {format} from "date-fns";
 
 export function getUser(): User | null {
@@ -91,7 +101,7 @@ export function getTicketsList(id:string,isSuccess:any, handleResult:any){
     })
 }
 
-export function getBusyTime(date:BusyTimeRequest,isSuccess:any, handleResult:any){
+export function getBusyTime(date:BusyTimeRequest ,isSuccess:any, handleResult:any){
     GetBusyTime(date).then((r:Array<string>) => {
         handleResult(r);
         isSuccess(true);
@@ -111,6 +121,31 @@ export function createTicket(request:CreateTicketRequest, isSuccess:any, handleR
         console.error(e)
         localStorage.setItem("message", e.message)
         isSuccess(false);
+    })
+}
+
+export function createTicketStaff(request:CreateTicketRequest, isSuccess:any, handleResult:any, handleMessage:any){
+    CreateTicketStaff(request).then((r :TicketResponse) => {
+        handleMessage(r.message);
+        handleResult(r.ticket);
+        isSuccess(true);
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccess(false);
+    })
+}
+
+export function cancelTicket(id:string, handleResult:any, handleIsAvaliable: any){
+    CancelTicket(id).then((r:TicketResponse) => {
+        debugger
+        handleResult(r.ticket)
+        handleIsAvaliable(false);
+        localStorage.setItem("message", r.message)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsAvaliable(true);
     })
 }
 

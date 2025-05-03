@@ -10,11 +10,15 @@ export default function ConfirmationAppointmentsPage() {
 
     return (
         <>
-            <div className={"appointments-container"}>
-                {ticketsList?.map((ticket: Ticket) => {
-                    return (<ModalRegistryAppointment ticket={ticket}/>)
-                })}
-            </div>
+            <main className="confirmation-appointments-page">
+                <div className="update-page" onClick={() => {/*обновление списка тикетов*/}}>Обновить</div>
+                <div className={"appointments-container"}>
+                    {ticketsList?.map((ticket: Ticket) => {
+                        return (<ModalRegistryAppointment ticket={ticket}/>)
+                    })}
+                </div>
+            </main>
+
         </>
     )
 }

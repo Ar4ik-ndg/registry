@@ -103,7 +103,6 @@ export function ModalLogin(props:ModalLogin) {
                                              props.handleModelType(ModalTypes.Register)
                                          }}>Регистрация
                                     </div>
-                                    <p className={"recovery"}>Восстановление пароля</p>
                                     <div className={"confirm-button"} onClick={handleLoginClick}>Вход</div>
                                 </div>
                             </div>

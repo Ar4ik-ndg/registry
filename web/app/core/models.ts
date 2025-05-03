@@ -94,6 +94,15 @@ export type CreateTicketRequest = {
     user: UserUpdateRequest
 }
 
+export type UpdateTicketRequest = {
+    date: string|null,
+    description: string|null,
+    result: string|null,
+    doctor: string|null,
+    status: string|null,
+    user: string|null,
+}
+
 export type AuthRequest = {
     email: string,
     password: string

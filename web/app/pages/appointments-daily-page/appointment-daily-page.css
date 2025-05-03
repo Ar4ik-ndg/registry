@@ -1,0 +1,26 @@
+.appointments-daily-page {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 120px);
+    border: black solid 1px;
+    box-sizing: border-box;
+    .update-page{
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: white;
+        background-color: #21B4A3;
+        font-size: large;
+        font-weight: bold;
+        margin: 20px;
+        padding: 5px 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+    }
+}

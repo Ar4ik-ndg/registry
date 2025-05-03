@@ -159,7 +159,6 @@ export function ModalRegister(props: ModalRegister) {
                                 <ModalMessageBox showModal={showMessage} handleShowModal={handleShowModalMessage} message={message} handleMessage={handleMessage}/>
                                 <div className={"bottom-content"}>
                                     <div className={"login"} onClick={() => props.handleModelType(ModalTypes.Login)}>Уже есть аккаунт? Вход</div>
-                                    <p className={"recovery"}>Восстановление пароля</p>
                                     <div className={"confirm-button"} onClick={handleConfirmClick}>Регистрация</div>
                                 </div>
                             </form>

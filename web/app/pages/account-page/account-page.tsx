@@ -45,7 +45,11 @@ export default function AccountPage() {
     }
 
     function handleSetTicketsList(l:any){
-        setTicketsList(l)
+        const sorted = l.sort((a:Ticket,b:Ticket)=>{
+            const now = new Date().getTime()
+            return Math.abs( new Date(a.date).getTime()-now) - Math.abs(new Date(b.date).getTime() - now)
+        })
+        setTicketsList(sorted)
     }
 
     function handleSetIsSuccessGetTickets(a:any){
@@ -118,9 +122,6 @@ export default function AccountPage() {
                         </li>
                     </ul>
                     <div className="buttons">
-                        {/*Заглушки*/}
-                        <div className="change-button">Изменить данные</div>
-                        <div className="change-button">Изменить пароль</div>
                         <Link to={"/auth"} className="cancel-button" onClick={() => {logout()}}>Выйти</Link>
                     </div>
                 </div>

@@ -9,7 +9,6 @@ export default [
         route("main","pages/main-page/main-page.tsx"),
         route("account/:userId", "pages/account-page/account-page.tsx"),
         route("appointment/:userId/new", "pages/create-appointment-page/create-appointment-page.tsx"),
-        route("appointment/:ticketId/update", "pages/update-appointment-page/update-appointment-page.tsx"),
     ]),
 
     ...prefix("med", [
@@ -25,6 +24,7 @@ export default [
     ...prefix("admin", [
         layout("layouts/admin-layout/admin-layout.tsx", [
             index("routes/test.tsx"),
+            route("test-cap", "pages/create-appointment-staff-page/create-appointment-staff-page.tsx"),
         ]),
     ])
 
