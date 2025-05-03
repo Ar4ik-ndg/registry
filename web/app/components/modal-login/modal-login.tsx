@@ -4,6 +4,7 @@ import { ModalRegister} from "~/components/modal-register/modal-register";
 import {type AuthRequest, ModalTypes} from "~/core/models";
 import {getMessage, loginUser} from "~/core/utils";
 import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
+import {useNavigate} from "react-router";
 
 type ModalLogin = {
     showModal: boolean
@@ -19,6 +20,7 @@ export function ModalLogin(props:ModalLogin) {
     const [password, setPassword] = useState("")
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
     function handleChangeEmail(e: any) {
         setEmail(e.target.value);
@@ -61,9 +63,9 @@ export function ModalLogin(props:ModalLogin) {
                     props.handleIsAuth(true)
                     setEmail("")
                     setPassword("")
+                    navigate("/")
                 }
                 else {
-                    debugger
                     handleShowModalMessage(true)
                     handleMessage(getMessage())
                 }

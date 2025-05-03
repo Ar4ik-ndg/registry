@@ -1,4 +1,5 @@
 import type { Route } from "./+types/test";
+import Loading from "~/assets/loading.svg"
 import { ModalUserAppointment } from "~/components/modal-user-appointment/modal-user-appointment";
 import {useEffect, useState} from "react";
 import {getMessage, getUser} from "~/core/utils";
@@ -23,7 +24,7 @@ export default function Home() {
         description: "test description",
         result: null,
         doctor: "ТЕст тест",
-        status: TiketStatus.подтверждается,
+        status: TiketStatus.confirmed,
         user: user? user : { id: "123",
             birthday: "string",
             email: "string",
@@ -52,7 +53,7 @@ export default function Home() {
 
     return (
         <>
-            <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}>[]</div>
+            <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}><img src={Loading} alt={"не загрузилось"} className={"loading"}/></div>
             <ModalUserAppointment showModal={showModal} handleShowModal={handleShowModal} tiket={tiket}/>
         </>
     );
