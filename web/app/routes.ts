@@ -12,6 +12,16 @@ export default [
         route("appointment/:ticketId/update", "pages/update-appointment-page/update-appointment-page.tsx"),
     ]),
 
+    ...prefix("med", [
+        layout("layouts/staff-layout/staff-layout.tsx", [
+            index("pages/main-page/main-page.tsx"),
+            route("registry","pages/confirmation-appointment-page/confirmation-appointment-page.tsx"),
+            route("appointment/new", "pages/new-appointment-page/new-appointment-page.tsx"),
+            // заглушка, заменить на страницу приемов доктора
+            route("appointments/daily", "pages/main-page/main-page.tsx"),
+        ]),
+    ]),
+
     ...prefix("admin", [
         layout("layouts/staff-layout/staff-layout.tsx", [
             index("routes/test.tsx"),

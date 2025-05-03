@@ -745,13 +745,13 @@ Status Code = 403 Forbidden
 ### Получение занятого времени:
 
 ```http
-GET http://localhost:8080/api/v0.1/user/tickets/busy
+POST http://localhost:8080/api/v0.1/user/tickets/busy
 ```
 
 #### Запрос
 
 ```curl
-curl --request GET \
+curl --request POST \
   --url http://localhost:8080/api/v0.1/user/tickets/busy \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ...'\

@@ -29,6 +29,7 @@ export function ModalStaffAppointment(props: ModalStaffAppointment) {
             setReason("")
         }
         else {
+            // временно
             console.log("Необходимо ввести причину")
         }
         //обновление тикета (статус -> TicketStatus.canceled; result -> отклонено по причине: ${reason}) PUT http://localhost:8080/api/v0.1/med/tickets/update/<ticketId>

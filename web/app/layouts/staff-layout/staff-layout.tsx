@@ -3,9 +3,7 @@ import "./staff-layout.css"
 import {Link, Navigate, Outlet, useNavigate} from "react-router";
 import logo from "~/assets/logo.png";
 import {ModalAccount} from "~/components/modal-account/modal-account";
-import {ModalLogin} from "~/components/modal-login/modal-login";
 import {useEffect, useState} from "react";
-import { ModalTypes } from "~/core/models";
 import type {User} from "~/core/models";
 import {checkAuth, getMessage, getUser, logout} from "~/core/utils";
 
@@ -13,7 +11,7 @@ export default function StaffLayout(){
     const [showModal, setShowModal] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [isAuth, setIsAuth] = useState<boolean | null>(null);
-    const allowedRoles: string[] = ["ADMIN"];
+    const allowedRoles: string[] = ["ADMIN", "DOCTOR", "REGISTRAR"];
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,10 +48,10 @@ export default function StaffLayout(){
             <header>
                 <div className="logo">
                     <img src={logo} alt="logo"/>
-                    <Link to={"/admin"} className={"logo"}>Медицинский центр</Link>
+                    <Link to={"/med"} className={"logo"}>Медицинский центр</Link>
                 </div>
                 <div className="nav-buttons">
-                    <Link to={`/appointment/${user?.id}/new`} className="nav-button back-btn">Запись на приём</Link>
+                    <Link to={`/appointment/new`} className="nav-button back-btn">Запись на приём</Link>
                     <div onClick={() => handleChangeShowModal(!showModal)}
                          className={`userName nav-button`}>{user?.fullName}</div>
                     {/*надо заменить на ссылку на страницу с приемами врача*/}

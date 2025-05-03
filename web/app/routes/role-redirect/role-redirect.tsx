@@ -18,6 +18,12 @@ export default function roleRedirect(){
                 case "USER":
                     navigate("/main");
                     break;
+                case "DOCTOR":
+                    navigate("/med");
+                    break;
+                case "REGISTRAR":
+                    navigate("/med");
+                    break;
             }
         }
         else { navigate("/auth"); }
