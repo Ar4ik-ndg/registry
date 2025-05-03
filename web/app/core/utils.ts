@@ -5,7 +5,7 @@ import {
     type AuthRequest,
     type UserResponse, type Staff, type BusyTimeRequest, type CreateTicketRequest, type Ticket, type TicketResponse
 } from "./models"
-import {CreateTicket, GetBusyTime, GetDoctorList, GetProfs, LoginUser, RegisterUser} from "~/core/api";
+import {CreateTicket, GetBusyTime, GetDoctorList, GetProfs, GetTicketsList, LoginUser, RegisterUser} from "~/core/api";
 import {format} from "date-fns";
 
 export function getUser(): User | null {
@@ -71,6 +71,17 @@ export function getDoctorList(req: string, isSuccess: any, handleResult: any){
 
 export function getProfs(isSuccess:any, handleResult:any){
     GetProfs().then((r:Array<string>) => {
+        isSuccess(true);
+        handleResult(r)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccess(false);
+    })
+}
+
+export function getTicketsList(id:string,isSuccess:any, handleResult:any){
+    GetTicketsList(id).then((r:Array<Ticket>) => {
         isSuccess(true);
         handleResult(r)
     }).catch((e:Error) => {
