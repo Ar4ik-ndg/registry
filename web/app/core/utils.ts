@@ -3,9 +3,10 @@ import {
     type User,
     type Message,
     type AuthRequest,
-    type UserResponse, type Staff
+    type UserResponse, type Staff, type BusyTimeRequest
 } from "./models"
 import {GetBusyTime, GetDoctorList, GetProfs, LoginUser, RegisterUser} from "~/core/api";
+import {format} from "date-fns";
 
 export function getUser(): User | null {
     let rawUserString = localStorage.getItem("user")
@@ -79,7 +80,7 @@ export function getProfs(isSuccess:any, handleResult:any){
     })
 }
 
-export function getBusyTime(date:string,isSuccess:any, handleResult:any){
+export function getBusyTime(date:BusyTimeRequest,isSuccess:any, handleResult:any){
     GetBusyTime(date).then((r:Array<string>) => {
         handleResult(r);
         isSuccess(true);
@@ -88,4 +89,12 @@ export function getBusyTime(date:string,isSuccess:any, handleResult:any){
         localStorage.setItem("message", e.message)
         isSuccess(false);
     })
+}
+
+export function formatDate(date: Date) {
+    return format(date, "dd.MM.yyyy HH:mm")
+}
+
+export function formatDateWithoutTime(date:Date){
+    return format(date, "dd.MM.yyyy")
 }

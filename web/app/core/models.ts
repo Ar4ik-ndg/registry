@@ -100,3 +100,8 @@ export type TicketResponse = {
     message: string,
     ticket: Ticket
 }
+
+export type BusyTimeRequest = {
+    date: string,
+    doctor: string
+}

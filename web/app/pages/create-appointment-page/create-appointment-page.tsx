@@ -7,7 +7,7 @@ import type { Route } from "./+types/create-appointment-page"
 import { useEffect, useState } from "react";
 import {Link, useLoaderData} from "react-router";
 import type {Staff} from "~/core/models";
-import {getBusyTime, getDoctorList, getProfs} from "~/core/utils";
+import {formatDate, formatDateWithoutTime, getBusyTime, getDoctorList, getProfs} from "~/core/utils";
 
 export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [showDocs, setShowDocs] = useState(false)
@@ -65,7 +65,10 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
             setBusyTime(e)
         }
 
-        getBusyTime(e,handleIsSuccess,handleBusyDate)
+        getBusyTime({
+            date: formatDateWithoutTime(e),
+            doctor: doctor
+        },handleIsSuccess,handleBusyDate)
 
         if (isSuccess){
             if (description !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
@@ -82,10 +85,6 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
         getProfs(handleIsProfsSuccess,handleSetProfs)
         //тут надо получение занятого времени GET http://localhost:8080/api/v0.1/user/tikets/busy/{date}
     }, [])
-
-    function formatDate(date: Date) {
-        return format(date, "dd.MM.yyyy HH:mm")
-    }
 
     const filterTime = (time: Date) =>  {
         const formattedDate = formatDate(time)
