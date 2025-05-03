@@ -9,6 +9,10 @@
     margin: 20px auto;
 }
 
+.line{
+    cursor: pointer;
+}
+
 h1 {
     text-align: center;
     width: 100%;
@@ -93,7 +97,7 @@ h3 {
     transition: all 0.5s;
 }
 
-.content-container.open, .doctor.open, .confirm-button.open{
+.content-container.open, .doctor.open, .confirm-appointment-button.open{
     pointer-events: auto;
     visibility: visible;
     opacity: 1;
@@ -109,7 +113,7 @@ h3 {
     display: none;
 }
 
-.confirm-button{
+.confirm-appointment-button{
     max-height: fit-content;
     width: fit-content;
     visibility: hidden;
@@ -117,4 +121,12 @@ h3 {
     transform: translateY(-100px);
     transition: all 0.5s;
     z-index: 1;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    padding: 5px 30px;
+    border-radius: 20px;
+    background-color: #4FAA39;
+    font-size: large;
+    pointer-events: none;
 }

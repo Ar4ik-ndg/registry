@@ -47,12 +47,14 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     function handleChangeDescription(e: any) {
         setDescription(e.target.value)
-        if (description !== "" && description !== null && date !== null) { setShowButton(true) }
+        debugger
+        if (e.target.value !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
     }
 
     function handleChangeDate(e: any) {
         setDate(e)
-        if (description !== "" && description !== null && date !== null) { setShowButton(true) }
+        debugger
+        if (description !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
     }
 
     function handleSubmit() {
@@ -132,7 +134,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                             inline/>
                     </div>
                 </div>
-                <Link to={"/"} className={`confirm-button${showButton? " open" : ""}`} onClick={handleSubmit}>Подтвердить</Link>
+                <Link to={"/"} className={`confirm-appointment-button${showButton? " open" : ""}`} onClick={handleSubmit}>Подтвердить</Link>
             </div>
         </main>
     )
