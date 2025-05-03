@@ -22,7 +22,7 @@ data class Staff(
     @Column(name = "prof", columnDefinition = "TEXT")
     val prof: String?,
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "password", nullable = false, columnDefinition = "TEXT")
     val password: String,
 

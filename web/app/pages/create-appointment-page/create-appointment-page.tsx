@@ -1,5 +1,6 @@
 import "./create-appointment-page.css"
 import "react-datepicker/dist/react-datepicker.css"
+import { useLoaderData } from "react-router"
 import DatePicker from "react-datepicker"
 import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
