@@ -42,6 +42,8 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     function handleChangeDoctor(e: string) {
         setDoctor(e)
+        setDate(null)
+        setDescription("")
         setShowDescriptionAndDate(true)
     }
 
@@ -53,7 +55,6 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     function handleChangeDate(e: any) {
         setDate(e)
-
         console.error(e)
 
         let isSuccess = false;

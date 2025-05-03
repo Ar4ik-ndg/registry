@@ -14,6 +14,6 @@ interface TicketRepository: JpaRepository<Ticket, String> {
     fun findByUserId(userId: String): List<Ticket>
     fun findByStatus(status: String): List<Ticket>
     fun findByDoctorId(doctorId: String): List<Ticket>
-    @Query("SELECT t.date FROM Ticket t WHERE t.date BETWEEN :start AND :end AND t.status NOT IN (:status) AND t.doctor = :doctor")
+    @Query("SELECT t.date FROM Ticket t WHERE t.date BETWEEN :start AND :end AND t.status NOT IN (:status) AND t.doctor.id = :doctor")
     fun findByDateBetweenAndStatusAndDoctor(start: LocalDateTime, end: LocalDateTime, status: List<String>, doctor: String): List<LocalDateTime>?
 }
