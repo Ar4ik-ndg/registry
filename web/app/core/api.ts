@@ -9,7 +9,7 @@ import type {
 } from "~/core/models";
 import {getToken} from "~/core/utils";
 
-const API_LINK = "http://registry_back:8080"
+const API_LINK = "http://backend:8080"
 
 const API_VERSION = "v0.1"
 
