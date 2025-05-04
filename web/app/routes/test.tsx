@@ -1,11 +1,9 @@
-import type { Route } from "./+types/test";
+import type {Route} from "./+types/test";
 import Loading from "~/assets/loading.svg"
-import { ModalUserAppointment } from "~/components/modal-user-appointment/modal-user-appointment";
 import {useEffect, useState} from "react";
 import {getMessage, getUser} from "~/core/utils";
-import {Roles, type Ticket, TicketStatus, type User} from "~/core/models"
-import {addDays, format} from "date-fns";
-import { ModalStaffAppointment } from "~/components/modal-staff-appointment/modal-staff-appointment";
+import {type Ticket, TicketStatus, type User, type Staff} from "~/core/models"
+import {ModalRegisterStaff} from "~/components/modal-register-staff/modal-register-staff";
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -16,29 +14,41 @@ export function meta({}: Route.MetaArgs) {
 
 
 export default function Home() {
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(false);
     const [message, setMessage] = useState<string|null>(null);
     const [user, setUser] = useState<User|null>(null);
 
-    const ticket: Ticket = {id: "123",
-        date: format(addDays(new Date(),2), "dd.MM.yyyy HH:mm"),
-        description: "test description",
-        result: null,
-        doctor: "ТЕст тест",
+    const test_ticket: Ticket = {
+        id: "608280f5-1f7f-4735-a102-fbcaf396c171",
+        date: "01.01.2001 00:00",
+        description: "test",
+        results: null,
+        doctor: {
+            id: "e0db2437-e7b1-449a-a73f-acc6889995c1",
+            fullName: "test user",
+            phone: "test",
+            email: "test doc",
+            prof: "Терапевт",
+            role: "DOCTOR"
+        },
         status: TicketStatus.confirmed,
-        user: user? user : { id: "123",
-            birthday: "string",
-            email: "string",
-            fullName: "string",
-            medPolicy: "string",
-            passport: "string",
-            phone: "string",
-            snils: "string",
-            role: "Roles",}}
+        user: {
+            id: "1231232",
+            email: "pacient@clinic.ru",
+            birthday: "12.3.4567",
+            fullName: "Иван Иванов Иванович",
+            medPolicy: "1234567890",
+            passport: "1234567890",
+            phone: "+79120000000",
+            snils: "1234567890",
+            role: "USER"
+        }
+    }
 
     function handleShowModal(change: any) {
         setShowModal(change);
     }
+
 
     function handleMessage(msg: string|null) {
         if (msg === null && getMessage()) {
@@ -55,7 +65,7 @@ export default function Home() {
     return (
         <>
             <div className={"button"} style={{color:"black", cursor:"pointer"}} onClick={()=> handleShowModal(true)}><img src={Loading} alt={"не загрузилось"} className={"loading"}/></div>
-            <ModalStaffAppointment ticket={ticket}/>
+            <ModalRegisterStaff handleShowModal={handleShowModal} showModal={showModal}/>
         </>
     );
 }

@@ -1,27 +1,37 @@
-import "./create-appointment-page.css"
+import "./create-appointment-staff-page.css"
 import "react-datepicker/dist/react-datepicker.css"
 import DatePicker from "react-datepicker"
 import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
-import type { Route } from "./+types/create-appointment-page"
+import type { Route } from "./+types/create-appointment-staff-page"
 import { useEffect, useState } from "react";
 import {Link, useLoaderData} from "react-router";
-import type {Staff, Ticket, User} from "~/core/models";
+import {type Staff, type Ticket, TicketStatus, type User, type UserUpdateRequest} from "~/core/models";
 import {
-    createTicket,
+    createTicket, createTicketStaff,
     formatDate,
     formatDateWithoutTime,
     getBusyTime,
     getDoctorList,
     getProfs,
-    getUser
+    getUser, getUserByEmail
 } from "~/core/utils";
 import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 
-export default function CreateAppointmentPage({params}: Route.ComponentProps) {
+export default function CreateAppointmentStaffPage({params}: Route.ComponentProps) {
+    const [showProfs, setShowProfs] = useState(false)
     const [showDocs, setShowDocs] = useState(false)
     const [showDescriptionAndDate, setShowDescriptionAndDate] = useState(false)
     const [showButton, setShowButton] = useState(false)
+
+    const [birthday, setBirthday] = useState("")
+    const [email, setEmail] = useState("")
+    const [fullName, setFullName] = useState("")
+    const [medPolicy, setMedPolicy] = useState("")
+    const [passport, setPassport] = useState("")
+    const [phone, setPhone] = useState("")
+    const [snils, setSnils] = useState("")
+
     const [prof, setProf] = useState("")
     const [doctor, setDoctor] = useState("")
     const [doctorsList, setDoctorsList] = useState<Array<Staff>>()
@@ -34,10 +44,86 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [message,setMessage] = useState<string>("")
     const [ticket,setTicket] = useState<Ticket>()
     const [isSuccessSubmit, setIsSuccessSubmit] = useState<boolean>(false)
-    const [user, setUser] = useState<User | null>(null)
+    const [user, setUser] = useState<UserUpdateRequest | null>(null)
+    const [userByEmail, setUserByEmail] = useState<User | null>(null)
+    const [isSuccess, setIsSuccess] = useState<boolean>(false)
+    const [showModal, setShowModal] = useState<boolean>(false)
 
-    function handleSetUser(u:any){
-        setUser(u)
+    function handleSetUserByEmail(u: User) {
+        setUserByEmail(u)
+    }
+
+    function handleSetIsSuccess(u:boolean) {
+        setIsSuccess(u)
+    }
+
+    function handleSetShowModal(u:boolean) {
+        setShowModal(u)
+    }
+
+    function handleSetShowProfs(u:boolean) {
+        setShowProfs(u)
+    }
+
+    function handleSetUser(u:User|null){
+        if (u == null) {
+            setUser({
+                email: email,
+                birthday: birthday,
+                phone: phone,
+                fullName: fullName,
+                medPolicy: medPolicy,
+                passport: passport,
+                snils: snils,
+                role: "USER"
+            })
+            handleSetShowModal(false)
+            handleSetShowProfs(true)
+            return
+        }
+        if (u != null) {
+            setUser({
+                email: user?.email ?? null,
+                birthday: user?.birthday ?? null,
+                fullName: user?.fullName ?? null,
+                medPolicy: user?.medPolicy ?? null,
+                passport: user?.passport ?? null,
+                phone: user?.phone ?? null,
+                snils: user?.snils ?? null,
+                role: user?.role ?? null,
+            })
+            handleSetShowModal(false)
+            handleSetShowProfs(true)
+            return
+        }
+    }
+
+    function handleSetBirthday(u:any){
+        setBirthday(u.target.value)
+    }
+
+    function handleSetFullName(u:any){
+        setFullName(u.target.value)
+    }
+
+    function handleSetMedPolicy(u:any) {
+        setMedPolicy(u.target.value)
+    }
+
+    function handleSetPassport(u:any) {
+        setPassport(u.target.value)
+    }
+
+    function handleSetPhone(u:any) {
+        setPhone(u.target.value)
+    }
+
+    function handleSetSnils(u:any) {
+        setSnils(u.target.value)
+    }
+
+    function handleSetEmail(u:any){
+        setEmail(u.target.value)
     }
 
     function handleSetProfs(l:any){
@@ -111,33 +197,22 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     function handleSubmit() {
-        // создание тикета POST http://localhost:8080/api/v0.1/user/tickets/new
-        createTicket({
+        // создание тикета POST http://localhost:8080/api/v0.1/med/tickets/new
+        createTicketStaff({
             results: null,
-            status: null,
+            status: TicketStatus.scheduled,
             date: formatDate(date!!) ?? "",
             description: description,
             doctor: doctor,
-            user: {
-                email: user?.email ?? null,
-                birthday: user?.birthday ?? null,
-                fullName: user?.fullName ?? null,
-                medPolicy: user?.medPolicy ?? null,
-                passport: user?.passport ?? null,
-                phone: user?.phone ?? null,
-                snils: user?.snils ?? null,
-                role: user?.role ?? null,
-            }
+            user: user!!
         }, handleIsSuccessSubmit, handleSetTicket, handleSetMessage)
 
         if (isSuccessSubmit){
             handleSetShowMessageBox(true)
         }
-
     }
 
     useEffect(() => {
-        handleSetUser(getUser())
         getProfs(handleIsProfsSuccess,handleSetProfs)
     }, [])
 
@@ -151,7 +226,47 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
             <ModalMessageBox showModal={showMessageBox} handleShowModal={handleSetShowMessageBox} message={message} handleMessage={handleSetMessage}/>
             <h1>Запись к специалисту</h1>
             <div className={"ticket-creator-box"}>
-                <div className="prof">
+                <div className={"user"}>
+                    <h3>Выбор пользователя</h3>
+                    <div className={"input-email"}>
+                        <input placeholder={"Email"} value={email} onChange={handleSetEmail} name={"email"}/>
+                        <div className={"search-button"} onClick={() => {getUserByEmail(email, handleSetUserByEmail, handleSetIsSuccess)
+                        }}>Найти</div>
+                    </div>
+                    <div className={`blackout-user${showModal ? " open" : ""}`}>
+                        <div className={`user-input`}>
+                            <div className={"close"} onClick={()=>handleSetShowModal(false)}>x</div>
+                            <input required placeholder={"ФИО"} name={"fullName"}
+                                   onChange={handleSetFullName} value={fullName} type={"text"}/>
+                            <input required placeholder={"Номер телефона"} autoComplete={"tel"} name={"phone"}
+                                   onChange={handleSetPhone} value={phone} maxLength={12}/>
+                            <p className={"birthday-input"}>
+                                Дата рождения
+                                <input required placeholder={"Дата рождения"} autoComplete={"bday"} name={"birthday"}
+                                       onChange={handleSetBirthday} value={birthday} type={"date"}/>
+                            </p>
+
+                            <input required placeholder={"Паспорт"} name={"passport"}
+                                   onChange={handleSetPassport} value={passport} maxLength={10}/>
+                            <input required placeholder={"СНИЛС"} name={"snils"}
+                                   onChange={handleSetSnils} value={snils} maxLength={11}/>
+                            <input required placeholder={"Номер мед. полиса"} name={"medPolicy"}
+                                   onChange={handleSetMedPolicy} value={medPolicy} maxLength={16}/>
+                            <div className={"confirm-button"} onClick={() => handleSetUser(null)}>Подтвердить</div>
+                        </div>
+                    </div>
+                    <ul className={"list"}>{(() => {
+                        if (isSuccess) {
+                            return (<li className={"line"} onClick={() => handleSetUser(userByEmail)}>{userByEmail?.fullName!!} {userByEmail?.birthday!!}</li>)
+                        }
+                        {
+                            return (<li className={`line`} onClick={()=>handleSetShowModal(true)}>Пользователей не найдено (ввести
+                                данные вручную)</li>)
+                        }
+                    })()}
+                    </ul>
+                </div>
+                <div className={`prof${showProfs ? " open" : ""}`}>
                     <h3>Выбор специальности</h3>
                     <ul className={"list"}>
                         {profs?.map((prof) => {
@@ -162,8 +277,9 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                 <div className={`doctor${showDocs ? " open" : ""}`}>
                     <h3>Выбор врача</h3>
                     <ul className={"list"}>
-                        {doctorsList?.map((doctor:Staff) =>{
-                            return (<li className={"line"} onClick={() => handleChangeDoctor(doctor.id)}>{doctor.fullName}</li>)
+                        {doctorsList?.map((doctor: Staff) => {
+                            return (<li className={"line"}
+                                        onClick={() => handleChangeDoctor(doctor.id)}>{doctor.fullName}</li>)
                         })}
                     </ul>
                 </div>

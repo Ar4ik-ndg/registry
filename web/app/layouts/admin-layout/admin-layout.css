@@ -78,3 +78,10 @@ footer p, footer a{
     font-size: smaller;
     min-width: fit-content;
 }
+
+.loading{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

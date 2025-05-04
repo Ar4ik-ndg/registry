@@ -1,4 +1,4 @@
-import "./staff-layout.css"
+import "./admin-layout.css"
 
 import {Link, Navigate, Outlet, useNavigate} from "react-router";
 import logo from "~/assets/logo.png";
@@ -6,12 +6,14 @@ import {ModalAccount} from "~/components/modal-account/modal-account";
 import {useEffect, useState} from "react";
 import type {User} from "~/core/models";
 import {checkAuth, getMessage, getUser, logout} from "~/core/utils";
+import {ModalRegisterStaff} from "~/components/modal-register-staff/modal-register-staff";
 
-export default function StaffLayout(){
-    const [showModal, setShowModal] = useState(false);
+export default function AdminLayout(){
+    const [showModalAccount, setShowModalAccount] = useState(false);
+    const [showModalRegisterStaff, setShowModalRegisterStaff] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [isAuth, setIsAuth] = useState<boolean | null>(null);
-    const allowedRoles: string[] = ["ADMIN", "DOCTOR", "REGISTRAR"];
+    const allowedRoles: string[] = ["ADMIN"];
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,8 +31,12 @@ export default function StaffLayout(){
 
     }, []);
 
-    function handleChangeShowModal(changeState: boolean) {
-        setShowModal(changeState);
+    function handleChangeShowModalAccount(changeState: boolean) {
+        setShowModalAccount(changeState);
+    }
+
+    function handleChangeShowModalRegisterStaff(changeState: boolean) {
+        setShowModalRegisterStaff(changeState);
     }
 
     function handleIsAuth() {
@@ -48,15 +54,16 @@ export default function StaffLayout(){
             <header>
                 <div className="logo">
                     <img src={logo} alt="logo"/>
-                    <Link to={"/med"} className={"logo"}>Медицинский центр</Link>
+                    <Link to={"/admin"} className={"logo"}>Медицинский центр</Link>
                 </div>
                 <div className="nav-buttons">
-                    <Link to={`med/appointment/new`} className="nav-button back-btn">Запись на приём</Link>
-                    <div onClick={() => handleChangeShowModal(!showModal)}
+                    <div className={"nav-button back-btn"} onClick={()=>handleChangeShowModalRegisterStaff(true)}>Добавить нового сотрудника</div>
+                    <ModalRegisterStaff handleShowModal={handleChangeShowModalRegisterStaff} showModal={showModalRegisterStaff}/>
+                    <div onClick={() => handleChangeShowModalAccount(!showModalAccount)}
                          className={`userName nav-button`}>{user?.fullName}</div>
                     {/*надо заменить на ссылку на страницу с приемами врача*/}
-                    <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal} isAuth={true}
-                                  handleIsAuth={handleIsAuth} link={"med/appointments/daily"}/>
+                    <ModalAccount showModal={showModalAccount} handleShowModal={handleChangeShowModalAccount} isAuth={true}
+                                  handleIsAuth={handleIsAuth} link={"/admin/all-tickets"}/>
                 </div>
             </header>
             <Outlet/>

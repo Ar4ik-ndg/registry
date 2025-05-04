@@ -24,7 +24,7 @@ data class Ticket(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor", nullable = false)
-    @JsonIgnoreProperties(value = ["hibernateLazyInitializer","handler","role"])
+    @JsonIgnoreProperties(value = ["hibernateLazyInitializer","handler"])
     val doctor: Staff,
 
     @Column(name = "status", nullable = false, columnDefinition = "TEXT")
@@ -32,6 +32,6 @@ data class Ticket(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties(value = ["hibernateLazyInitializer","handler","role"])
+    @JsonIgnoreProperties(value = ["hibernateLazyInitializer","handler"])
     val user: User
 )

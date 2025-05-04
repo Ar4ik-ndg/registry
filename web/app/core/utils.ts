@@ -3,9 +3,25 @@ import {
     type User,
     type Message,
     type AuthRequest,
-    type UserResponse, type Staff, type BusyTimeRequest, type CreateTicketRequest, type Ticket, type TicketResponse
+    type UserResponse,
+    type Staff,
+    type BusyTimeRequest,
+    type CreateTicketRequest,
+    type Ticket,
+    type TicketResponse,
+    type UpdateTicketRequest
 } from "./models"
-import {CreateTicket, GetBusyTime, GetDoctorList, GetProfs, GetTicketsList, LoginUser, RegisterUser} from "~/core/api";
+import {
+    CancelTicket,
+    CreateTicket,
+    CreateTicketStaff, GetAllTickets,
+    GetBusyTime,
+    GetDoctorList,
+    GetProfs, GetTicketListByDoctor, GetTicketListByStatus,
+    GetTicketsList, GetUserByEmail,
+    LoginUser,
+    RegisterUser, UpdateTicket
+} from "~/core/api";
 import {format} from "date-fns";
 
 export function getUser(): User | null {
@@ -91,7 +107,7 @@ export function getTicketsList(id:string,isSuccess:any, handleResult:any){
     })
 }
 
-export function getBusyTime(date:BusyTimeRequest,isSuccess:any, handleResult:any){
+export function getBusyTime(date:BusyTimeRequest ,isSuccess:any, handleResult:any){
     GetBusyTime(date).then((r:Array<string>) => {
         handleResult(r);
         isSuccess(true);
@@ -114,10 +130,98 @@ export function createTicket(request:CreateTicketRequest, isSuccess:any, handleR
     })
 }
 
+export function createTicketStaff(request:CreateTicketRequest, isSuccess:any, handleResult:any, handleMessage:any){
+    CreateTicketStaff(request).then((r :TicketResponse) => {
+        handleMessage(r.message);
+        handleResult(r.ticket);
+        isSuccess(true);
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccess(false);
+    })
+}
+
+export function cancelTicket(id:string, handleResult:any, handleIsAvaliable: any){
+    CancelTicket(id).then((r:TicketResponse) => {
+        handleResult(r.ticket)
+        handleIsAvaliable(false);
+        localStorage.setItem("message", r.message)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsAvaliable(true);
+    })
+}
+
+export function getTicketsConfirmation(status: string, handleResult:any, handleIsSuccess: any){
+    GetTicketListByStatus(status).then((r:Array<Ticket>) => {
+        handleResult(r)
+        handleIsSuccess(true);
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function getTicketsDaily(doctorId:string,handleResult:any,handleIsSuccess:any){
+    GetTicketListByDoctor(doctorId).then((r:Array<Ticket>) => {
+        handleResult(r)
+        handleIsSuccess(true)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function getUserByEmail(email:string,handleResult:any,handleIsSuccess:any){
+    GetUserByEmail(email).then((r:User) => {
+        handleResult(r)
+        handleIsSuccess(true)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function getAllTickets(handleResult:any,handleIsSuccess:any){
+    GetAllTickets().then((r:Array<Ticket>) => {
+        handleResult(r)
+        handleIsSuccess(true)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function updateTicket(id:string, request: UpdateTicketRequest, handleResult:any, handleIsAvaliable: any){
+    UpdateTicket(id, request).then((r:TicketResponse) => {
+        handleResult(r.ticket)
+        handleIsAvaliable(false);
+        localStorage.setItem("message", r.message)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsAvaliable(true);
+    })
+}
+
 export function formatDate(date: Date) {
     return format(date, "dd.MM.yyyy HH:mm")
 }
 
 export function formatDateWithoutTime(date:Date){
     return format(date, "dd.MM.yyyy")
+}
+
+export function sortArrayTickets(l: Array<Ticket>) {
+    const sorted = l.sort((a:Ticket,b:Ticket)=>{
+        const now = new Date().getTime()
+        return Math.abs( new Date(a.date).getTime()-now) - Math.abs(new Date(b.date).getTime() - now)
+    })
+    return sorted
 }

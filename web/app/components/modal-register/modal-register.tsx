@@ -127,7 +127,7 @@ export function ModalRegister(props: ModalRegister) {
             case ModalTypes.Register:
                 return (
                     <>
-                        <div className={`blackout ${props.showModal ? "open" : ""}`}>
+                        <div className={`blackout-auth ${props.showModal ? "open" : ""}`}>
                             <form autoComplete={"off"} className={`register-box ${props.showModal ? "open" : ""}`}>
                                 <h2>Регистрация</h2>
                                 <div className={"close"} onClick={() => {
@@ -159,7 +159,6 @@ export function ModalRegister(props: ModalRegister) {
                                 <ModalMessageBox showModal={showMessage} handleShowModal={handleShowModalMessage} message={message} handleMessage={handleMessage}/>
                                 <div className={"bottom-content"}>
                                     <div className={"login"} onClick={() => props.handleModelType(ModalTypes.Login)}>Уже есть аккаунт? Вход</div>
-                                    <p className={"recovery"}>Восстановление пароля</p>
                                     <div className={"confirm-button"} onClick={handleConfirmClick}>Регистрация</div>
                                 </div>
                             </form>

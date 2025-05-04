@@ -8,6 +8,7 @@ type ModalAccountProps = {
     handleShowModal: any
     isAuth: boolean
     handleIsAuth: any
+    link: string
 }
 
 export function ModalAccount(props:ModalAccountProps) {
@@ -34,7 +35,7 @@ export function ModalAccount(props:ModalAccountProps) {
         return (
             <>
                 <div ref={modalRef} className={`burger ${props.showModal? "open" : ""}`}>
-                    <div className={`line`}><Link to={`/account/${userId}`}>Личный кабинет</Link></div>
+                    <div className={`line`}><Link to={`${props.link}`}>Личный кабинет</Link></div>
                     <div className={"divider"}></div>
                     <Link to={"/"} className={"line"} onClick={() => {
                         logout();
