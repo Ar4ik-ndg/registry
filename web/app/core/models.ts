@@ -72,6 +72,7 @@ export type RegistryStaffRequest = {
     email: string,
     prof: string|null,
     role: string,
+    password: string,
 }
 
 export type UserUpdateRequest = {

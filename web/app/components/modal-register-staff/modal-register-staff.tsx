@@ -1,8 +1,8 @@
 import "./modal-register-staff.css"
 import {useEffect, useState} from "react";
 import {ModalLogin} from "~/components/modal-login/modal-login";
-import {ModalTypes, type RegistryStaffRequest, type RegistryUserRequest} from "~/core/models";
-import {getMessage, registryUser} from "~/core/utils";
+import {ModalTypes, type RegistryStaffRequest, type RegistryUserRequest, Roles} from "~/core/models";
+import {getMessage, registryStaff, registryUser} from "~/core/utils";
 import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 import {useNavigate} from "react-router";
 
@@ -17,7 +17,7 @@ export function ModalRegisterStaff(props: ModalRegisterStaff) {
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
     const [prof, setProf] = useState(null);
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState(Roles.ADMIN);
     const [showMessage, setShowMessage] = useState(false);
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
@@ -28,7 +28,6 @@ export function ModalRegisterStaff(props: ModalRegisterStaff) {
         setFullName(setValue)
         setPhone(setValue)
         setProf(setValue)
-        setRole(setValue)
     }
 
     function handleChangeFullName(e: any) {
@@ -40,7 +39,7 @@ export function ModalRegisterStaff(props: ModalRegisterStaff) {
     }
 
     function handleChangeProf(e: any) {
-        setProf(e.target.value);
+        e? setProf(e.target.value) : setProf(null)
     }
 
     function handleChangeRole(e: any) {
@@ -68,6 +67,7 @@ export function ModalRegisterStaff(props: ModalRegisterStaff) {
 
     function handleConfirmClick() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        console.log(fullName, phone, prof, role, email, password);
         if (!(emailRegex.test(email))) {
             alert("Неверно введен email адрес")
         }
@@ -82,19 +82,19 @@ export function ModalRegisterStaff(props: ModalRegisterStaff) {
                 phone: phone,
                 email: email,
                 prof: prof,
-                role: role
+                role: role,
+                password: password
             }
-            // registryUser(request , (response:boolean) => {
-            //     if (response) {
-            //         props.handleShowModal(false)
-            //         setAllValues("")
-            //         navigate("/")
-            //     }
-            //     else {
-            //         handleShowModalMessage(true)
-            //         handleMessage(getMessage())
-            //     }
-            // });
+            registryStaff(request , (response:boolean) => {
+                if (response) {
+                    props.handleShowModal(false)
+                    setAllValues("")
+                }
+                else {
+                    handleShowModalMessage(true)
+                    handleMessage(getMessage())
+                }
+            });
         }
     }
 
@@ -117,10 +117,13 @@ export function ModalRegisterStaff(props: ModalRegisterStaff) {
                            onChange={handleChangeEmail} value={email} type={"email"} className={"email-input"}/>
                     <input required placeholder={"Номер телефона"} autoComplete={"tel"} name={"phone"}
                            onChange={handleChangePhone} value={phone} maxLength={12}/>
-                    <input required placeholder={"Специальность"} name={"prof"}
+                    <input placeholder={"Специальность"} name={"prof"}
                            onChange={handleChangeProf} value={prof??""} maxLength={10}/>
-                    <input required placeholder={"Роль"} name={"snils"}
-                           onChange={handleChangeRole} value={role} maxLength={11}/>
+                    <select onChange={handleChangeRole} value={role} className={"role-select"}>
+                        <option value={Roles.ADMIN}>{Roles.ADMIN}</option>
+                        <option value={Roles.DOCTOR}>{Roles.DOCTOR}</option>
+                        <option value={Roles.REGISTRAR}>{Roles.REGISTRAR}</option>
+                    </select>
                     <input required placeholder={"Пароль"} autoComplete={"current-password"} name={"password"}
                            onChange={handleChangePassword} value={password} type={"password"} className={"password-input"}/>
                     <ModalMessageBox showModal={showMessage} handleShowModal={handleShowModalMessage} message={message} handleMessage={handleMessage}/>

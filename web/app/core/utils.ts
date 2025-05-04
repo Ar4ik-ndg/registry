@@ -9,7 +9,7 @@ import {
     type CreateTicketRequest,
     type Ticket,
     type TicketResponse,
-    type UpdateTicketRequest
+    type UpdateTicketRequest, type RegistryStaffRequest
 } from "./models"
 import {
     CancelTicket,
@@ -19,7 +19,7 @@ import {
     GetDoctorList,
     GetProfs, GetTicketListByDoctor, GetTicketListByStatus,
     GetTicketsList, GetUserByEmail,
-    LoginUser,
+    LoginUser, RegisterStaff,
     RegisterUser, UpdateTicket
 } from "~/core/api";
 import {format} from "date-fns";
@@ -54,6 +54,16 @@ export function registryUser(user: RegistryUserRequest, isSuccsess: any) {
     RegisterUser(user).then((r:UserResponse) => {
         localStorage.setItem("user", JSON.stringify(r.user))
         localStorage.setItem("token", r.token)
+        isSuccsess(true);
+    }).catch((e: Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        isSuccsess(false);
+    })
+}
+
+export function registryStaff(user: RegistryStaffRequest, isSuccsess: any) {
+    RegisterStaff(user).then((r:UserResponse) => {
         isSuccsess(true);
     }).catch((e: Error) => {
         console.error(e)
