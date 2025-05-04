@@ -23,7 +23,7 @@ export type Ticket = {
     id: string,
     date: string,
     description: string,
-    result: string|null,
+    results: string|null,
     doctor: Staff,
     status: TicketStatus,
     user: User
@@ -88,7 +88,7 @@ export type UserUpdateRequest = {
 export type CreateTicketRequest = {
     date: string,
     description: string,
-    result: string|null,
+    results: string|null,
     doctor: string,
     status: string|null,
     user: UserUpdateRequest
@@ -97,7 +97,7 @@ export type CreateTicketRequest = {
 export type UpdateTicketRequest = {
     date: string|null,
     description: string|null,
-    result: string|null,
+    results: string|null,
     doctor: string|null,
     status: string|null,
     user: string|null,

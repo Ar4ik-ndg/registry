@@ -3,7 +3,13 @@ import {
     type User,
     type Message,
     type AuthRequest,
-    type UserResponse, type Staff, type BusyTimeRequest, type CreateTicketRequest, type Ticket, type TicketResponse
+    type UserResponse,
+    type Staff,
+    type BusyTimeRequest,
+    type CreateTicketRequest,
+    type Ticket,
+    type TicketResponse,
+    type UpdateTicketRequest
 } from "./models"
 import {
     CancelTicket,
@@ -11,10 +17,10 @@ import {
     CreateTicketStaff,
     GetBusyTime,
     GetDoctorList,
-    GetProfs,
+    GetProfs, GetTicketListByStatus,
     GetTicketsList,
     LoginUser,
-    RegisterUser
+    RegisterUser, UpdateTicket
 } from "~/core/api";
 import {format} from "date-fns";
 
@@ -138,7 +144,29 @@ export function createTicketStaff(request:CreateTicketRequest, isSuccess:any, ha
 
 export function cancelTicket(id:string, handleResult:any, handleIsAvaliable: any){
     CancelTicket(id).then((r:TicketResponse) => {
-        debugger
+        handleResult(r.ticket)
+        handleIsAvaliable(false);
+        localStorage.setItem("message", r.message)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsAvaliable(true);
+    })
+}
+
+export function getTicketsConfirmation(status: string, handleResult:any, handleIsSuccess: any){
+    GetTicketListByStatus(status).then((r:Array<Ticket>) => {
+        handleResult(r)
+        handleIsSuccess(true);
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function updateTicket(id:string, request: UpdateTicketRequest, handleResult:any, handleIsAvaliable: any){
+    UpdateTicket(id, request).then((r:TicketResponse) => {
         handleResult(r.ticket)
         handleIsAvaliable(false);
         localStorage.setItem("message", r.message)
@@ -155,4 +183,12 @@ export function formatDate(date: Date) {
 
 export function formatDateWithoutTime(date:Date){
     return format(date, "dd.MM.yyyy")
+}
+
+export function sortArrayTickets(l: Array<Ticket>) {
+    const sorted = l.sort((a:Ticket,b:Ticket)=>{
+        const now = new Date().getTime()
+        return Math.abs( new Date(a.date).getTime()-now) - Math.abs(new Date(b.date).getTime() - now)
+    })
+    return sorted
 }

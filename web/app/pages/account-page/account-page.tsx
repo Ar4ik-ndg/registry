@@ -2,7 +2,7 @@ import "./account-page.css"
 import type { Route } from "./+types/account-page"
 import type {Ticket, User} from "~/core/models"
 import {useEffect, useState} from "react";
-import {getTicketsList, getUser, logout} from "~/core/utils";
+import {getTicketsList, getUser, logout, sortArrayTickets} from "~/core/utils";
 import {ModalUserAppointment} from "~/components/modal-user-appointment/modal-user-appointment";
 import {Link, Navigate} from "react-router";
 
@@ -45,11 +45,7 @@ export default function AccountPage() {
     }
 
     function handleSetTicketsList(l:any){
-        const sorted = l.sort((a:Ticket,b:Ticket)=>{
-            const now = new Date().getTime()
-            return Math.abs( new Date(a.date).getTime()-now) - Math.abs(new Date(b.date).getTime() - now)
-        })
-        setTicketsList(sorted)
+        setTicketsList(sortArrayTickets(l))
     }
 
     function handleSetIsSuccessGetTickets(a:any){

@@ -67,7 +67,6 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     function handleChangeDescription(e: any) {
         setDescription(e.target.value)
-        debugger
         if (e.target.value !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
     }
 
@@ -114,7 +113,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     function handleSubmit() {
         // создание тикета POST http://localhost:8080/api/v0.1/user/tickets/new
         createTicket({
-            result: null,
+            results: null,
             status: null,
             date: formatDate(date!!) ?? "",
             description: description,

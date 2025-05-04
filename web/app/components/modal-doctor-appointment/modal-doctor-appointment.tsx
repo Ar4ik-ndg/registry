@@ -35,7 +35,7 @@ export function ModalDoctorAppointment(props: ModalDoctorAppointment) {
                 </div>
                 <div className={"card-description"}>
                     <div className={"doctor"}>Специалист: {ticket.doctor.fullName}</div>
-                    <div className={"result"}>Результат:<br/>{ticket.result ?? "пока нет результата"}</div>
+                    <div className={"results"}>Результат:<br/>{ticket.results ?? "пока нет результата"}</div>
                     <div className={"description"}>Жалоба:<br/>{ticket.description}</div>
                     <div className={"time"}>Время: {ticket.date.split(" ")[1]}</div>
                 </div>
@@ -49,7 +49,7 @@ export function ModalDoctorAppointment(props: ModalDoctorAppointment) {
                     </div>
                     <div className={"card-description"}>
                         <div className={"doctor"}>Специалист: {ticket.doctor.fullName}</div>
-                        <div className={"result"}>Результат:<br/><textarea placeholder={"Введите результат осмотра"}/></div>
+                        <div className={"results"}>Результат:<br/><textarea placeholder={"Введите результат осмотра"}/></div>
                         <div className={"description"}>Жалоба:<br/>{ticket.description}</div>
                         <div className={"time"}>Время: {ticket.date.split(" ")[1]}</div>
                     </div>

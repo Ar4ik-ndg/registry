@@ -189,7 +189,7 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
     function handleSubmit() {
         // создание тикета POST http://localhost:8080/api/v0.1/med/tickets/new
         createTicketStaff({
-            result: null,
+            results: null,
             status: TicketStatus.scheduled,
             date: formatDate(date!!) ?? "",
             description: description,

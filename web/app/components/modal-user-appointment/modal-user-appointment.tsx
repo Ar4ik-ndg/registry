@@ -55,7 +55,7 @@ export function ModalUserAppointment(props:ModalOrderProps){
                     </div>
                     <div className={"card-description"}>
                         <div className={"doctor"}>Специалист: {(ticket??props.ticket).doctor.fullName}</div>
-                        <div className={"result"}>Результат:<br/>{(ticket??props.ticket).result ?? "пока нет результата"}</div>
+                        <div className={"results"}>Результат:<br/>{(ticket??props.ticket).results ?? "пока нет результата"}</div>
                         <div className={"description"}>Жалоба:<br/>{(ticket??props.ticket).description}</div>
                         <div className={"time"}>Время: {(ticket??props.ticket).date.split(" ")[1]}</div>
                     </div>
