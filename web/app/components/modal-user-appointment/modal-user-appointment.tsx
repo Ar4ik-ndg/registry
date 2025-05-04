@@ -25,7 +25,7 @@ export function ModalUserAppointment(props:ModalOrderProps){
     function checkAvaliable() {
         const today = new Date()
         const ticketDate = parse((ticket??props.ticket).date, "dd.MM.yyyy HH:mm", new Date())
-        setAvaliable(Math.abs(differenceInHours(ticketDate, today)) >= 12 && (ticket??props.ticket).status == TicketStatus.confirmed);
+        setAvaliable(Math.abs(differenceInHours(ticketDate, today)) >= 12 && ((ticket??props.ticket).status == TicketStatus.confirmed || (ticket??props.ticket).status == TicketStatus.scheduled));
     }
 
     useEffect(() => {
@@ -54,7 +54,7 @@ export function ModalUserAppointment(props:ModalOrderProps){
                         <div className={"ticket-status"}>Статус: {(ticket??props.ticket).status}</div>
                     </div>
                     <div className={"card-description"}>
-                        <div className={"doctor"}>Специалист: {(ticket??props.ticket).doctor.fullName}</div>
+                        <div className={"doctor"}>Специалист: {(ticket??props.ticket).doctor.fullName}<br/>{(ticket??props.ticket).doctor.prof}</div>
                         <div className={"results"}>Результат:<br/>{(ticket??props.ticket).results ?? "пока нет результата"}</div>
                         <div className={"description"}>Жалоба:<br/>{(ticket??props.ticket).description}</div>
                         <div className={"time"}>Время: {(ticket??props.ticket).date.split(" ")[1]}</div>
