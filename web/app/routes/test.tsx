@@ -22,7 +22,7 @@ export default function Home() {
         id: "608280f5-1f7f-4735-a102-fbcaf396c171",
         date: "01.01.2001 00:00",
         description: "test",
-        result: null,
+        results: null,
         doctor: {
             id: "e0db2437-e7b1-449a-a73f-acc6889995c1",
             fullName: "test user",

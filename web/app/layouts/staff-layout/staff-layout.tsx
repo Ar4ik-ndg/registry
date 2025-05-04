@@ -51,12 +51,12 @@ export default function StaffLayout(){
                     <Link to={"/med"} className={"logo"}>Медицинский центр</Link>
                 </div>
                 <div className="nav-buttons">
-                    <Link to={`/appointment/new`} className="nav-button back-btn">Запись на приём</Link>
+                    <Link to={`med/appointment/new`} className="nav-button back-btn">Запись на приём</Link>
                     <div onClick={() => handleChangeShowModal(!showModal)}
                          className={`userName nav-button`}>{user?.fullName}</div>
                     {/*надо заменить на ссылку на страницу с приемами врача*/}
                     <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal} isAuth={true}
-                                  handleIsAuth={handleIsAuth}/>
+                                  handleIsAuth={handleIsAuth} link={"med/appointments/daily"}/>
                 </div>
             </header>
             <Outlet/>

@@ -54,7 +54,7 @@ export default function UserLayout() {
                     <Link to={`/appointment/${user?.id}/new`} className="nav-button back-btn">Запись на приём</Link>
                     <div onClick={() => handleChangeShowModal(!showModal)}
                          className={`userName nav-button`}>{user?.fullName}</div>
-                    <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal} isAuth={true} handleIsAuth={handleIsAuth}/>
+                    <ModalAccount showModal={showModal} handleShowModal={handleChangeShowModal} isAuth={true} handleIsAuth={handleIsAuth} link={`/account/${user?.id}`} />
                 </div>
             </header>
             <Outlet/>

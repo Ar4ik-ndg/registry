@@ -14,11 +14,11 @@ import {
 import {
     CancelTicket,
     CreateTicket,
-    CreateTicketStaff,
+    CreateTicketStaff, GetAllTickets,
     GetBusyTime,
     GetDoctorList,
-    GetProfs, GetTicketListByStatus,
-    GetTicketsList,
+    GetProfs, GetTicketListByDoctor, GetTicketListByStatus,
+    GetTicketsList, GetUserByEmail,
     LoginUser,
     RegisterUser, UpdateTicket
 } from "~/core/api";
@@ -158,6 +158,39 @@ export function getTicketsConfirmation(status: string, handleResult:any, handleI
     GetTicketListByStatus(status).then((r:Array<Ticket>) => {
         handleResult(r)
         handleIsSuccess(true);
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function getTicketsDaily(doctorId:string,handleResult:any,handleIsSuccess:any){
+    GetTicketListByDoctor(doctorId).then((r:Array<Ticket>) => {
+        handleResult(r)
+        handleIsSuccess(true)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function getUserByEmail(email:string,handleResult:any,handleIsSuccess:any){
+    GetUserByEmail(email).then((r:User) => {
+        handleResult(r)
+        handleIsSuccess(true)
+    }).catch((e:Error) => {
+        console.error(e)
+        localStorage.setItem("message", e.message)
+        handleIsSuccess(false);
+    })
+}
+
+export function getAllTickets(handleResult:any,handleIsSuccess:any){
+    GetAllTickets().then((r:Array<Ticket>) => {
+        handleResult(r)
+        handleIsSuccess(true)
     }).catch((e:Error) => {
         console.error(e)
         localStorage.setItem("message", e.message)

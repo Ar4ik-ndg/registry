@@ -35,28 +35,6 @@
         text-align: start;
         width: 100%;
     }
-
-    .card-buttons{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        .cancel-button, .confirm-button{
-            text-align: center;
-            background-color: #E21B16;
-            color: white;
-            border-radius: 20px;
-            padding: 5px 30px;
-            font-weight: bold;
-            font-size: large;
-            cursor: pointer;
-            margin: 5px;
-            width: fit-content;
-        }
-        .confirm-button{
-            background-color: #4FAA39;
-        }
-    }
 }
 
 .card-fs{
@@ -89,10 +67,10 @@
     .card{
         cursor: default;
         position: relative;
-        width: 500px;
-        height: 500px;
+        width: 600px;
+        height: 600px;
     }
-    .result textarea{
+    .results textarea{
         background-color: #EAEAEA;
         border: #21B4A3 2px solid;
         border-radius: 20px;
@@ -110,11 +88,11 @@
         cursor: pointer;
     }
     .card-buttons{
-        position: absolute;
-        bottom: 0;
-        right: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
         padding: 20px 20px;
-        align-items: end;
     }
 }
 

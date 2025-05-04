@@ -63,7 +63,7 @@ export default function AdminLayout(){
                          className={`userName nav-button`}>{user?.fullName}</div>
                     {/*надо заменить на ссылку на страницу с приемами врача*/}
                     <ModalAccount showModal={showModalAccount} handleShowModal={handleChangeShowModalAccount} isAuth={true}
-                                  handleIsAuth={handleIsAuth}/>
+                                  handleIsAuth={handleIsAuth} link={"/admin/all-tickets"}/>
                 </div>
             </header>
             <Outlet/>

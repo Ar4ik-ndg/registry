@@ -3,10 +3,16 @@ import {useEffect, useState} from "react";
 import {type Ticket, TicketStatus} from "~/core/models";
 import {ModalRegistryAppointment} from "~/components/modal-registry-appointment/modal-registry-appointment";
 import {getTicketsConfirmation, getTicketsList, sortArrayTickets} from "~/core/utils";
+import {ModalDoctorAppointment} from "~/components/modal-doctor-appointment/modal-doctor-appointment";
 
 export default function ConfirmationAppointmentsPage() {
     const [ticketsList, setTicketsList] = useState<Array<Ticket>>([])
     const [isSuccessGetTickets, setIsSuccessGetTickets] = useState<boolean>(false)
+    const [showModal, setShowModal] = useState<boolean>(false)
+
+    function handleShowModal(u: boolean) {
+        setShowModal(u)
+    }
 
     function handleTicketsList(l: any) {
         setTicketsList(sortArrayTickets(l));

@@ -188,6 +188,23 @@ export async function GetTicketListByStatus(status :string){
     return await response.json() as Array<Ticket>
 }
 
+export async function GetAllTickets(){
+    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/all`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': getToken(),
+        }
+    })
+
+    if (!response.ok){
+        const error = await response.json() as Message
+        throw new Error(error.message?? error.error?? "ошибка на стороне сервера")
+    }
+
+    return await response.json() as Array<Ticket>
+}
+
 export async function GetTicketListByDoctor(doctor :string){
     const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/doctor/${doctor}`,{
         method: 'GET',

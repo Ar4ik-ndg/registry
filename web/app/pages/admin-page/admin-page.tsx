@@ -1,8 +1,8 @@
-import "./appointment-daily-page.css"
+import "./admin-page.css"
 import {useEffect, useState} from "react";
 import type {Ticket, User} from "~/core/models";
 import {ModalDoctorAppointment} from "~/components/modal-doctor-appointment/modal-doctor-appointment";
-import {getTicketsDaily, getUser, sortArrayTickets} from "~/core/utils";
+import {getAllTickets, getTicketsDaily, getUser, sortArrayTickets} from "~/core/utils";
 
 export default function ConfirmationAppointmentsPage() {
     const [ticketsList, setTicketsList] = useState<Array<Ticket>>([])
@@ -22,17 +22,17 @@ export default function ConfirmationAppointmentsPage() {
     }
 
     function updatePage() {
-        getTicketsDaily(getUser()?.id!!, handleSetTicketsList, handleShowModal)
+        getAllTickets(handleSetTicketsList, handleSetUser)
     }
 
     useEffect(() => {
         handleSetUser(getUser())
-        getTicketsDaily(getUser()?.id!!, handleSetTicketsList, handleShowModal)
+        getAllTickets(handleSetTicketsList, handleShowModal)
     }, [])
 
     return (
         <>
-            <div className="appointments-daily-page">
+            <div className="admin-page">
                 <div className={"update-page"} onClick={updatePage}>Обновить</div>
                 <div className={"appointments-container"}>
                     {ticketsList?.map((ticket: Ticket) => {

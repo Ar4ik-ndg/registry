@@ -14,7 +14,7 @@ import {
     getBusyTime,
     getDoctorList,
     getProfs,
-    getUser
+    getUser, getUserByEmail
 } from "~/core/utils";
 import {ModalMessageBox} from "~/components/modal-message-box/modal-message-box";
 
@@ -45,7 +45,17 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
     const [ticket,setTicket] = useState<Ticket>()
     const [isSuccessSubmit, setIsSuccessSubmit] = useState<boolean>(false)
     const [user, setUser] = useState<UserUpdateRequest | null>(null)
+    const [userByEmail, setUserByEmail] = useState<User | null>(null)
+    const [isSuccess, setIsSuccess] = useState<boolean>(false)
     const [showModal, setShowModal] = useState<boolean>(false)
+
+    function handleSetUserByEmail(u: User) {
+        setUserByEmail(u)
+    }
+
+    function handleSetIsSuccess(u:boolean) {
+        setIsSuccess(u)
+    }
 
     function handleSetShowModal(u:boolean) {
         setShowModal(u)
@@ -200,7 +210,6 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
         if (isSuccessSubmit){
             handleSetShowMessageBox(true)
         }
-
     }
 
     useEffect(() => {
@@ -221,7 +230,8 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
                     <h3>Выбор пользователя</h3>
                     <div className={"input-email"}>
                         <input placeholder={"Email"} value={email} onChange={handleSetEmail} name={"email"}/>
-                        <div className={"search-button"}>Найти</div>
+                        <div className={"search-button"} onClick={() => {getUserByEmail(email, handleSetUserByEmail, handleSetIsSuccess)
+                        }}>Найти</div>
                     </div>
                     <div className={`blackout-user${showModal ? " open" : ""}`}>
                         <div className={`user-input`}>
@@ -245,10 +255,9 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
                             <div className={"confirm-button"} onClick={() => handleSetUser(null)}>Подтвердить</div>
                         </div>
                     </div>
-                    <ul className={"list"} onClick={() => {/*GET http://localhost:8080/api/v0.1/user/email/<email>*/
-                    }}>{(() => {
-                        if (user !== null) {
-                            return (<li className={"line"}>{user.fullName} {user.birthday}</li>)
+                    <ul className={"list"}>{(() => {
+                        if (isSuccess) {
+                            return (<li className={"line"} onClick={() => handleSetUser(userByEmail)}>{userByEmail?.fullName!!} {userByEmail?.birthday!!}</li>)
                         }
                         {
                             return (<li className={`line`} onClick={()=>handleSetShowModal(true)}>Пользователей не найдено (ввести

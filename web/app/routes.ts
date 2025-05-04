@@ -14,17 +14,17 @@ export default [
     ...prefix("med", [
         layout("layouts/staff-layout/staff-layout.tsx", [
             index("pages/staff-page/staff-page.tsx"),
-            route("registry","pages/confirmation-appointments-page/confirmation-appointments-page.tsx"),
-            // route("appointment/new", "pages/create-appointment-page/create-appointment-page.tsx"),
-            // заглушка, заменить на страницу приемов доктора
-            // route("appointments/daily", "pages/main-page/main-page.tsx"),
+            route("appointments/registry","pages/confirmation-appointments-page/confirmation-appointments-page.tsx"),
+            route("appointment/new", "pages/create-appointment-staff-page/create-appointment-staff-page.tsx"),
+            route("appointments/daily", "pages/appointments-daily-page/appointments-daily-page.tsx")
         ]),
     ]),
 
     ...prefix("admin", [
         layout("layouts/admin-layout/admin-layout.tsx", [
             index("routes/test.tsx"),
-            route("test-cap", "pages/create-appointment-staff-page/create-appointment-staff-page.tsx"),
+            route("all-tickets", "pages/admin-page/admin-page.tsx"),
+
         ]),
     ])
 
