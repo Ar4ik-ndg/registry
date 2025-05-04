@@ -67,16 +67,15 @@ export function ModalRegisterStaff(props: ModalRegisterStaff) {
 
     function handleConfirmClick() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        console.log(fullName, phone, prof, role, email, password);
         if (!(emailRegex.test(email))) {
             alert("Неверно введен email адрес")
         }
         else if (!password || !fullName || !phone || !role) {
             alert("Не все данные введены")
         }
-        if (prof === "") handleChangeProf(null);
 
         else {
+            if (prof === "") handleChangeProf(null);
             let request : RegistryStaffRequest = {
                 fullName: fullName,
                 phone: phone,
