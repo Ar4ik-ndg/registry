@@ -1,3 +1,5 @@
+import "./role-redirect.css"
+
 import { type User} from "~/core/models";
 import loading from "~/assets/loading.svg"
 
