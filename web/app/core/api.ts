@@ -7,15 +7,28 @@ import type {
     CreateTicketRequest,
     Ticket, TicketResponse, Staff, BusyTimeRequest, UpdateTicketRequest, RegistryStaffRequest
 } from "~/core/models";
-import {getToken} from "~/core/utils";
+
+import {getToken, logout} from "~/core/utils";
 
 const API_LINK = "http://109.61.108.240:8080"
 
 const API_VERSION = "v0.1"
 
+export async function apiFetch(input: RequestInfo, init?: RequestInit) {
+    const response = await fetch(input, init);
+
+    if (response.status === 403) {
+        logout()
+        window.location.href = "/";
+        alert("Ошибка аутентификации, необходимо войти заново")
+    }
+
+    return response;
+}
+
 // RegisterUser - регистрация пользователя
 export async function RegisterUser(request: RegistryUserRequest) {
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/auth/register`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/auth/register`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -33,7 +46,7 @@ export async function RegisterUser(request: RegistryUserRequest) {
 }
 
 export async function RegisterStaff(request: RegistryStaffRequest) {
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/auth/register/staff`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/auth/register/staff`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -51,7 +64,7 @@ export async function RegisterStaff(request: RegistryStaffRequest) {
 }
 
 export async function LoginUser(request: AuthRequest) {
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/auth/login`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/auth/login`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -69,7 +82,7 @@ export async function LoginUser(request: AuthRequest) {
 }
 
 export async function CreateTicket(request: CreateTicketRequest) {
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/new`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/user/tickets/new`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -87,7 +100,7 @@ export async function CreateTicket(request: CreateTicketRequest) {
 }
 
 export async function CreateTicketStaff(request: CreateTicketRequest) {
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/new`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/med/tickets/new`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -105,7 +118,7 @@ export async function CreateTicketStaff(request: CreateTicketRequest) {
 }
 
 export async function GetProfs(){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/med/profs`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/user/med/profs`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +135,7 @@ export async function GetProfs(){
 }
 
 export async function GetBusyTime(req:BusyTimeRequest){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/busy`,{
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/user/tickets/busy`,{
         method: 'POST',
         headers:{
             'Content-Type': 'application/json',
@@ -139,7 +152,7 @@ export async function GetBusyTime(req:BusyTimeRequest){
 }
 
 export async function GetDoctorList(prof :string){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/med/${prof}`,{
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/user/med/${prof}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -156,7 +169,7 @@ export async function GetDoctorList(prof :string){
 }
 
 export async function GetTicketsList(id:string){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/${id}`,{
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/user/tickets/${id}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -173,7 +186,7 @@ export async function GetTicketsList(id:string){
 }
 
 export async function GetUserByEmail(email :string){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/email/${email}`,{
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/user/email/${email}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -190,7 +203,7 @@ export async function GetUserByEmail(email :string){
 }
 
 export async function GetTicketListByStatus(status :string){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/status/${status}`,{
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/med/tickets/status/${status}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -207,7 +220,7 @@ export async function GetTicketListByStatus(status :string){
 }
 
 export async function GetAllTickets(){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/all`,{
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/med/tickets/all`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -224,7 +237,7 @@ export async function GetAllTickets(){
 }
 
 export async function GetTicketListByDoctor(doctor :string){
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/doctor/${doctor}`,{
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/med/tickets/doctor/${doctor}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -241,7 +254,7 @@ export async function GetTicketListByDoctor(doctor :string){
 }
 
 export async function UpdateTicket(id: String, request: UpdateTicketRequest) {
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/med/tickets/update/${id}`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/med/tickets/update/${id}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -259,7 +272,7 @@ export async function UpdateTicket(id: String, request: UpdateTicketRequest) {
 }
 
 export async function CancelTicket(id:string) {
-    const response = await fetch(`${API_LINK}/api/${API_VERSION}/user/tickets/cancel/${id}`, {
+    const response = await apiFetch(`${API_LINK}/api/${API_VERSION}/user/tickets/cancel/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
