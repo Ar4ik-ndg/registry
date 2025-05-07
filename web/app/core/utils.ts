@@ -135,6 +135,7 @@ export function createTicket(request:CreateTicketRequest, isSuccess:any, handleR
         isSuccess(true);
     }).catch((e:Error) => {
         console.error(e)
+        handleMessage(e.message);
         localStorage.setItem("message", e.message)
         isSuccess(false);
     })

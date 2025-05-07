@@ -1,4 +1,5 @@
 .blackout-message {
+    z-index: 1000;
     position: absolute;
     top: 0;
     left: 0;
@@ -13,7 +14,6 @@
     justify-content: center;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1;
     transition: opacity 0.2s ease-in, visibility 0.2s ease-in;
     pointer-events: none;
     .message-box {

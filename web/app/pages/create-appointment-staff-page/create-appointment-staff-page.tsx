@@ -5,7 +5,7 @@ import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
 import type { Route } from "./+types/create-appointment-staff-page"
 import { useEffect, useState } from "react";
-import {Link, useLoaderData} from "react-router";
+import {Link, replace, useLoaderData, useLocation, useNavigate} from "react-router";
 import {type Staff, type Ticket, TicketStatus, type User, type UserUpdateRequest} from "~/core/models";
 import {
     createTicket, createTicketStaff,
@@ -48,6 +48,8 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
     const [userByEmail, setUserByEmail] = useState<User | null>(null)
     const [isSuccess, setIsSuccess] = useState<boolean>(false)
     const [showModal, setShowModal] = useState<boolean>(false)
+    const navigate = useNavigate()
+    const location = useLocation()
 
     function handleSetUserByEmail(u: User) {
         setUserByEmail(u)
@@ -126,6 +128,10 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
         setEmail(u.target.value)
     }
 
+    function handleSetShowButton(u:boolean) {
+        setShowButton(u)
+    }
+
     function handleSetProfs(l:any){
         setProfs(l)
     }
@@ -152,8 +158,10 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
     }
 
     function handleChangeDescription(e: any) {
+        if (e == "") { setDescription("") }
+        filterTime(date!!)
+        if (e.target.value !== "" && date !== null && filterTime(date)) { handleSetShowButton(true) } else { handleSetShowButton(false) }
         setDescription(e.target.value)
-        if (e.target.value !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
     }
 
     const [isSuccessChangeDate, setIsSuccessChangeDate] = useState<boolean>()
@@ -167,17 +175,18 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
     }
 
     function handleChangeDate(e: any) {
-        setDate(e)
-
-        getBusyTime({
-            date: formatDateWithoutTime(e),
-            doctor: doctor
-        },handleIsSuccessChangeDate,handleBusyDate)
-
-        if (isSuccessChangeDate){
-            if (description !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
+        if (e == null) {setDate(e)}
+        else {
+            setDate(e)
+            getBusyTime({
+                date: formatDateWithoutTime(e),
+                doctor: doctor
+            }, handleIsSuccessChangeDate, (bTime: any)=>{
+                const f = formatDate(e)
+                handleBusyDate(bTime)
+                if (e !== null && !bTime.includes(f) && description !=="") { handleSetShowButton(true) } else { handleSetShowButton(false) }
+            })
         }
-
     }
 
     function handleSetMessage(e:any){
@@ -190,6 +199,13 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
 
     function handleSetShowMessageBox(e:any){
         setShowMessageBox(e)
+        if (e == false){
+            if (isSuccessSubmit) { navigate(location.pathname, {replace: true}) }
+            if (!isSuccessSubmit){
+                handleChangeDate(null)
+                handleSetShowButton(false)
+            }
+        }
     }
 
     function handleSetTicket(e:any){
@@ -207,9 +223,7 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
             user: user!!
         }, handleIsSuccessSubmit, handleSetTicket, handleSetMessage)
 
-        if (isSuccessSubmit){
-            handleSetShowMessageBox(true)
-        }
+        handleSetShowMessageBox(true)
     }
 
     useEffect(() => {

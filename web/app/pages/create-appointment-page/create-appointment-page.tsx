@@ -5,7 +5,7 @@ import {format, addDays, set} from "date-fns";
 import { ru } from "date-fns/locale";
 import type { Route } from "./+types/create-appointment-page"
 import { useEffect, useState } from "react";
-import {Link, useLoaderData} from "react-router";
+import {Link, Navigate, useLoaderData, useNavigate} from "react-router";
 import type {Staff, Ticket, User} from "~/core/models";
 import {
     createTicket,
@@ -35,6 +35,11 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     const [ticket,setTicket] = useState<Ticket>()
     const [isSuccessSubmit, setIsSuccessSubmit] = useState<boolean>(false)
     const [user, setUser] = useState<User | null>(null)
+    const navigate = useNavigate()
+
+    function handleSetShowButton(u: boolean) {
+        setShowButton(u)
+    }
 
     function handleSetUser(u:any){
         setUser(u)
@@ -66,8 +71,10 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     function handleChangeDescription(e: any) {
+        if (e == "") { setDescription("") }
+        filterTime(date!!)
+        if (e.target.value !== "" && date !== null && filterTime(date)) { handleSetShowButton(true) } else { handleSetShowButton(false) }
         setDescription(e.target.value)
-        if (e.target.value !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
     }
 
     const [isSuccessChangeDate, setIsSuccessChangeDate] = useState<boolean>()
@@ -81,17 +88,18 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
     }
 
     function handleChangeDate(e: any) {
-        setDate(e)
-
-        getBusyTime({
-            date: formatDateWithoutTime(e),
-            doctor: doctor
-        },handleIsSuccessChangeDate,handleBusyDate)
-
-        if (isSuccessChangeDate){
-            if (description !== "" && description !== null && date !== null) { setShowButton(true) } else { setShowButton(false) }
+        if (e == null) {setDate(e)}
+        else {
+            setDate(e)
+            getBusyTime({
+                date: formatDateWithoutTime(e),
+                doctor: doctor
+            }, handleIsSuccessChangeDate, (bTime: any)=>{
+                const f = formatDate(e)
+                handleBusyDate(bTime)
+                if (e !== null && !bTime.includes(f) && description !=="") { handleSetShowButton(true) } else { handleSetShowButton(false) }
+            })
         }
-
     }
 
     function handleSetMessage(e:any){
@@ -104,6 +112,14 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
 
     function handleSetShowMessageBox(e:any){
         setShowMessageBox(e)
+        if (e == false){
+            debugger
+            if (isSuccessSubmit) { navigate(`/account/${user?.id}`) }
+            if (!isSuccessSubmit){
+                handleChangeDate(null)
+                handleSetShowButton(false)
+            }
+        }
     }
 
     function handleSetTicket(e:any){
@@ -129,11 +145,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                 role: user?.role ?? null,
             }
         }, handleIsSuccessSubmit, handleSetTicket, handleSetMessage)
-
-        if (isSuccessSubmit){
-            handleSetShowMessageBox(true)
-        }
-
+        handleSetShowMessageBox(true)
     }
 
     useEffect(() => {
@@ -155,7 +167,9 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                     <h3>Выбор специальности</h3>
                     <ul className={"list"}>
                         {profs?.map((prof) => {
-                            return (<li className={"line"} onClick={() => handleChangeProf(prof)}>{prof}</li>)
+                            if (prof !== null && prof !=="") {
+                                return (<li className={"line"} onClick={() => handleChangeProf(prof)}>{prof}</li>)
+                            }
                         })}
                     </ul>
                 </div>
@@ -201,7 +215,7 @@ export default function CreateAppointmentPage({params}: Route.ComponentProps) {
                             inline/>
                     </div>
                 </div>
-                <Link to={"/"} className={`confirm-appointment-button${showButton? " open" : ""}`} onClick={handleSubmit}>Подтвердить</Link>
+                <div className={`confirm-appointment-button${showButton? " open" : ""}`} onClick={handleSubmit}>Подтвердить</div>
             </div>
         </main>
     )
