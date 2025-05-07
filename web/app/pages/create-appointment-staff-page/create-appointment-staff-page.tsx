@@ -184,7 +184,6 @@ export default function CreateAppointmentStaffPage({params}: Route.ComponentProp
             }, handleIsSuccessChangeDate, (bTime: any)=>{
                 const f = formatDate(e)
                 handleBusyDate(bTime)
-                debugger
                 if (e !== null && !bTime.includes(f) && description !=="") { handleSetShowButton(true) } else { handleSetShowButton(false) }
             })
         }
