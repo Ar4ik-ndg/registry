@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 import registry.ru.model.*
 import registry.ru.service.StaffService
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -44,9 +45,10 @@ class UserController(private val userService: UserService, private val ticketSer
                     return ResponseEntity.badRequest().body(Error("Неверно задан статус"))
                 }
                 if (ticket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
-                val busyTime = ticketService.getTicketsByDateAndDoctor(doctor.id).body
+                val busyTime = ticketService.getBusyTime(ticket.date.toLocalDate(), ticket.doctor).body
                 if (busyTime is List<*>) {
-                    if (busyTime.contains(ticket.date)) { return ResponseEntity.badRequest().body(Error("Время уже занято"))}
+                    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+                    if (busyTime.contains(formatter.format(ticket.date))) { return ResponseEntity.badRequest().body(Error("Время уже занято"))}
                 }
                 val newTicket: Ticket = Ticket(
                     UUID.randomUUID().toString(),

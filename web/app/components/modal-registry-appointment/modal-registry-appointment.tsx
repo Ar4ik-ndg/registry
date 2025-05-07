@@ -87,9 +87,9 @@ export function ModalRegistryAppointment(props: ModalRegistryAppointment) {
                         <div className={"ticket-status"}>Статус: {ticket.status}</div>
                     </div>
                     <div className={"card-description"}>
-                        <div className={"doctor"}>Специалист: {ticket.doctor.fullName}</div>
-                        <div className={"results"}>Результат:<br/>{ticket.results ?? "пока нет результата"}</div>
-                        <div className={"description"}>Жалоба:<br/>{ticket.description}</div>
+                        <div className={"doctor"}>Специалист: {ticket.doctor.fullName}<br/>{ticket.doctor.prof}</div>
+                        <div className={"results"}>Результат:<textarea value={ticket.results ?? "пока нет результата"} readOnly={true}/></div>
+                        <div className={"description"}>Жалоба:<textarea value={ticket.description} readOnly={true}/></div>
                         <div className={"time"}>Время: {ticket.date.split(" ")[1]}</div>
                     </div>
                     <div className={"card-buttons"}>
