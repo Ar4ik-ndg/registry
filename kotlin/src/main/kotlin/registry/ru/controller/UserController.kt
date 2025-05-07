@@ -44,6 +44,10 @@ class UserController(private val userService: UserService, private val ticketSer
                     return ResponseEntity.badRequest().body(Error("Неверно задан статус"))
                 }
                 if (ticket.date < LocalDate.now().plusDays(1).atStartOfDay()) return ResponseEntity.badRequest().body(Error("Неверно выбрано время"))
+                val busyTime = ticketService.getTicketsByDateAndDoctor(doctor.id).body
+                if (busyTime is List<*>) {
+                    if (busyTime.contains(ticket.date)) { return ResponseEntity.badRequest().body(Error("Время уже занято"))}
+                }
                 val newTicket: Ticket = Ticket(
                     UUID.randomUUID().toString(),
                     ticket.date,
@@ -91,7 +95,7 @@ class UserController(private val userService: UserService, private val ticketSer
     @GetMapping("/med/profs")
     fun getProfsDoctors(): ResponseEntity<Any> {
         val profs: List<String>? = staffService.getStaffPofs()
-        if (profs.isNullOrEmpty()) return ResponseEntity.internalServerError().body(Error("нет врачей")) else return ResponseEntity.ok().body(profs)
+        if (profs.isNullOrEmpty()) return ResponseEntity.internalServerError().body(Error("нет врачей")) else return ResponseEntity.ok().body(profs.filterNotNull())
     }
 
     @PutMapping("/id/{id}")
